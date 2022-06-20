@@ -26,7 +26,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Secure Area" />
+    <Head title="Area Segura" />
 
     <JetAuthenticationCard>
         <template #logo>

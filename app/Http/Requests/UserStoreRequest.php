@@ -43,8 +43,13 @@ class UserStoreRequest extends FormRequest
     public function attributes()
     {
         return [
-            'firstname' => 'nombre',
-            'lastname' => 'apellido',
+            'firstname' => 'Nombre',
+            'lastname' => 'Apellido',
+            'dni' => 'DNI',
+            'birthdate' => 'Fecha de Nacimiento',
+            'email' => 'Correo Electrónico',
+            'password' => 'Contraseña',
+            'role' => 'Rol',
         ];
     }
 }

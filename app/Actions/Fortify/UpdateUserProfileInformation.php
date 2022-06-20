@@ -25,6 +25,13 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'birthdate' => ['required', 'date'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
+        ], [], [
+            'firstname' => 'Nombre',
+            'lastname' => 'Apellido',
+            'dni' => 'DNI',
+            'birthdate' => 'Fecha de Nacimiento',
+            'email' => 'Correo Electrónico',
+            'photo' => 'Foto',
         ])->validateWithBag('updateProfileInformation');
 
         if (isset($input['photo'])) {

@@ -31,4 +31,20 @@ class UserUpdateRequest extends FormRequest
             'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $this->user->id],
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'firstname' => 'Nombre',
+            'lastname' => 'Apellido',
+            'dni' => 'DNI',
+            'birthdate' => 'Fecha de Nacimiento',
+            'email' => 'Correo Electrónico',
+        ];
+    }
 }

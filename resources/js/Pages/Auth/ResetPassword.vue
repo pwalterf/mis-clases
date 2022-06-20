@@ -27,7 +27,7 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Reset Password" />
+    <Head title="Restablecer Contraseña" />
 
     <JetAuthenticationCard>
         <template #logo>
