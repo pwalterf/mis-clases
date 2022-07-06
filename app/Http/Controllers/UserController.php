@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Resources\StudentsResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -204,5 +205,15 @@ class UserController extends Controller
         }
 
         return Redirect::back();
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function students()
+    {
+        return StudentsResource::collection(User::whereRelation('roles', 'name', 'user')->get());
     }
 }

@@ -6,7 +6,7 @@
     >
         <div v-if="show && message" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="text-sm rounded-md" :class="alert[style]" role="alert" @mouseover="twn.pause()" @mouseleave="twn.resume()">
-                <div class="flex items-center justify-between flex-wrap p-4 pb-3">
+                <div class="flex items-center justify-between p-4 pb-3">
                     <div>
                         <span class="font-bold capitalize">{{ style }}</span> {{ message }}
                     </div>
@@ -59,7 +59,7 @@ watch(message, async () => {
         await trueShow()
 
         if (progressbar.value) {
-            twn.value = gsap.fromTo("#progressbar", {width: '100%'}, { duration: 5, ease: "none", width: '0%', onComplete: function() {show.value = false} })
+            twn.value = gsap.fromTo("#progressbar", {width: '100%'}, { duration: 5, ease: "none", overwrite: true, width: '0%', onComplete: function() {show.value = false} })
         }
     }
 }, {deep: true})

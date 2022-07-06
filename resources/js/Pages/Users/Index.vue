@@ -12,20 +12,19 @@
                     </template>
                 </Breadcrumb>
                 <Link :href="route('users.create')">
-                    <JetButton class="border-none font-medium px-3 bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-900 focus:ring-blue-300">Nuevo Usuario</JetButton>
+                    <Button type="button" class="border-none bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                        Nuevo Usuario
+                    </Button>
                 </Link>
             </div>
         </template>
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-purple-700 uppercase bg-purple-100">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
-                                #
-                            </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
                                 Nombre
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -40,17 +39,14 @@
                             <th scope="col" class="px-6 py-3 text-center">
                                 Estado
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
                                 <span class="sr-only">Editar</span>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="user in users" :key="user.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <td class="px-6 py-4">
-                                {{ user.id }}
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                        <tr v-for="(user, index) in users" :key="user.id" :class="{'border-b': index != users.length - 1}" class="bg-white hover:bg-gray-50">
+                            <th scope="row" class="pl-4 sm:pl-6 pr-2 py-3 text-gray-900">
                                 {{ user.firstname + ' ' + user.lastname }}
                             </th>
                             <td class="px-6 py-4">
@@ -67,8 +63,12 @@
                                     {{ user.deleted_at ? 'Inactivo' : 'Activo' }}
                                 </Badge>
                             </td>
-                            <td class="px-6 py-4 text-right">
-                                <Link :href="route('users.edit', user.id)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</Link>
+                            <td class="pl-2 pr-4 sm:pr-6 py-3">
+                                <div class="flex justify-end items-center">
+                                    <Link :href="route('users.edit', user.id)" class="p-1">
+                                        <PencilAltIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
+                                    </Link>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -83,8 +83,9 @@ import { Link } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
-import JetButton from '@/Jetstream/Button.vue'
+import Button from '@/Components/Button.vue'
 import Badge from '@/Components/Badge.vue'
+import { PencilAltIcon } from '@heroicons/vue/outline'
 
 const props = defineProps({
     users: Object

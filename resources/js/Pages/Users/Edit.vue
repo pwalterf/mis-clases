@@ -53,19 +53,21 @@
                 </template>
 
                 <template #actions>
-                    <div v-if="$page.props.user.id !== userData.id">
-                        <JetButton v-if="userData.deleted_at" type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal">
-                            Restaurar
-                        </JetButton>
+                    <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
+                        :class="{ 'opacity-25': form.processing}" :disabled="form.processing || !form.isDirty"
+                    >
+                        <span v-text="form.isDirty ? 'Guardar Cambios' : 'Sin Cambios'"></span>
+                    </Button>
 
-                        <JetDangerButton v-else type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal">
+                    <div v-if="$page.props.user.id !== userData.id">
+                        <Button v-if="userData.deleted_at" type="button" class="bg-green-700 hover:bg-green-800 focus:bg-green-900 focus:ring-green-600 active:bg-green-900" :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal">
+                            Restaurar
+                        </Button>
+
+                        <Button v-else type="button" class="bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800" :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal">
                             Eliminar
-                        </JetDangerButton>
+                        </Button>
                     </div>
-                    
-                    <JetButton :class="{ 'opacity-25': form.processing}" :disabled="form.processing" class="ml-4">
-                        Guardar
-                    </JetButton>
                 </template>
             </FormSection>
         </div>
@@ -80,13 +82,13 @@
             </template>
 
             <template #footer>
-                <JetSecondaryButton @click="closeModal">
+                <Button class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700" @click="closeModal">
                     Cancelar
-                </JetSecondaryButton>
+                </Button>
 
-                <JetButton class="ml-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmingAction">
+                <Button class="ml-4 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmingAction">
                     Confirmar
-                </JetButton>
+                </Button>
             </template>
         </JetDialogModal>
     </AppLayout>
@@ -101,9 +103,7 @@ import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
 import FormSection from '@/Components/FormSection.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
-import JetButton from '@/Jetstream/Button.vue'
-import JetDangerButton from '@/Jetstream/DangerButton.vue'
-import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
+import Button from '@/Components/Button.vue'
 import JetInputError from '@/Jetstream/InputError.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
 

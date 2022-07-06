@@ -49,6 +49,14 @@ const logout = () => {
                                 <JetNavLink v-if="is('admin')" :href="route('users.index')" :active="route().current('users.*')">
                                     Usuarios
                                 </JetNavLink>
+
+                                <JetNavLink v-if="is('admin')" :href="route('classrooms.index')" :active="route().current('classrooms.*')">
+                                    Clases
+                                </JetNavLink>
+
+                                <JetNavLink v-if="is('admin')" :href="route('payments.index')" :active="route().current('payments.*')">
+                                    Pagos
+                                </JetNavLink>
                             </div>
                         </div>
 
@@ -143,6 +151,14 @@ const logout = () => {
                         <JetResponsiveNavLink v-if="is('admin')" :href="route('users.index')" :active="route().current('users.*')">
                             Usuarios
                         </JetResponsiveNavLink>
+
+                        <JetResponsiveNavLink v-if="is('admin')" :href="route('classrooms.index')" :active="route().current('classrooms.*')">
+                            Clases
+                        </JetResponsiveNavLink>
+
+                        <JetResponsiveNavLink v-if="is('admin')" :href="route('payments.index')" :active="route().current('payments.*')">
+                            Pagos
+                        </JetResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
@@ -190,7 +206,7 @@ const logout = () => {
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main class="pb-4">
                 <div class="py-4">
                     <Alert />
                 </div>
