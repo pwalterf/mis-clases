@@ -26,8 +26,8 @@ class UserUpdateRequest extends FormRequest
         return [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
-            'dni' => ['required', 'numeric', 'digits_between:7,9', 'unique:users,dni,' . $this->user->id],
-            'birthdate' => ['required', 'date'],
+            //'dni' => ['required', 'numeric', 'digits_between:7,9', 'unique:users,dni,' . $this->user->id],
+            //'birthdate' => ['required', 'date'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $this->user->id],
         ];
     }
@@ -42,8 +42,8 @@ class UserUpdateRequest extends FormRequest
         return [
             'firstname' => 'Nombre',
             'lastname' => 'Apellido',
-            'dni' => 'DNI',
-            'birthdate' => 'Fecha de Nacimiento',
+            //'dni' => 'DNI',
+            //'birthdate' => 'Fecha de Nacimiento',
             'email' => 'Correo Electrónico',
         ];
     }

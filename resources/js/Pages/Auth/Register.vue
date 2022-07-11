@@ -11,8 +11,8 @@ import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
 const form = useForm({
     firstname: '',
     lastname: '',
-    dni: '',
-    birthdate: '',
+    //dni: '',
+    //birthdate: '',
     email: '',
     password: '',
     password_confirmation: '',
@@ -38,7 +38,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <JetLabel for="firstname" value="Firstname" />
+                <JetLabel for="firstname" value="Nombre" />
                 <JetInput
                     id="firstname"
                     v-model="form.firstname"
@@ -51,7 +51,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <JetLabel for="lastname" value="Lastname" />
+                <JetLabel for="lastname" value="Apellido" />
                 <JetInput
                     id="lastname"
                     v-model="form.lastname"
@@ -62,7 +62,7 @@ const submit = () => {
                 />
             </div>
 
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <JetLabel for="dni" value="DNI" />
                 <JetInput
                     id="dni"
@@ -72,7 +72,7 @@ const submit = () => {
                     required
                     autocomplete="dni"
                 />
-            </div>
+            </div> -->
 
             <div class="mt-4">
                 <JetLabel for="email" value="Email" />
@@ -85,7 +85,7 @@ const submit = () => {
                 />
             </div>
 
-            <div class="mt-4">
+            <!-- <div class="mt-4">
                 <JetLabel for="birthdate" value="Birthdate" />
                 <JetInput
                     id="birthdate"
@@ -94,10 +94,10 @@ const submit = () => {
                     class="mt-1 block w-full"
                     required
                 />
-            </div>
+            </div> -->
 
             <div class="mt-4">
-                <JetLabel for="password" value="Password" />
+                <JetLabel for="password" value="Contraseña" />
                 <JetInput
                     id="password"
                     v-model="form.password"
@@ -109,7 +109,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <JetLabel for="password_confirmation" value="Confirm Password" />
+                <JetLabel for="password_confirmation" value="Confirmar Contraseña" />
                 <JetInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"

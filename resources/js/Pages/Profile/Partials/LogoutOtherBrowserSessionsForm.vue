@@ -3,11 +3,10 @@ import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import JetActionMessage from '@/Jetstream/ActionMessage.vue';
 import JetActionSection from '@/Jetstream/ActionSection.vue';
-import JetButton from '@/Jetstream/Button.vue';
+import Button from '@/Components/Button.vue';
 import JetDialogModal from '@/Jetstream/DialogModal.vue';
 import JetInput from '@/Jetstream/Input.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
-import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue';
 
 defineProps({
     sessions: Array,
@@ -113,9 +112,9 @@ const closeModal = () => {
             </div>
 
             <div class="flex items-center mt-5">
-                <JetButton @click="confirmLogout">
+                <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700" @click="confirmLogout">
                     Cerrar Otras Sesiones Abiertas
-                </JetButton>
+                </Button>
 
                 <JetActionMessage :on="form.recentlySuccessful" class="ml-3">
                     Hecho.
@@ -137,7 +136,7 @@ const closeModal = () => {
                             v-model="form.password"
                             type="password"
                             class="mt-1 block w-3/4"
-                            placeholder="Password"
+                            placeholder="Contraseña"
                             @keyup.enter="logoutOtherBrowserSessions"
                         />
 
@@ -146,18 +145,16 @@ const closeModal = () => {
                 </template>
 
                 <template #footer>
-                    <JetSecondaryButton @click="closeModal">
+                    <Button type="button" class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700" @click="closeModal">
                         Cancelar
-                    </JetSecondaryButton>
+                    </Button>
 
-                    <JetButton
-                        class="ml-3"
+                    <Button class="ml-3 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
-                        @click="logoutOtherBrowserSessions"
-                    >
+                        @click="logoutOtherBrowserSessions">
                         Cerrar Otras Sesiones Abiertas
-                    </JetButton>
+                    </Button>
                 </template>
             </JetDialogModal>
         </template>

@@ -19,7 +19,7 @@
                     <!-- Payment_date -->
                     <div class="col-span-6 md:col-span-3">
                         <JetLabel for="payment_date" value="Fecha del Pago" />
-                        <JetInput id="payment_date" v-model="form.payment_date" type="date" class="mt-1 block w-full"/>
+                        <JetInput id="payment_date" v-model="form.payment_date" type="date" class="mt-1 block w-full" :error="form.errors.payment_date" required />
                         <JetInputError :message="form.errors.payment_date" class="mt-2" />
                     </div>
 
@@ -30,7 +30,7 @@
                             <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
                                 <span class="text-gray-600">$</span>
                             </div>
-                            <JetInput id="income" v-model="form.income" type="text" class="mt-1 block w-full pl-10"/>
+                            <JetInput id="income" v-model="form.income" type="text" class="mt-1 block w-full pl-10" :error="form.errors.income" required />
                         </div>
                         <JetInputError :message="form.errors.income" class="mt-2" />
                     </div>
@@ -38,7 +38,7 @@
                     <!-- Comment -->
                     <div class="col-span-6">
                         <JetLabel for="comment" value="Comentario" />
-                        <JetInput id="comment" v-model="form.comment" type="text" class="mt-1 block w-full"/>
+                        <JetInput id="comment" v-model="form.comment" type="text" class="mt-1 block w-full" :error="form.errors.comment" />
                         <JetInputError :message="form.errors.comment" class="mt-2" />
                     </div>
 
@@ -81,7 +81,7 @@
                                             $ {{ studentClass.price_hr }}
                                         </td>
                                         <td>
-                                            <JetInput v-model="studentClass.new_credit" type="text" class="py-1"/>
+                                            <JetInput v-model="studentClass.new_credit" type="text" class="py-1" />
                                         </td>
                                         <td class="pl-2 pr-4 sm:pr-6 py-4 flex justify-end">
                                             <UserRemoveIcon class="h-5 w-5 text-red-600 cursor-pointer" aria-hidden="true" @click="removeStudent(studentClass)" />
@@ -121,10 +121,7 @@
                         <table class="w-full text-sm text-left text-gray-500">
                             <thead class="text-xs text-purple-700 uppercase bg-purple-100">
                                 <tr>
-                                    <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
-                                        ID
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="pl-4 sm:pl-6 pr-2 py-4">
                                         Alumno
                                     </th>
                                     <th scope="col" class="px-6 py-3">
@@ -137,13 +134,10 @@
                             </thead>
                             <tbody>
                                 <tr v-if="studentsList.length === 0" class="bg-white">
-                                    <td colspan="4" class="pl-4 sm:pl-6 pr-2 py-4">No existen alumnos cursando actualmente.</td>
+                                    <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No existen alumnos cursando actualmente.</td>
                                 </tr>
-                                <tr v-else v-for="(student, index) in studentsList" :key="student.id" :class="{'border-b': index != studentsList.length - 1}" class="bg-white border-b hover:bg-gray-50">
+                                <tr v-else v-for="(student, index) in studentsList" :key="student.id" :class="{'border-b': index != studentsList.length - 1}" class="bg-white hover:bg-gray-50">
                                     <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {{ student.id }}
-                                    </th>
-                                    <th class="px-6 py-4">
                                         {{ student.user.firstname + ' ' + student.user.lastname }}
                                     </th>
                                     <td class="px-6 py-4">

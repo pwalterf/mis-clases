@@ -2,13 +2,12 @@
 import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Link, useForm } from '@inertiajs/inertia-vue3';
-import JetButton from '@/Jetstream/Button.vue';
+import Button from '@/Components/Button.vue';
 import JetFormSection from '@/Jetstream/FormSection.vue';
 import JetInput from '@/Jetstream/Input.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
 import JetLabel from '@/Jetstream/Label.vue';
 import JetActionMessage from '@/Jetstream/ActionMessage.vue';
-import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue';
 
 const props = defineProps({
     user: Object,
@@ -115,25 +114,24 @@ const clearPhotoFileInput = () => {
                     />
                 </div>
 
-                <JetSecondaryButton class="mt-2 mr-2" type="button" @click.prevent="selectNewPhoto">
+                <Button type="button" class="mt-2 mr-2 bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
+                    @click.prevent="selectNewPhoto"
+                >
                     Seleccione una Nueva Foto
-                </JetSecondaryButton>
+                </Button>
 
-                <JetSecondaryButton
-                    v-if="user.profile_photo_path"
-                    type="button"
-                    class="mt-2"
+                <Button v-if="user.profile_photo_path" type="button" class="mt-2 bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800"
                     @click.prevent="deletePhoto"
                 >
                     Eliminar Foto
-                </JetSecondaryButton>
+                </Button>
 
                 <JetInputError :message="form.errors.photo" class="mt-2" />
             </div>
 
             <!-- Firstname -->
             <div class="col-span-6 sm:col-span-4">
-                <JetLabel for="firstname" value="Firstname" />
+                <JetLabel for="firstname" value="Nombre" />
                 <JetInput
                     id="firstname"
                     v-model="form.firstname"
@@ -146,7 +144,7 @@ const clearPhotoFileInput = () => {
 
             <!-- Lastname -->
             <div class="col-span-6 sm:col-span-4">
-                <JetLabel for="lastname" value="Lastname" />
+                <JetLabel for="lastname" value="Apellido" />
                 <JetInput
                     id="lastname"
                     v-model="form.lastname"
@@ -158,7 +156,7 @@ const clearPhotoFileInput = () => {
             </div>
 
             <!-- DNI -->
-            <div class="col-span-6 sm:col-span-4">
+            <!-- <div class="col-span-6 sm:col-span-4">
                 <JetLabel for="dni" value="DNI" />
                 <JetInput
                     id="dni"
@@ -168,11 +166,11 @@ const clearPhotoFileInput = () => {
                     autocomplete="dni"
                 />
                 <JetInputError :message="form.errors.dni" class="mt-2" />
-            </div>
+            </div> -->
 
             <!-- Birthdate -->
-            <div class="col-span-6 sm:col-span-4">
-                <JetLabel for="birthdate" value="Birthdate" />
+            <!-- <div class="col-span-6 sm:col-span-4">
+                <JetLabel for="birthdate" value="Fecha de Nacimiento" />
                 <JetInput
                     id="birthdate"
                     v-model="form.birthdate"
@@ -181,7 +179,7 @@ const clearPhotoFileInput = () => {
                     autocomplete="birthdate"
                 />
                 <JetInputError :message="form.errors.birthdate" class="mt-2" />
-            </div>
+            </div> -->
 
             <!-- Email -->
             <div class="col-span-6 sm:col-span-4">
@@ -221,9 +219,11 @@ const clearPhotoFileInput = () => {
                 Guardado.
             </JetActionMessage>
 
-            <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Guardar
-            </JetButton>
+            <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
+                :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.isDirty"
+            >
+                <span v-text="form.isDirty ? 'Guardar Cambios' : 'Sin Cambios'"></span>
+            </Button>
         </template>
     </JetFormSection>
 </template>

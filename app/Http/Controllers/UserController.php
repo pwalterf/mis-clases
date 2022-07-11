@@ -7,13 +7,13 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\StudentsResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -63,8 +63,8 @@ class UserController extends Controller
             $validatedUser = $request->safe()->except('role');
             $validatedRole = $request->safe()->only('role');
 
-            $validatedUser['password'] = Hash::make($validatedUser['password']);
-            //$validatedUser['email_verified_at'] = now();
+            //$validatedUser['password'] = Hash::make($validatedUser['password']);
+            $validatedUser['password'] = Hash::make(Str::random(8));
 
             $user = User::create($validatedUser);
 
@@ -214,6 +214,6 @@ class UserController extends Controller
      */
     public function students()
     {
-        return StudentsResource::collection(User::whereRelation('roles', 'name', 'user')->get());
+        return StudentsResource::collection(User::whereRelation('roles', 'name', 'alumno')->get());
     }
 }

@@ -19,35 +19,35 @@
                     <!-- Firstname -->
                     <div class="col-span-6 md:col-span-3">
                         <JetLabel for="firstname" value="Firstname" />
-                        <JetInput id="firstname" v-model="form.firstname" type="text" class="mt-1 block w-full" required autofocus autocomplete="firstname"/>
+                        <JetInput id="firstname" v-model="form.firstname" type="text" class="mt-1 block w-full" :error="form.errors.firstname" required />
                         <JetInputError :message="form.errors.firstname" class="mt-2" />
                     </div>
 
                     <!-- Lastname -->
                     <div class="col-span-6 md:col-span-3">
                         <JetLabel for="lastname" value="Lastname" />
-                        <JetInput id="lastname" v-model="form.lastname" type="text" class="mt-1 block w-full" required autocomplete="lastname"/>
+                        <JetInput id="lastname" v-model="form.lastname" type="text" class="mt-1 block w-full" :error="form.errors.lastname" required />
                         <JetInputError :message="form.errors.lastname" class="mt-2" />
                     </div>
 
                     <!-- DNI -->
-                    <div class="col-span-6 md:col-span-3">
+                    <!-- <div class="col-span-6 md:col-span-3">
                         <JetLabel for="dni" value="DNI" />
-                        <JetInput id="dni" v-model="form.dni" type="text" class="mt-1 block w-full" required autocomplete="dni"/>
+                        <JetInput id="dni" v-model="form.dni" type="text" class="mt-1 block w-full" :error="form.errors.dni" required />
                         <JetInputError :message="form.errors.dni" class="mt-2" />
-                    </div>
+                    </div> -->
 
                     <!-- Birthdate -->
-                    <div class="col-span-6 md:col-span-3">
+                    <!-- <div class="col-span-6 md:col-span-3">
                         <JetLabel for="birthdate" value="Birthdate" />
-                        <JetInput id="birthdate" v-model="form.birthdate" type="date" class="mt-1 block w-full" required autocomplete="birthdate"/>
+                        <JetInput id="birthdate" v-model="form.birthdate" type="date" class="mt-1 block w-full" :error="form.errors.birthdate" required />
                         <JetInputError :message="form.errors.birthdate" class="mt-2" />
-                    </div>
+                    </div> -->
 
                     <!-- Email Address -->
                     <div class="col-span-6 md:col-span-3">
                         <JetLabel for="email" value="Email" />
-                        <JetInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required autocomplete="email"/>
+                        <JetInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" :error="form.errors.email" required />
                         <JetInputError :message="form.errors.email" class="mt-2" />
                     </div>
                 </template>
@@ -117,8 +117,8 @@ const form = useForm({
     _method: 'PUT',
     firstname: props.userData.firstname,
     lastname: props.userData.lastname,
-    dni: props.userData.dni,
-    birthdate: props.userData.birthdate,
+    //dni: props.userData.dni,
+    //birthdate: props.userData.birthdate,
     email: props.userData.email,
     //password: '',
     //password_confirmation: '',

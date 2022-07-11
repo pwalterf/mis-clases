@@ -32,7 +32,8 @@ class Classroom extends Model
 
     public function classroomUsers()
     {
-        return $this->hasMany(ClassroomUser::class)->with('user')->withTrashed();
+        //return $this->hasMany(ClassroomUser::class)->with('user')->withTrashed();
+        return $this->hasMany(ClassroomUser::class);
     }
 
     public function lessons()

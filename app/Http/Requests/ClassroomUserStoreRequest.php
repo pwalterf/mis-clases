@@ -29,4 +29,18 @@ class ClassroomUserStoreRequest extends FormRequest
             'credit' => ['sometimes', 'numeric'],
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'classroom_id' => 'Clase',
+            'user_id' => 'Alumno',
+            'credit' => 'Créditos'
+        ];
+    }
 }

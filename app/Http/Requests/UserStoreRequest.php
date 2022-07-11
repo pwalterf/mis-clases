@@ -27,10 +27,10 @@ class UserStoreRequest extends FormRequest
         return [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
-            'dni' => ['required', 'numeric', 'digits_between:7,9', 'unique:users,dni'],
-            'birthdate' => ['required', 'date'],
+            //'dni' => ['required', 'numeric', 'digits_between:7,9', 'unique:users,dni'],
+            //'birthdate' => ['required', 'date'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', new Password, 'confirmed'],
+            //'password' => ['required', 'string', new Password, 'confirmed'],
             'role' => ['required', 'string'],
         ];
     }
@@ -45,10 +45,10 @@ class UserStoreRequest extends FormRequest
         return [
             'firstname' => 'Nombre',
             'lastname' => 'Apellido',
-            'dni' => 'DNI',
-            'birthdate' => 'Fecha de Nacimiento',
+            //'dni' => 'DNI',
+            //'birthdate' => 'Fecha de Nacimiento',
             'email' => 'Correo Electrónico',
-            'password' => 'Contraseña',
+            //'password' => 'Contraseña',
             'role' => 'Rol',
         ];
     }

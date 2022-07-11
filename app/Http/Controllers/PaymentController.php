@@ -6,6 +6,7 @@ use App\Http\Requests\PaymentStoreRequest;
 use App\Http\Requests\PaymentUpdateRequest;
 use App\Http\Resources\PaymentResource;
 use App\Http\Resources\Payments\ClassroomUsersResource;
+use App\Http\Resources\Payments\IndexStudentsResource;
 use App\Http\Resources\PaymentsResource;
 use App\Models\ClassroomUser;
 use App\Models\Payment;
@@ -189,5 +190,16 @@ class PaymentController extends Controller
 
             return Redirect::back()->withInput();
         }
+    }
+
+    /**
+     * Display a listing of students of the resource.
+     *
+     * @param  \App\Models\Payment  $payment
+     * @return \Illuminate\Http\Response
+     */
+    public function students(Payment $payment)
+    {
+        return IndexStudentsResource::collection($payment->classroomUsers()->with('user', 'classroom')->get());
     }
 }

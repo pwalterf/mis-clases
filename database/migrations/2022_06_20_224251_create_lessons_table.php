@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('comment');
             $table->string('student_page')->nullable();
             $table->string('workbook_page')->nullable();
+            $table->date('lesson_date');
             $table->timestamps();
 
             $table->foreignId('classroom_id')->constrained()->onDelete('cascade');

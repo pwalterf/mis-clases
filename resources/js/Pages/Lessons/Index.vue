@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="Clases">
+    <AppLayout title="Lecciones">
         <template #header>
             <div class="flex flex-row justify-between">
                 <Breadcrumb>
@@ -8,12 +8,12 @@
                     </template>
 
                     <template #static>
-                        Salas de Clases
+                        Lecciones
                     </template>
                 </Breadcrumb>
-                <Link :href="route('classrooms.create')">
+                <Link :href="route('lessons.create', classroom_id)">
                     <Button type="button" class="border-none bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
-                        Nueva Clase
+                        Nueva Lección
                     </Button>
                 </Link>
             </div>
@@ -25,16 +25,13 @@
                     <thead class="text-xs text-purple-700 uppercase bg-purple-100">
                         <tr>
                             <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
-                                Nombre
+                                Fecha
                             </th>
                             <th scope="col" class="px-2 py-3">
-                                Creada
+                                Clase
                             </th>
                             <th scope="col" class="px-2 py-3">
-                                Precio/hr
-                            </th>
-                            <th scope="col" class="px-2 py-3 text-center">
-                                Estado
+                                Comentario
                             </th>
                             <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
                                 <span class="sr-only">Editar</span>
@@ -42,32 +39,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="classrooms.length === 0" class="bg-white">
-                            <td colspan="5" class="pl-4 sm:pl-6 pr-2 py-4">No existen clases creadas.</td>
+                        <tr v-if="lessons.length === 0" class="bg-white">
+                            <td colspan="4" class="pl-4 sm:pl-6 pr-2 py-3">No existen clases lecciones creadas.</td>
                         </tr>
-                        <tr v-else v-for="(classroom, index) in classrooms" :key="classroom.id" :class="{'border-b': index != classrooms.length - 1}" class="bg-white hover:bg-gray-50">
-                            <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
-                                {{ classroom.name }}
-                            </th>
-                            <td class="px-2 py-4">
-                                {{ classroom.created_at }}
+                        <tr v-else v-for="(lesson, index) in lessons" :key="lesson.id" :class="{'border-b': index != lessons.length - 1}" class="bg-white hover:bg-gray-50">
+                            <td class="pl-4 sm:pl-6 pr-2 py-3">
+                                {{ lesson.lesson_date }}
                             </td>
                             <td class="px-2 py-4">
-                                $ {{ classroom.price_hr }}
+                                {{ lesson.classroom.name }}
                             </td>
-                            <td class="px-2 py-4 text-center">
-                                <Badge :class="classroom.deleted_at ? 'bg-red-500' : 'bg-green-500'">
-                                    {{ classroom.deleted_at ? 'Inactiva' : 'Activa' }}
-                                </Badge>
+                            <td class="px-2 py-4">
+                                {{ lesson.comment ?? 'Ninguno' }}
                             </td>
                             <td class="pl-2 pr-4 sm:pr-6 py-3">
                                 <div class="flex justify-end items-center gap-2">
                                     <span v-if="loading[index]" class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent rounded-full" role="status" aria-label="loading"></span>
-                                    <UserGroupIcon v-else class="h-5 w-5 text-gray-600 cursor-pointer" aria-hidden="true" @click="studentsOpen(classroom.id, index)" />
-                                    <Link :href="route('classrooms.lessons', classroom.id)">
-                                        <BookOpenIcon class="h-5 w-5 text-yellow-600 cursor-pointer" aria-hidden="true" />
-                                    </Link>
-                                    <Link :href="route('classrooms.edit', classroom.id)">
+                                    <UserGroupIcon v-else class="h-5 w-5 text-gray-600 cursor-pointer" aria-hidden="true" @click="studentsOpen(lesson.classroom.id, index)" />
+                                    <Link :href="route('lessons.edit', lesson.id)">
                                         <PencilAltIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
                                     </Link>
                                 </div>
@@ -78,10 +67,10 @@
             </div>
         </div>
 
-        <!-- Alumnos por clase -->
+        <!-- Alumnos en la leccion -->
         <JetDialogModal :show="studentsModal" @close="studentsClose">
             <template #title>
-                {{ selected.name }}
+                Alumnos
             </template>
 
             <template #content>
@@ -95,9 +84,6 @@
                                 <th scope="col" class="px-6 py-3">
                                     Email
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    Créditos
-                                </th>
                                 <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3 text-center">
                                     Estado
                                 </th>
@@ -105,17 +91,14 @@
                         </thead>
                         <tbody>
                             <tr v-if="students.length === 0" class="bg-white">
-                                <td colspan="4" class="pl-4 sm:pl-6 pr-2 py-4">No existen alumnos asociados a la clase.</td>
+                                <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No existen alumnos asociados a la clase.</td>
                             </tr>
                             <tr v-else v-for="(student, index) in students" :key="student.id" :class="{'border-b': index != students.length - 1}" class="bg-white hover:bg-gray-50">
-                                <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
+                                <td scope="row" class="pl-4 sm:pl-6 pr-2 py-4">
                                     {{ student.user.firstname + ' ' + student.user.lastname }}
-                                </th>
+                                </td>
                                 <td class="px-6 py-4">
                                     {{ student.user.email }}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    {{ student.credit }}
                                 </td>
                                 <td class="pl-2 pr-4 sm:pr-6 py-4 text-center">
                                     <Badge :class="student.deleted_at ? 'bg-red-500' : 'bg-green-500'">
@@ -137,13 +120,14 @@ import { Link } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
-import Badge from '@/Components/Badge.vue'
 import Button from '@/Components/Button.vue'
+import Badge from '@/Components/Badge.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
-import { PencilAltIcon, UserGroupIcon, BookOpenIcon } from '@heroicons/vue/outline'
+import { PencilAltIcon, UserGroupIcon } from '@heroicons/vue/outline'
 
 const props = defineProps({
-    classrooms: Object,
+    lessons: Object,
+    classroom_id: Number,
 })
 
 const loading = ref([])

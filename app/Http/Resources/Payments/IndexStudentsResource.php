@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Classroom;
+namespace App\Http\Resources\Payments;
 
+use App\Http\Resources\ClassroomUsers\ClassroomResource;
 use App\Http\Resources\StudentsResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ClassroomUsersResource extends JsonResource
+class IndexStudentsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +17,9 @@ class ClassroomUsersResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'credit' => $this->credit,
-            'deleted_at' => $this->deleted_at,
+            'new_credit' => $this->studentPayment->new_credit,
             'user' => new StudentsResource($this->user),
+            'classroom' => new ClassroomResource($this->classroom),
         ];
     }
 }

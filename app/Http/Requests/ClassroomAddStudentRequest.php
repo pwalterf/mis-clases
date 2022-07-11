@@ -27,4 +27,16 @@ class ClassroomAddStudentRequest extends FormRequest
             'user' => ['required', 'numeric']
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'user' => 'Alumno',
+        ];
+    }
 }

@@ -54,6 +54,10 @@ const logout = () => {
                                     Clases
                                 </JetNavLink>
 
+                                <JetNavLink v-if="is('admin')" :href="route('lessons.index')" :active="route().current('lessons.*')">
+                                    Lecciones
+                                </JetNavLink>
+
                                 <JetNavLink v-if="is('admin')" :href="route('payments.index')" :active="route().current('payments.*')">
                                     Pagos
                                 </JetNavLink>
@@ -154,6 +158,10 @@ const logout = () => {
 
                         <JetResponsiveNavLink v-if="is('admin')" :href="route('classrooms.index')" :active="route().current('classrooms.*')">
                             Clases
+                        </JetResponsiveNavLink>
+
+                        <JetResponsiveNavLink v-if="is('admin')" :href="route('lessons.index')" :active="route().current('lessons.*')">
+                            Lecciones
                         </JetResponsiveNavLink>
 
                         <JetResponsiveNavLink v-if="is('admin')" :href="route('payments.index')" :active="route().current('payments.*')">

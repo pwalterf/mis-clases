@@ -19,7 +19,7 @@
                     <!-- Price_hr -->
                     <div class="col-span-6">
                         <JetLabel for="price_hr" value="Precio por Hora" />
-                        <JetInput id="price_hr" v-model="form.price_hr" type="text" class="mt-1 block w-full"/>
+                        <JetInput id="price_hr" v-model="form.price_hr" type="text" class="mt-1 block w-full" :error="form.errors.price_hr" required />
                         <JetInputError :message="form.errors.price_hr" class="mt-2" />
                     </div>
                 </template>

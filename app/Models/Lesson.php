@@ -18,7 +18,18 @@ class Lesson extends Model
         'comment',
         'student_page',
         'workbook_page',
+        'lesson_date',
         'classroom_id',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'lesson_date' => 'datetime:d/m/Y',
+        'created_at' => 'datetime:d/m/Y',
     ];
 
     public function classroom()

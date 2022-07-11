@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { usePage } from '@inertiajs/inertia-vue3'
 import gsap from 'gsap'
 
@@ -50,11 +50,11 @@ const progress = {
     advertencia: 'bg-orange-500'
 }
 
-function trueShow() {
+const trueShow = () => {
     show.value = true
 }
 
-watch(message, async () => {
+watchEffect(async () => {
     if (message.value) {
         await trueShow()
 
@@ -62,5 +62,5 @@ watch(message, async () => {
             twn.value = gsap.fromTo("#progressbar", {width: '100%'}, { duration: 5, ease: "none", overwrite: true, width: '0%', onComplete: function() {show.value = false} })
         }
     }
-}, {deep: true})
+})
 </script>

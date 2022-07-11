@@ -6,6 +6,8 @@ use App\Http\Requests\ClassroomStoreRequest;
 use App\Http\Requests\ClassroomUpdateRequest;
 use App\Http\Resources\Classroom\ClassroomResource;
 use App\Http\Resources\Classroom\ClassroomsResource;
+use App\Http\Resources\Classroom\ClassroomUsersResource;
+use App\Http\Resources\LessonsResource;
 use App\Models\Classroom;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +29,7 @@ class ClassroomController extends Controller
                 ->whereColumn('classroom_id', 'classrooms.id')
                 ->latest()
                 ->limit(1)
-            ])->get());
+            ])->withTrashed()->get());
         
         //$classrooms = Classroom::with('subscriptions')->get();
         //$classrooms = ClassroomResource::collection(Classroom::with('currentSubs')->get());
@@ -84,18 +86,26 @@ class ClassroomController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Classroom  $classroom
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Classroom $classroom)
     {
-        //
+        /*
+        if (!$classroom->deleted_at) {
+            return Redirect::route('classrooms.edit', $classroom->id);
+        }
+
+        $classroom = new ClassroomResource($classroom);
+
+        return Inertia::render('Classrooms/Show', compact('classroom'));
+        */
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Classroom  $classroom
+     * @param  \App\Models\Classroom  $classroom
      * @return \Illuminate\Http\Response
      */
     public function edit(Classroom $classroom)
@@ -109,7 +119,7 @@ class ClassroomController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\ClassroomUpdateRequest  $request
-     * @param  Classroom  $classroom
+     * @param  \App\Models\Classroom  $classroom
      * @return \Illuminate\Http\Response
      */
     public function update(ClassroomUpdateRequest $request, Classroom $classroom)
@@ -134,25 +144,81 @@ class ClassroomController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Classroom  $classroom
+     * @param  \App\Models\Classroom  $classroom
      * @return \Illuminate\Http\Response
      */
     public function destroy(Classroom $classroom)
     {
         try {
+            DB::beginTransaction();
+
             $classroom->delete();
+            $classroom->classroomUsers()->delete();
+
+            DB::commit();
 
             Session::flash('alert.style', 'exitoso');
             Session::flash('alert.message', 'Se ha eliminado la clase correctamente.');
 
-            return Redirect::route('classrooms.index');
+            return Redirect::back();
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollBack();
 
             Session::flash('alert.style', 'error');
             Session::flash('alert.message', 'Ha ocurrido un error al eliminar la clase. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
 
             return Redirect::back()->withInput();
         }
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param  \App\Models\Classroom  $classroom
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(Classroom $classroom)
+    {
+        try {
+            $classroom->restore();
+
+            Session::flash('alert.style', 'exitoso');
+            Session::flash('alert.message', 'Se ha restaurado la clase correctamente.');
+
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            //throw $th;
+
+            Session::flash('alert.style', 'error');
+            Session::flash('alert.message', 'Ha ocurrido un error al restaurar la clase. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
+
+            return Redirect::back()->withInput();
+        }
+    }
+
+    /**
+     * Display a listing of students of the resource.
+     *
+     * @param  \App\Models\Classroom  $classroom
+     * @return \Illuminate\Http\Response
+     */
+    public function students(Classroom $classroom)
+    {
+        return ClassroomUsersResource::collection($classroom->classroomUsers()->with('user')->get());
+    }
+
+    /**
+     * Display a listing of lessons of the resource.
+     *
+     * @param  \App\Models\Classroom  $classroom
+     * @return \Illuminate\Http\Response
+     */
+    public function lessons(Classroom $classroom)
+    {
+        $lessons = LessonsResource::collection($classroom->lessons()->with('classroom:id,name')->get());
+        $classroom_id = $classroom->id;
+
+        return Inertia::render('Lessons/Index', compact('lessons', 'classroom_id'));
     }
 }

@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
         ]);
 
         $teacher->assignRole('admin');
-
+/*
         $student = User::create([
             'firstname' => 'Walter',
             'lastname' => 'Pinto',
@@ -59,5 +59,6 @@ class UserSeeder extends Seeder
         ]);
 
         $student3->assignRole('user');
+*/
     }
 }

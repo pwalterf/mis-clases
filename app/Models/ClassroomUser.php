@@ -26,7 +26,7 @@ class ClassroomUser extends Model
 
     public function classroom()
     {
-        return $this->belongsTo(Classroom::class);
+        return $this->belongsTo(Classroom::class)->withTrashed();
     }
 
     public function user()

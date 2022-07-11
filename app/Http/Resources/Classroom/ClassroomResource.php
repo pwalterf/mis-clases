@@ -20,8 +20,9 @@ class ClassroomResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'created_at' => $this->created_at->format('d/m/Y'),
+            'deleted_at' => $this->deleted_at,
             'subscriptions' => SubscriptionsResource::collection($this->subscriptions),
-            'classroomUsers' => ClassroomUsersResource::collection($this->classroomUsers),
+            'classroomUsers' => ClassroomUsersResource::collection($this->classroomUsers()->withTrashed()->with('user')->get()),
         ];
     }
 }

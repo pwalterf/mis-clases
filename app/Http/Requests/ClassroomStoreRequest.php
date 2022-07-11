@@ -30,4 +30,19 @@ class ClassroomStoreRequest extends FormRequest
             'students' => ['nullable', 'array'],
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'name' => 'Nombre',
+            'description' => 'Descripción',
+            'price_hr' => 'Precio por Hora',
+            'students' => 'Alumnos',
+        ];
+    }
 }

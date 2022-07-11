@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Payments;
+namespace App\Http\Resources;
 
 use App\Http\Resources\ClassroomUsers\ClassroomResource;
-use App\Http\Resources\StudentsResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
-class ClassroomUsersResource extends JsonResource
+class LessonsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,11 +18,10 @@ class ClassroomUsersResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'credit' => $this->credit,
-            'deleted_at' => $this->deleted_at,
-            'new_credit' => $this->studentPayment?->new_credit . '',
-            'price_hr' => $this->classroom->subscriptions()->first()->price_hr,
-            'user' => new StudentsResource($this->user),
+            'comment' => Str::limit($this->comment, 30),
+            'student_page' => $this->student_page,
+            'workbook_page' => $this->workbook_page,
+            'lesson_date' => $this->lesson_date->format('d/m/Y'),
             'classroom' => new ClassroomResource($this->classroom),
         ];
     }

@@ -16,40 +16,30 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <FormSection @submitted="submit">
                 <template #form>
+                    <!-- Name -->
                     <div class="col-span-6 md:col-span-4">
-                        <!-- Name -->
-                        <div class="col-span-6">
-                            <JetLabel for="name" value="Nombre" />
-                            <JetInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" required/>
-                            <JetInputError :message="form.errors.name" class="mt-2" />
-                        </div>
-
-                        <!-- Description -->
-                        <div class="col-span-6 mt-6">
-                            <JetLabel for="description" value="Descripción" />
-                            <JetInput id="description" v-model="form.description" type="text" class="mt-1 block w-full" required/>
-                            <JetInputError :message="form.errors.description" class="mt-2" />
-                        </div>
+                        <JetLabel for="name" value="Nombre" />
+                        <JetInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" :error="form.errors.name" required />
+                        <JetInputError :message="form.errors.name" class="mt-2" />
                     </div>
 
+                    <!-- Price_hr -->
                     <div class="col-span-6 md:col-span-2">
-                        <!-- Created_at -->
-                        <div class="col-span-6">
-                            <JetLabel for="sub_created_at" value="Creada" />
-                            <JetInput id="sub_created_at" v-model="form.sub_created_at" type="text" class="mt-1 block w-full" disabled/>
-                        </div>
-
-                        <!-- Price_hr -->
-                        <div class="col-span-6 mt-6">
-                            <JetLabel for="price_hr" value="Precio por Hora" />
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
-                                    <span class="text-gray-600">$</span>
-                                </div>
-                                <JetInput id="price_hr" v-model="form.price_hr" type="text" class="mt-1 block w-full pl-10"/>
+                        <JetLabel for="price_hr" value="Precio por Hora" />
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
+                                <span class="text-gray-600">$</span>
                             </div>
-                            <JetInputError :message="form.errors.price_hr" class="mt-2" />
+                            <JetInput id="price_hr" v-model="form.price_hr" type="text" class="mt-1 block w-full pl-10" :error="form.errors.price_hr" required />
                         </div>
+                        <JetInputError :message="form.errors.price_hr" class="mt-2" />
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-span-6">
+                        <JetLabel for="description" value="Descripción" />
+                        <JetInput id="description" v-model="form.description" type="text" class="mt-1 block w-full" :error="form.errors.description" />
+                        <JetInputError :message="form.errors.description" class="mt-2" />
                     </div>
 
                     <div class="col-span-6">
@@ -181,7 +171,7 @@ const studentsList = computed(() => {
 const form = useForm({
     name: '',
     description: '',
-    sub_created_at: '',
+    created_at: '',
     price_hr: '',
     students: []
 })

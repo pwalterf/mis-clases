@@ -3,10 +3,9 @@ import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import JetActionSection from '@/Jetstream/ActionSection.vue';
 import JetDialogModal from '@/Jetstream/DialogModal.vue';
-import JetDangerButton from '@/Jetstream/DangerButton.vue';
 import JetInput from '@/Jetstream/Input.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
-import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue';
+import Button from '@/Components/Button.vue';
 
 const confirmingUserDeletion = ref(false);
 const passwordInput = ref(null);
@@ -53,9 +52,11 @@ const closeModal = () => {
             </div>
 
             <div class="mt-5">
-                <JetDangerButton @click="confirmUserDeletion">
+                <Button type="button" class="bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800"
+                    @click="confirmUserDeletion"
+                >
                     Eliminar Cuenta
-                </JetDangerButton>
+                </Button>
             </div>
 
             <!-- Delete Account Confirmation Modal -->
@@ -83,18 +84,17 @@ const closeModal = () => {
                 </template>
 
                 <template #footer>
-                    <JetSecondaryButton @click="closeModal">
+                    <Button type="button" class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700"
+                        @click="closeModal"
+                    >
                         Cancelar
-                    </JetSecondaryButton>
+                    </Button>
 
-                    <JetDangerButton
-                        class="ml-3"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                        @click="deleteUser"
+                    <Button type="button" class="ml-3 bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800"
+                        :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="deleteUser"
                     >
                         Eliminar Cuenta
-                    </JetDangerButton>
+                    </Button>
                 </template>
             </JetDialogModal>
         </template>

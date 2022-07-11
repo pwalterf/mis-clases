@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\ClassroomUserController;
+use App\Http\Controllers\LessonController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
+use App\Models\Classroom;
 use App\Models\ClassroomUser;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -38,27 +40,35 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     // Admin Panel
     Route::middleware(['role:admin'])->group(function () {
-        // Manage Users
+        
         // Permite enviar los usuarios eliminados como parametro en las URL
         Route::bind('user', function($id) {
             return User::withTrashed()->findOrFail($id);
         });
+        // Permite enviar los estudiantes eliminados como parametro en las URL
+        Route::bind('classroom', function($id) {
+            return Classroom::withTrashed()->findOrFail($id);
+        });
+        // Permite enviar los estudiantes eliminados como parametro en las URL
+        Route::bind('classroomUser', function($id) {
+            return ClassroomUser::withTrashed()->findOrFail($id);
+        });
+
+        // Manage Users
         Route::get('/users/students', [UserController::class, 'students'])->name('users.students');
         Route::put('/users/{user}/restore', [UserController::class, 'restore'])->name('users.restore');
         Route::resource('users', UserController::class);
 
         // Sala de Clases
-        //Route::post('/classroom/{classroom}/add_student', [ClassroomController::class, 'addStudent'])->name('classrooms.addStudent');
         Route::resource('classrooms', ClassroomController::class);
+        Route::put('/classrooms/{classroom}/restore', [ClassroomController::class, 'restore'])->name('classrooms.restore');
+        Route::get('/classrooms/{classroom}/students', [ClassroomController::class, 'students'])->name('classrooms.students');
+        Route::get('/classrooms/{classroom}/lessons', [ClassroomController::class, 'lessons'])->name('classrooms.lessons');
 
         // Suscripciones
         Route::resource('classrooms.subscriptions', SubscriptionController::class)->shallow();
 
         // Estudiantes
-        // Permite enviar los estudiantes eliminados como parametro en las URL
-        Route::bind('classroomUser', function($id) {
-            return ClassroomUser::withTrashed()->findOrFail($id);
-        });
         Route::get('/classroomUsers', [ClassroomUserController::class, 'index'])->name('classroomUsers.index');
         Route::get('/classroomUsers/{classroomUser}/payments', [ClassroomUserController::class, 'payments'])->name('classroomUsers.payments');
         Route::get('/classroomUsers/{classroomUser}/subscription', [ClassroomUserController::class, 'subscription'])->name('classroomUsers.subscription');
@@ -69,5 +79,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         // Payments
         Route::get('/payments/create/{classroomUser?}', [PaymentController::class, 'create'])->name('payments.create');
         Route::resource('payments', PaymentController::class)->except(['create']);
+        Route::get('/payments/{payment}/students', [PaymentController::class, 'students'])->name('payments.students');
+
+        // Lessons
+        Route::get('/lessons/create/{classroom?}', [LessonController::class, 'create'])->name('lessons.create');
+        Route::get('/lessons/classrooms', [LessonController::class, 'classrooms'])->name('lessons.classrooms');
+        Route::resource('lessons', LessonController::class)->except(['create']);
     });
 });

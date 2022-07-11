@@ -23,16 +23,27 @@ class SubscriptionStoreRequest extends FormRequest
      */
     public function rules()
     {
-        //dd($this->classroom->subscriptions->first());
         return [
             'price_hr' => [
                 'required', 'numeric', 'between:0,9999.99',
                 function ($attribute, $value, $fail) {
-                    if ($value === $this->classroom->subscriptions->first()->price_hr) {
-                        $fail('El '.$attribute.' es idéntico.');
+                    if ($value == $this->classroom->subscriptions->first()->price_hr) {
+                        $fail('El Precio por Hora es idéntico.');
                     }
                 },
             ],
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'price_hr' => 'Precio por Hora',
         ];
     }
 }

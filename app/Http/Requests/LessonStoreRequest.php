@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ClassroomUpdateRequest extends FormRequest
+class LessonStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,11 @@ class ClassroomUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'lesson_date' => ['required', 'date'],
+            'comment' => ['required', 'string'],
+            'student_page' => ['nullable', 'string'],
+            'workbook_page' => ['nullable', 'string'],
+            'classroom_id' => ['required', 'integer', 'exists:App\Models\Classroom,id'],
         ];
     }
 
@@ -37,8 +40,11 @@ class ClassroomUpdateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => 'Nombre',
-            'description' => 'Descripción',
+            'lesson_date' => 'Fecha de la Lección',
+            'comment' => 'Comentario',
+            'student_page' => 'Libro Estudiante',
+            'workbook_page' => 'Libro Ejercicios',
+            'classroom_id' => 'Clase',
         ];
     }
 }

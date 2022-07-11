@@ -23,16 +23,16 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
-            'dni' => ['required', 'numeric', 'digits_between:7,9', 'unique:users'],
-            'birthdate' => ['required', 'date'],
+            //'dni' => ['required', 'numeric', 'digits_between:7,9', 'unique:users'],
+            //'birthdate' => ['required', 'date'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
         ], [], [
             'firstname' => 'Nombre',
             'lastname' => 'Apellido',
-            'dni' => 'DNI',
-            'birthdate' => 'Fecha de Nacimiento',
+            //'dni' => 'DNI',
+            //'birthdate' => 'Fecha de Nacimiento',
             'email' => 'Correo Electrónico',
             'password' => 'Contraseña',
         ])->validate();
@@ -40,13 +40,13 @@ class CreateNewUser implements CreatesNewUsers
         $user = User::create([
             'firstname' => $input['firstname'],
             'lastname' => $input['lastname'],
-            'dni' => $input['dni'],
-            'birthdate' => $input['birthdate'],
+            //'dni' => $input['dni'],
+            //'birthdate' => $input['birthdate'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
         ]);
 
-        $user->assignRole('user');
+        $user->assignRole('alumno');
 
         return $user;
     }

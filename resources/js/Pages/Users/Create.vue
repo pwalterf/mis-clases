@@ -19,35 +19,35 @@
                     <!-- Firstname -->
                     <div class="col-span-6 md:col-span-3">
                         <JetLabel for="firstname" value="Firstname" />
-                        <JetInput id="firstname" v-model="form.firstname" type="text" class="mt-1 block w-full" required autofocus autocomplete="firstname"/>
+                        <JetInput id="firstname" v-model="form.firstname" type="text" class="mt-1 block w-full" :error="form.errors.firstname" required />
                         <JetInputError :message="form.errors.firstname" class="mt-2" />
                     </div>
 
                     <!-- Lastname -->
                     <div class="col-span-6 md:col-span-3">
                         <JetLabel for="lastname" value="Lastname" />
-                        <JetInput id="lastname" v-model="form.lastname" type="text" class="mt-1 block w-full" required autocomplete="lastname"/>
+                        <JetInput id="lastname" v-model="form.lastname" type="text" class="mt-1 block w-full" :error="form.errors.lastname" required />
                         <JetInputError :message="form.errors.lastname" class="mt-2" />
                     </div>
 
                     <!-- DNI -->
-                    <div class="col-span-6 md:col-span-3">
+                    <!-- <div class="col-span-6 md:col-span-3">
                         <JetLabel for="dni" value="DNI" />
-                        <JetInput id="dni" v-model="form.dni" type="text" class="mt-1 block w-full" required autocomplete="dni"/>
+                        <JetInput id="dni" v-model="form.dni" type="text" class="mt-1 block w-full" :error="form.errors.dni" required />
                         <JetInputError :message="form.errors.dni" class="mt-2" />
-                    </div>
+                    </div> -->
 
                     <!-- Birthdate -->
-                    <div class="col-span-6 md:col-span-3">
+                    <!-- <div class="col-span-6 md:col-span-3">
                         <JetLabel for="birthdate" value="Birthdate" />
-                        <JetInput id="birthdate" v-model="form.birthdate" type="date" class="mt-1 block w-full" required autocomplete="birthdate"/>
+                        <JetInput id="birthdate" v-model="form.birthdate" type="date" class="mt-1 block w-full" :error="form.errors.birthdate" required />
                         <JetInputError :message="form.errors.birthdate" class="mt-2" />
-                    </div>
+                    </div> -->
 
                     <!-- Email Address -->
                     <div class="col-span-6 md:col-span-3">
                         <JetLabel for="email" value="Email" />
-                        <JetInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required autocomplete="email"/>
+                        <JetInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" :error="form.errors.email" required />
                         <JetInputError :message="form.errors.email" class="mt-2" />
                     </div>
 
@@ -56,7 +56,7 @@
                         <JetLabel for="role" value="Role" />
                         <Listbox v-model="form.role" name="role">
                             <div class="relative mt-1">
-                                <ListboxButton class="border mt-1 block w-full cursor-default py-2 pl-3 pr-10 text-left border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                                <ListboxButton :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': form.errors.role}" class="border mt-1 block w-full cursor-default py-2 pl-3 pr-10 text-left border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
                                     <span class="block truncate capitalize">{{ form.role ? form.role : 'Seleccione Rol...' }}</span>
                                     <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                         <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -93,18 +93,18 @@
                     </div>
 
                     <!-- Password -->
-                    <div class="col-span-6 md:col-span-3">
+                    <!-- <div class="col-span-6 md:col-span-3">
                         <JetLabel for="password" value="Password" />
-                        <JetInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" required autocomplete="new-password"/>
+                        <JetInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" :error="form.errors.password" required />
                         <JetInputError :message="form.errors.password" class="mt-2" />
-                    </div>
+                    </div> -->
 
                     <!-- Password Confirmation -->
-                    <div class="col-span-6 md:col-span-3">
+                    <!-- <div class="col-span-6 md:col-span-3">
                         <JetLabel for="password_confirmation" value="Confirm Password" />
-                        <JetInput id="password_confirmation" v-model="form.password_confirmation" type="password" class="mt-1 block w-full" required autocomplete="new-password"/>
+                        <JetInput id="password_confirmation" v-model="form.password_confirmation" type="password" class="mt-1 block w-full" :error="form.errors.password_confirmation" required />
                         <JetInputError :message="form.errors.password_confirmation" class="mt-2" />
-                    </div>
+                    </div> -->
                 </template>
 
                 <template #actions>
@@ -140,11 +140,11 @@ const props = defineProps({
 const form = useForm({
     firstname: '',
     lastname: '',
-    dni: '',
-    birthdate: '',
+    //dni: '',
+    //birthdate: '',
     email: '',
-    password: '',
-    password_confirmation: '',
+    //password: '',
+    //password_confirmation: '',
     role: null,
 })
 

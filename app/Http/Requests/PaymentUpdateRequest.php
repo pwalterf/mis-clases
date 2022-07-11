@@ -31,4 +31,20 @@ class PaymentUpdateRequest extends FormRequest
             'students' => ['required', 'array'],
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'payment_date' => 'Fecha del Pago',
+            'income' => 'Ingreso',
+            'comment' => 'Comentario',
+            'original_students' => 'Alumnos',
+            'students' => 'Alumnos',
+        ];
+    }
 }

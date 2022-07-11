@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import JetActionMessage from '@/Jetstream/ActionMessage.vue';
-import JetButton from '@/Jetstream/Button.vue';
+import Button from '@/Components/Button.vue';
 import JetFormSection from '@/Jetstream/FormSection.vue';
 import JetInput from '@/Jetstream/Input.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
@@ -49,7 +49,7 @@ const updatePassword = () => {
 
         <template #form>
             <div class="col-span-6 sm:col-span-4">
-                <JetLabel for="current_password" value="Current Password" />
+                <JetLabel for="current_password" value="Contraseña Actual" />
                 <JetInput
                     id="current_password"
                     ref="currentPasswordInput"
@@ -62,7 +62,7 @@ const updatePassword = () => {
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <JetLabel for="password" value="New Password" />
+                <JetLabel for="password" value="Nueva Contraseña" />
                 <JetInput
                     id="password"
                     ref="passwordInput"
@@ -75,7 +75,7 @@ const updatePassword = () => {
             </div>
 
             <div class="col-span-6 sm:col-span-4">
-                <JetLabel for="password_confirmation" value="Confirm Password" />
+                <JetLabel for="password_confirmation" value="Confirmar Contraseña" />
                 <JetInput
                     id="password_confirmation"
                     v-model="form.password_confirmation"
@@ -92,9 +92,11 @@ const updatePassword = () => {
                 Guardado.
             </JetActionMessage>
 
-            <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Guardar
-            </JetButton>
+            <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
+                :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.isDirty"
+            >
+                <span v-text="form.isDirty ? 'Guardar Cambios' : 'Sin Cambios'"></span>
+            </Button>
         </template>
     </JetFormSection>
 </template>
