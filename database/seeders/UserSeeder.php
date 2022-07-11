@@ -19,8 +19,8 @@ class UserSeeder extends Seeder
         $teacher = User::create([
             'firstname' => 'Milagro',
             'lastname' => 'Saavedra',
-            'dni' => 38827420,
-            'birthdate' => '1995-04-01',
+            //'dni' => 38827420,
+            //'birthdate' => '1995-04-01',
             'email' => 'admin@test.com',
             'password' => Hash::make('admintest'),
         ]);
@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('admintest'),
         ]);
 
-        $student->assignRole('user');
+        $student->assignRole('alumno');
 
         $student2 = User::create([
             'firstname' => 'Antonella',
@@ -47,7 +47,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('admintest'),
         ]);
 
-        $student2->assignRole('user');
+        $student2->assignRole('alumno');
 
         $student3 = User::create([
             'firstname' => 'Miguel',
@@ -58,7 +58,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('admintest'),
         ]);
 
-        $student3->assignRole('user');
+        $student3->assignRole('alumno');
 */
     }
 }

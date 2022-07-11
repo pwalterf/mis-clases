@@ -110,8 +110,9 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $userData = new UserResource($user);
+        $roles = Role::all()->pluck('name');
 
-        return Inertia::render('Users/Edit', compact('userData'));
+        return Inertia::render('Users/Edit', compact('userData', 'roles'));
     }
 
     /**

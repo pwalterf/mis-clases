@@ -18,14 +18,14 @@
                 <template #form>
                     <!-- Firstname -->
                     <div class="col-span-6 md:col-span-3">
-                        <JetLabel for="firstname" value="Firstname" />
+                        <JetLabel for="firstname" value="Nombre" />
                         <JetInput id="firstname" v-model="form.firstname" type="text" class="mt-1 block w-full" :error="form.errors.firstname" required />
                         <JetInputError :message="form.errors.firstname" class="mt-2" />
                     </div>
 
                     <!-- Lastname -->
                     <div class="col-span-6 md:col-span-3">
-                        <JetLabel for="lastname" value="Lastname" />
+                        <JetLabel for="lastname" value="Apellido" />
                         <JetInput id="lastname" v-model="form.lastname" type="text" class="mt-1 block w-full" :error="form.errors.lastname" required />
                         <JetInputError :message="form.errors.lastname" class="mt-2" />
                     </div>
@@ -53,7 +53,7 @@
 
                     <!-- Role -->
                     <div class="col-span-6 md:col-span-3">
-                        <JetLabel for="role" value="Role" />
+                        <JetLabel for="role" value="Rol" />
                         <Listbox v-model="form.role" name="role">
                             <div class="relative mt-1">
                                 <ListboxButton :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': form.errors.role}" class="border mt-1 block w-full cursor-default py-2 pl-3 pr-10 text-left border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">

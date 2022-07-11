@@ -18,14 +18,14 @@
                 <template #form>
                     <!-- Firstname -->
                     <div class="col-span-6 md:col-span-3">
-                        <JetLabel for="firstname" value="Firstname" />
+                        <JetLabel for="firstname" value="Nombre" />
                         <JetInput id="firstname" v-model="form.firstname" type="text" class="mt-1 block w-full" :error="form.errors.firstname" required />
                         <JetInputError :message="form.errors.firstname" class="mt-2" />
                     </div>
 
                     <!-- Lastname -->
                     <div class="col-span-6 md:col-span-3">
-                        <JetLabel for="lastname" value="Lastname" />
+                        <JetLabel for="lastname" value="Apellido" />
                         <JetInput id="lastname" v-model="form.lastname" type="text" class="mt-1 block w-full" :error="form.errors.lastname" required />
                         <JetInputError :message="form.errors.lastname" class="mt-2" />
                     </div>
@@ -49,6 +49,47 @@
                         <JetLabel for="email" value="Email" />
                         <JetInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" :error="form.errors.email" required />
                         <JetInputError :message="form.errors.email" class="mt-2" />
+                    </div>
+
+                    <!-- Role -->
+                    <div class="col-span-6 md:col-span-3">
+                        <JetLabel for="role" value="Rol" />
+                        <Listbox v-model="form.role" name="role">
+                            <div class="relative mt-1">
+                                <ListboxButton :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': form.errors.role}" class="border mt-1 block w-full cursor-default py-2 pl-3 pr-10 text-left border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                                    <span class="block truncate capitalize">{{ form.role ? form.role : 'Seleccione Rol...' }}</span>
+                                    <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                        <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                    </span>
+                                </ListboxButton>
+
+                                <transition
+                                    leave-active-class="transition duration-200 ease-in"
+                                    leave-from-class="transform opacity-100"
+                                    leave-to-class="transform opacity-0"
+                                    enter-active-class="transition duration-200 ease-out"
+                                    enter-from-class="transform scale-y-75 -translate-y-5"
+                                    enter-to-class="transform scale-y-100 translate-y-0"
+                                >
+                                    <ListboxOptions class="z-10 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                        <ListboxOption as="template" :value="null" disabled>
+                                            <li class="text-gray-900 relative cursor-default select-none py-2 pl-10 pr-4"><span class="opacity-75">Seleccione Rol...</span></li>
+                                        </ListboxOption>
+                                        <ListboxOption v-slot="{ active, selected }" v-for="role in roles" :key="role" :value="role" as="template">
+                                        <li :class="[active ? 'bg-indigo-100 text-indigo-900' : 'text-gray-900', 'relative cursor-default select-none py-2 pl-10 pr-4']">
+                                            <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate capitalize']">
+                                                {{ role }}
+                                            </span>
+                                            <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600">
+                                                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                                            </span>
+                                        </li>
+                                        </ListboxOption>
+                                    </ListboxOptions>
+                                </transition>
+                            </div>
+                        </Listbox>
+                        <JetInputError :message="form.errors.role" class="mt-2" />
                     </div>
                 </template>
 
@@ -106,9 +147,12 @@ import JetLabel from '@/Jetstream/Label.vue'
 import Button from '@/Components/Button.vue'
 import JetInputError from '@/Jetstream/InputError.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
+import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/vue'
+import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid'
 
 const props = defineProps({
-    userData: Object
+    userData: Object,
+    roles: Object
 })
 
 const confirming = ref(false)
@@ -122,7 +166,7 @@ const form = useForm({
     email: props.userData.email,
     //password: '',
     //password_confirmation: '',
-    //role: userData.role,
+    role: props.userData.roleNames,
 })
 
 const confirmModal = () => {
