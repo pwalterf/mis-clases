@@ -165,16 +165,22 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         try {
+            DB::beginTransaction();
+
             if (auth()->user()->id === $user->id) {
                 return Redirect::back();
             }
-
+            
             $user->delete();
+
+            DB::commit();
 
             Session::flash('alert.style', 'exitoso');
             Session::flash('alert.message', 'Se dió de baja al usuario correctamente.');
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollBack();
+
             Session::flash('alert.style', 'error');
             Session::flash('alert.message', 'Ha ocurrido un error al dar de baja al usuario. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
         }

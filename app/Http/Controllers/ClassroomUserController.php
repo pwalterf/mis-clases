@@ -126,11 +126,16 @@ class ClassroomUserController extends Controller
     public function restore(ClassroomUser $classroomUser)
     {
         try {
-            $classroomUser->restore();
-
-            Session::flash('alert.style', 'exitoso');
-            Session::flash('alert.message', 'Se ha vinculado al alumno correctamente.');
-
+            if (!$classroomUser->user->trashed()) {
+                $classroomUser->restore();
+    
+                Session::flash('alert.style', 'exitoso');
+                Session::flash('alert.message', 'Se ha vinculado al alumno correctamente.');
+            } else {
+                Session::flash('alert.style', 'error');
+                Session::flash('alert.message', 'No se puede asociar al alumno porque su cuenta fue eliminada.');
+            }
+            
             return Redirect::back();
         } catch (\Throwable $th) {
             //throw $th;

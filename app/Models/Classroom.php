@@ -45,4 +45,16 @@ class Classroom extends Model
     {
         return $this->hasMany(Subscription::class)->latest();
     }
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::deleting(function ($classroom) {
+            $classroom->classroomUsers()->delete();
+        });
+    }
 }

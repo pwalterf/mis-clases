@@ -79,9 +79,6 @@
                                 <th scope="col" class="px-6 py-3">
                                     Email
                                 </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Créditos
-                                </th>
                                 <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3 text-center">
                                     Estado
                                 </th>
@@ -89,7 +86,7 @@
                         </thead>
                         <tbody>
                             <tr v-if="selected.students.length === 0" class="bg-white">
-                                <td colspan="4" class="pl-4 sm:pl-6 pr-2 py-4">No hay alumnos asociados a la clase.</td>
+                                <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No hay alumnos asociados a la clase.</td>
                             </tr>
                             <tr v-else v-for="(student, index) in selected.students" :key="student.id" :class="{'border-b': index != selected.students.length - 1}" class="bg-white hover:bg-gray-50">
                                 <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
@@ -97,9 +94,6 @@
                                 </th>
                                 <td class="px-6 py-4">
                                     {{ student.user.email }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    {{ student.credit }}
                                 </td>
                                 <td class="pl-2 pr-4 sm:pr-6 py-4 text-center">
                                     <Badge :class="student.deleted_at ? 'bg-red-500' : 'bg-green-500'">

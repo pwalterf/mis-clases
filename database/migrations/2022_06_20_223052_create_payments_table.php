@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('income', 7, 2, true);
             $table->date('payment_date');
-            $table->string('commert')->nullable();
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }

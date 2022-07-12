@@ -76,4 +76,16 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Classroom::class);
     }
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::deleting(function ($user) {
+            $user->classroomUsers()->delete();
+        });
+    }
 }

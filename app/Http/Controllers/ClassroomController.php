@@ -153,7 +153,6 @@ class ClassroomController extends Controller
             DB::beginTransaction();
 
             $classroom->delete();
-            $classroom->classroomUsers()->delete();
 
             DB::commit();
 
