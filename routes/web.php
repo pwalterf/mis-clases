@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\Admin\ClassroomController;
 use App\Http\Controllers\ClassroomUserController;
-use App\Http\Controllers\LessonController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\LessonController;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\SubscriptionController;
+use App\Http\Controllers\Admin\UserController;
 use App\Models\Classroom;
 use App\Models\ClassroomUser;
 use App\Models\User;
@@ -57,18 +57,19 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         // Manage Users
         Route::get('/users/students', [UserController::class, 'students'])->name('users.students');
         Route::put('/users/{user}/restore', [UserController::class, 'restore'])->name('users.restore');
-        Route::resource('users', UserController::class);
+        Route::resource('users', UserController::class)->except(['show']);
 
-        // Sala de Clases
-        Route::resource('classrooms', ClassroomController::class);
+        // Classrooms
+        Route::resource('classrooms', ClassroomController::class)->except(['show']);
+        Route::get('/classrooms/active-students', [ClassroomController::class, 'activeStudents'])->name('classrooms.active_students');
         Route::put('/classrooms/{classroom}/restore', [ClassroomController::class, 'restore'])->name('classrooms.restore');
         Route::get('/classrooms/{classroom}/students', [ClassroomController::class, 'students'])->name('classrooms.students');
         Route::get('/classrooms/{classroom}/lessons', [ClassroomController::class, 'lessons'])->name('classrooms.lessons');
 
-        // Suscripciones
-        Route::resource('classrooms.subscriptions', SubscriptionController::class)->shallow();
+        // Subscriptions
+        Route::resource('classrooms.subscriptions', SubscriptionController::class)->shallow()->only(['store', 'delete']);
 
-        // Estudiantes
+        // ClassroomUsers
         Route::get('/classroomUsers', [ClassroomUserController::class, 'index'])->name('classroomUsers.index');
         Route::get('/classroomUsers/{classroomUser}/payments', [ClassroomUserController::class, 'payments'])->name('classroomUsers.payments');
         Route::get('/classroomUsers/{classroomUser}/subscription', [ClassroomUserController::class, 'subscription'])->name('classroomUsers.subscription');
@@ -78,12 +79,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         // Payments
         Route::get('/payments/create/{classroomUser?}', [PaymentController::class, 'create'])->name('payments.create');
-        Route::resource('payments', PaymentController::class)->except(['create']);
+        Route::resource('payments', PaymentController::class)->except(['create', 'show']);
         Route::get('/payments/{payment}/students', [PaymentController::class, 'students'])->name('payments.students');
 
         // Lessons
         Route::get('/lessons/create/{classroom?}', [LessonController::class, 'create'])->name('lessons.create');
-        Route::get('/lessons/classrooms', [LessonController::class, 'classrooms'])->name('lessons.classrooms');
-        Route::resource('lessons', LessonController::class)->except(['create']);
+        Route::resource('lessons', LessonController::class)->except(['create', 'show']);
     });
 });

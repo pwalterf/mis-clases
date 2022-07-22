@@ -76,7 +76,7 @@
                                 <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
                                     Nombre
                                 </th>
-                                <th scope="col" class="px-6 py-3">
+                                <th scope="col" class="px-2 py-3">
                                     Email
                                 </th>
                                 <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3 text-center">
@@ -92,7 +92,7 @@
                                 <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
                                     {{ student.user.firstname + ' ' + student.user.lastname }}
                                 </th>
-                                <td class="px-6 py-4">
+                                <td class="px-2 py-4">
                                     {{ student.user.email }}
                                 </td>
                                 <td class="pl-2 pr-4 sm:pr-6 py-4 text-center">
@@ -120,7 +120,7 @@
                                     <th scope="col" class="pl-4 sm:pl-6 pr-2 py-4">
                                         Nombre
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3">
                                         Estado
                                     </th>
                                     <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
@@ -136,7 +136,7 @@
                                     <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 font-medium text-gray-900 whitespace-nowrap">
                                         {{ classroom.name }}
                                     </th>
-                                    <td class="px-6 py-4">
+                                    <td class="px-2 py-4">
                                         <Badge :class="classroom.deleted_at ? 'bg-red-500' : 'bg-green-500'">
                                             {{ classroom.deleted_at ? 'Inactiva' : 'Activa' }}
                                         </Badge>
@@ -155,7 +155,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useForm } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
@@ -177,7 +177,8 @@ const props = defineProps({
 const open = ref(false)
 const loading = ref(false)
 const selected = ref(props.classroom)
-const classrooms = ref([])
+const classroomList = ref([])
+const classrooms = computed(() => {return classroomList.value.filter((classroom) => selected.value?.id !== classroom.id)})
 
 const form = useForm({
     _method: 'POST',
@@ -217,7 +218,7 @@ const addClassroom = (classroom) => {
 }
 
 const getClassrooms = async () => {
-    let response = await axios.get('/lessons/classrooms')
-    classrooms.value = response.data
+    let response = await axios.get('/classrooms/active-students')
+    classroomList.value = response.data
 }
 </script>

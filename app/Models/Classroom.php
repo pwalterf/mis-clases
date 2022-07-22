@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -38,7 +39,7 @@ class Classroom extends Model
 
     public function lessons()
     {
-        return $this->hasMany(Lesson::class);
+        return $this->hasMany(Lesson::class)->latest('lesson_date');
     }
 
     public function subscriptions()
@@ -46,15 +47,18 @@ class Classroom extends Model
         return $this->hasMany(Subscription::class)->latest();
     }
 
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
+    public function scopeActiveWithStudents(): Collection
     {
-        static::deleting(function ($classroom) {
-            $classroom->classroomUsers()->delete();
-        });
+        return $this->has('classroomUsers')->with('classroomUsers.user')->get();
+    }
+
+    public function scopeAllWithLastSubscription(): Collection
+    {
+        return $this->addSelect([
+            'price_hr' => Subscription::select('price_hr')
+                ->whereColumn('classroom_id', 'classrooms.id')
+                ->latest()
+                ->limit(1)
+            ])->withTrashed()->get();
     }
 }

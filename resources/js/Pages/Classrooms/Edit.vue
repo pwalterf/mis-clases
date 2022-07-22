@@ -93,73 +93,160 @@
                 </FormSection>
             </div>
 
-            <div class="col-span-6">
-                <h2 class="font-semibold text-xl pl-4 sm:pl-6 pr-2 py-2">Alumnos</h2>
+            <div class="col-span-6 mt-2">
 
-                <div class="relative overflow-x-auto shadow sm:rounded-lg">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-purple-700 uppercase bg-purple-100">
-                            <tr>
-                                <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
-                                    Nombre
-                                </th>
-                                <th scope="col" class="px-2 py-3">
-                                    Email
-                                </th>
-                                <th scope="col" class="px-2 py-3">
-                                    Créditos
-                                </th>
-                                <th scope="col" class="px-2 py-3 text-center">
-                                    Estado
-                                </th>
-                                <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
-                                    <span class="sr-only">Editar</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-if="classroom.classroomUsers.length === 0" class="bg-white">
-                                <td colspan="5" class="pl-4 sm:pl-6 pr-2 py-4">No hay alumnos asociados a la clase.</td>
-                            </tr>
-                            <tr v-else v-for="(student, index) in classroom.classroomUsers" :key="student.id" :class="{'border-b': index != classroom.classroomUsers.length - 1}" class="bg-white hover:bg-gray-50">
-                                <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
-                                    {{ student.user.firstname + ' ' + student.user.lastname }}
-                                </th>
-                                <td class="px-2 py-4">
-                                    {{ student.user.email }}
-                                </td>
-                                <td class="px-2 py-4">
-                                    {{ student.credit }}
-                                </td>
-                                <td class="px-2 py-4 text-center">
-                                    <Badge :class="student.deleted_at ? 'bg-red-500' : 'bg-green-500'">
-                                        {{ student.deleted_at ? 'Inactivo' : 'Activo' }}
-                                    </Badge>
-                                </td>
-                                <td class="pl-2 pr-4 sm:pr-6 py-4">
-                                    <div class="flex justify-end items-center gap-2">
-                                        <span v-if="loading[index]" class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent rounded-full" role="status" aria-label="loading"></span>
-                                        <CashIcon v-else class="h-5 w-5 text-gray-600 cursor-pointer" aria-hidden="true" @click="paymentsOpenModal(student.id, index)" />
-                                        <Link :href="route('users.edit', student.user.id)">
-                                            <PencilAltIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
-                                        </Link>
-                                        <template v-if="!classroom.deleted_at">
-                                            <TrashIcon v-if="!student.deleted_at" class="h-5 w-5 text-red-600 cursor-pointer" aria-hidden="true" @click="destroyStudent(student.id)" />
-                                            <ClipboardCheckIcon v-else class="h-5 w-5 text-green-600 cursor-pointer" aria-hidden="true" @click="restoreStudent(student.id)" />
-                                        </template>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <TabGroup>
+                    <div class="mb-3 border-b-2 border-gray-200">
+                        <TabList class="flex -mb-px text-lg font-medium text-center space-x-6">
+                            <Tab v-slot="{ selected }" as="div" class="outline-none">
+                                <button type="button" class="inline-flex items-center p-4 border-b-2 gap-2" :class="selected ? 'text-purple-600 border-purple-500' : 'border-transparent text-gray-500 hover:text-purple-600'">
+                                    <UserIcon class="h-5 w-5" aria-hidden="true" />
+                                    Alumnos
+                                </button>
+                            </Tab>
+                            <Tab v-slot="{ selected }" as="div" class="outline-none">
+                                <button type="button" class="inline-flex items-center p-4 border-b-2 gap-2" :class="selected ? 'text-purple-600 border-purple-500' : 'border-transparent text-gray-500 hover:text-purple-600'" @click="getLessons">
+                                    <span v-if="lessonsLoading" class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent rounded-full" role="status" aria-label="loading"></span>
+                                    <BookOpenIcon v-else class="h-5 w-5" aria-hidden="true" />
+                                    Lecciones
+                                </button>
+                            </Tab>
+                        </TabList>
+                    </div>
+                    <TabPanels>
+                        <!-- Alumnos -->
+                        <TabPanel class="bg-white rounded-md px-6 py-4 shadow">
+                            <div class="relative overflow-x-auto shadow rounded-md">
+                                <table class="w-full text-sm text-left text-gray-500">
+                                    <thead class="text-xs text-purple-700 uppercase bg-purple-100">
+                                        <tr>
+                                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
+                                                Nombre
+                                            </th>
+                                            <th scope="col" class="px-2 py-3">
+                                                Email
+                                            </th>
+                                            <th scope="col" class="px-2 py-3">
+                                                Créditos
+                                            </th>
+                                            <th scope="col" class="px-2 py-3 text-center">
+                                                Estado
+                                            </th>
+                                            <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
+                                                <span class="sr-only">Editar</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-if="classroom.students.length === 0" class="bg-white">
+                                            <td colspan="5" class="pl-4 sm:pl-6 pr-2 py-4">No hay alumnos asociados a la clase.</td>
+                                        </tr>
+                                        <tr v-else v-for="(student, index) in classroom.students" :key="student.id" :class="{'border-b': index != classroom.students.length - 1}" class="bg-white hover:bg-gray-50">
+                                            <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
+                                                {{ student.user.firstname + ' ' + student.user.lastname }}
+                                            </th>
+                                            <td class="px-2 py-4">
+                                                {{ student.user.email }}
+                                            </td>
+                                            <td class="px-2 py-4">
+                                                {{ student.credit }}
+                                            </td>
+                                            <td class="px-2 py-4 text-center">
+                                                <Badge :class="student.deleted_at ? 'bg-red-500' : 'bg-green-500'">
+                                                    {{ student.deleted_at ? 'Inactivo' : 'Activo' }}
+                                                </Badge>
+                                            </td>
+                                            <td class="pl-2 pr-4 sm:pr-6 py-4">
+                                                <div class="flex justify-end items-center gap-2">
+                                                    <span v-if="loading[index]" class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent rounded-full" role="status" aria-label="loading"></span>
+                                                    <CashIcon v-else class="h-5 w-5 text-gray-600 cursor-pointer" aria-hidden="true" @click="paymentsOpenModal(student.id, index)" />
+                                                    <Link :href="route('users.edit', student.user.id)">
+                                                        <PencilAltIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
+                                                    </Link>
+                                                    <template v-if="!classroom.deleted_at">
+                                                        <TrashIcon v-if="!student.deleted_at" class="h-5 w-5 text-red-600 cursor-pointer" aria-hidden="true" @click="destroyStudent(student.id)" />
+                                                        <ClipboardCheckIcon v-else class="h-5 w-5 text-green-600 cursor-pointer" aria-hidden="true" @click="restoreStudent(student.id)" />
+                                                    </template>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                <div class="flex justify-end mt-2">
-                    <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
-                        :class="{ 'opacity-25': form.processing}" :disabled="form.processing || classroom.deleted_at" @click="studentsOpenModal">
-                        Agregar Alumno
-                    </Button>
-                </div>
+                            <div class="flex justify-end mt-2">
+                                <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
+                                    :class="{ 'opacity-25': form.processing}" :disabled="form.processing || classroom.deleted_at" @click="studentsOpenModal">
+                                    Agregar Alumno
+                                </Button>
+                            </div>
+                        </TabPanel>
+
+                        <!-- Lecciones -->
+                        <TabPanel class="bg-white rounded-md px-6 py-4 shadow">
+                            <div class="relative overflow-x-auto shadow rounded-md">
+                                <table class="w-full text-sm text-left text-gray-500">
+                                    <thead class="text-xs text-purple-700 uppercase bg-purple-100">
+                                        <tr>
+                                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
+                                                Fecha
+                                            </th>
+                                            <th scope="col" class="px-2 py-3">
+                                                Comentario
+                                            </th>
+                                            <th scope="col" class="px-2 py-3">
+                                                Libro Estudiante
+                                            </th>
+                                            <th scope="col" class="px-2 py-3">
+                                                Libro Ejercicio
+                                            </th>
+                                            <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
+                                                <span class="sr-only">Editar</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-if="lessons.length === 0" class="bg-white">
+                                            <td colspan="4" class="pl-4 sm:pl-6 pr-2 py-3">
+                                                <span v-if="lessonsLoading">Cargando datos...</span>
+                                                <span v-else>La clase no posee lecciones cargadas.</span>
+                                            </td>
+                                        </tr>
+                                        <tr v-else v-for="(lesson, index) in lessons" :key="lesson.id" :class="{'border-b': index != lessons.length - 1}" class="bg-white hover:bg-gray-50">
+                                            <td class="pl-4 sm:pl-6 pr-2 py-3">
+                                                {{ lesson.lesson_date }}
+                                            </td>
+                                            <td class="px-2 py-4">
+                                                {{ lesson.comment ?? 'Ninguno' }}
+                                            </td>
+                                            <td class="px-2 py-4">
+                                                {{ lesson.student_page ?? '-' }}
+                                            </td>
+                                            <td class="px-2 py-4">
+                                                {{ lesson.workbook_page ?? '-' }}
+                                            </td>
+                                            <td class="pl-2 pr-4 sm:pr-6 py-3">
+                                                <div class="flex justify-end items-center gap-2">
+                                                    <Link :href="route('lessons.edit', lesson.id)">
+                                                        <PencilAltIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
+                                                    </Link>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="flex justify-end mt-2">
+                                <Link :href="route('lessons.create', classroom.id)">
+                                    <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                                        Nueva Lección
+                                    </Button>
+                                </Link>
+                            </div>
+                        </TabPanel>
+                    </TabPanels>
+                </TabGroup>
             </div>
 
             <!-- Modal de Confirmacion -->
@@ -199,7 +286,7 @@
                                     <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
                                         Precio / hr
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3">
                                         Creada
                                     </th>
                                     <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
@@ -215,7 +302,7 @@
                                     <td scope="row" class="pl-4 sm:pl-6 pr-2 py-4">
                                         $ {{ subscription.price_hr }}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-2 py-4">
                                         {{ subscription.created_at }}
                                     </td>
                                     <td class="pl-2 pr-4 sm:pr-6 py-4">
@@ -277,7 +364,7 @@
                                     <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
                                         Alumno
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3">
                                         Email
                                     </th>
                                     <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
@@ -293,7 +380,7 @@
                                     <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
                                         {{ student.firstname + ' ' + student.lastname }}
                                     </th>
-                                    <td class="px-6 py-4">
+                                    <td class="px-2 py-4">
                                         {{ student.email }}
                                     </td>
                                     <td class="pl-2 pr-4 sm:pr-6 py-4">
@@ -322,10 +409,10 @@
                                     <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
                                         Fecha
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3">
                                         Importe
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3">
                                         Comentario
                                     </th>
                                     <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
@@ -341,10 +428,10 @@
                                     <td scope="row" class="pl-4 sm:pl-6 pr-2 py-4">
                                         {{ payment.payment_date }}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="px-2 py-4">
                                         {{ payment.income }}
                                     </td>
-                                     <td class="px-6 py-4">
+                                     <td class="px-2 py-4">
                                         {{ payment.comment ?? 'Ninguno' }}
                                     </td>
                                     <td class="pl-2 pr-4 sm:pr-6 py-4">
@@ -385,26 +472,29 @@ import JetInputError from '@/Jetstream/InputError.vue'
 import Badge from '@/Components/Badge.vue'
 import Button from '@/Components/Button.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
-import { CashIcon, PencilAltIcon, TrashIcon, ClipboardCheckIcon, UserAddIcon } from '@heroicons/vue/outline'
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
+import { CashIcon, UserIcon, BookOpenIcon, PencilAltIcon, TrashIcon, ClipboardCheckIcon, UserAddIcon } from '@heroicons/vue/outline'
 
 const props = defineProps({
     classroom: Object,
 })
 
 const loading = ref([])
+const lessonsLoading = ref(false)
 const open = ref(false)
 const subsOpen = ref(false)
 const studentsOpen = ref(false)
 const paymentsOpen = ref(false)
 const students = ref([])
 const payments = ref([])
+const lessons = ref([])
 const paymentsSelected =  ref(null)
 const confirming = ref(false)
 
 const price_hr = computed(() => props.classroom.subscriptions[0].price_hr)
 const sub_created_at = computed(() => props.classroom.subscriptions[0].created_at)
 const studentsList = computed(() => {
-    return students.value.filter((student) => !props.classroom.classroomUsers.map(st => st.user.id).includes(student.id))
+    return students.value.filter((student) => !props.classroom.students.map(st => st.user.id).includes(student.id))
 })
 
 const form = useForm({
@@ -424,7 +514,7 @@ const subsForm = useForm({
 })
 
 const subsSubmit = () => {
-    subsForm.post(route('classrooms.subscriptions.store', props.classroom), {
+    subsForm.post(route('classrooms.subscriptions.store', props.classroom.id), {
         preserveScroll: true,
         onSuccess: () => subsCloseModal(),
     })
@@ -538,5 +628,14 @@ const addStudent = (student) => {
 const getPayments = async (classroomUser) => {
     let response = await axios.get('/classroomUsers/' + classroomUser + '/payments')
     payments.value = response.data
+}
+
+const getLessons = async () => {
+    if (!lessons.value.length) {
+        lessonsLoading.value = true
+        let response = await axios.get('/classrooms/' + props.classroom.id + '/lessons')
+        lessons.value = response.data
+        lessonsLoading.value = false
+    }
 }
 </script>

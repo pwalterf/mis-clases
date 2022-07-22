@@ -157,7 +157,7 @@
                                     <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
                                         Alumno
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-2 py-3">
                                         Clase
                                     </th>
                                     <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
@@ -173,7 +173,7 @@
                                     <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
                                         {{ student.user.firstname + ' ' + student.user.lastname }}
                                     </th>
-                                    <td class="px-6 py-4">
+                                    <td class="px-2 py-4">
                                         {{ student.classroom.name }}
                                     </td>
                                     <td class="pl-2 pr-4 sm:pr-6 py-4">
@@ -193,7 +193,7 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { useForm } from '@inertiajs/inertia-vue3'
+import { useForm, usePage } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
@@ -215,10 +215,6 @@ const form = useForm({
     income: props.payment.income,
     comment: props.payment.comment,
     students: props.payment.students,
-    original_students: props.payment.students.reduce((selected, student) => {
-        selected[student.id] = student.new_credit
-        return selected
-    }, {})
 })
 
 const open = ref(false)
@@ -246,7 +242,7 @@ const submit = () => {
     form.transform((data) => ({
         ...data,
         students: data.students.reduce((selected, student) => {
-            selected[student.id] = student.new_credit
+            selected[student.id] = {'new_credit': student.new_credit}
             return selected
         }, {})
     })).put(route('payments.update', props.payment.id), {

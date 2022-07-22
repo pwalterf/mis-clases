@@ -27,16 +27,16 @@
                             <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
                                 Nombre
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3">
                                 Email
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3">
                                 Creado
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-2 py-3">
                                 Rol
                             </th>
-                            <th scope="col" class="px-6 py-3 text-center">
+                            <th scope="col" class="px-2 py-3 text-center">
                                 Estado
                             </th>
                             <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
@@ -49,16 +49,16 @@
                             <th scope="row" class="pl-4 sm:pl-6 pr-2 py-3 text-gray-900">
                                 {{ user.firstname + ' ' + user.lastname }}
                             </th>
-                            <td class="px-6 py-4">
+                            <td class="px-2 py-4">
                                 {{ user.email }}
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-2 py-4">
                                 {{ user.created_at }}
                             </td>
-                            <td class="px-6 py-4 uppercase">
+                            <td class="px-2 py-4 uppercase">
                                 {{ user.roleNames }}
                             </td>
-                            <td class="px-6 py-4 text-center">
+                            <td class="px-2 py-4 text-center">
                                 <Badge :class="user.deleted_at ? 'bg-red-500' : 'bg-green-500'">
                                     {{ user.deleted_at ? 'Inactivo' : 'Activo' }}
                                 </Badge>

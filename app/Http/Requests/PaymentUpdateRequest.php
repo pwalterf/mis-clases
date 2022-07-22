@@ -27,7 +27,6 @@ class PaymentUpdateRequest extends FormRequest
             'payment_date' => ['required', 'date'],
             'income' => ['required', 'numeric', 'between:0,99999,99'],
             'comment' => ['nullable', 'string'],
-            'original_students' => ['required', 'array'],
             'students' => ['required', 'array'],
         ];
     }
@@ -43,7 +42,6 @@ class PaymentUpdateRequest extends FormRequest
             'payment_date' => 'Fecha del Pago',
             'income' => 'Ingreso',
             'comment' => 'Comentario',
-            'original_students' => 'Alumnos',
             'students' => 'Alumnos',
         ];
     }

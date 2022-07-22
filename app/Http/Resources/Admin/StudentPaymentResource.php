@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class StudentPaymentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +16,12 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'firstname' => $this->firstname,
-            'lastname' => $this->lastname,
-            'email' => $this->email,
-            'created_at' => $this->created_at->format('d/m/Y'),
+            'credit' => $this->credit,
             'deleted_at' => $this->deleted_at,
-            'roleNames' => $this->roles->pluck('name')->join(', ', ' y '),
+            'new_credit' => $this->studentPayment?->new_credit . '',
+            'price_hr' => $this->classroom->subscriptions()->first()->price_hr,
+            'user' => new UserBasicResource($this->user),
+            'classroom' => new ClassroomBasicResource($this->classroom),
         ];
     }
 }

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Lessons;
+namespace App\Http\Resources\Admin;
 
-use App\Http\Resources\Classroom\ClassroomUsersResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ClassroomResource extends JsonResource
+class ClassroomListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,7 +17,10 @@ class ClassroomResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'students' => ClassroomUsersResource::collection($this->classroomUsers),
+            'description' => $this->description,
+            'created_at' => $this->created_at->format('d/m/Y'),
+            'deleted_at' => $this->deleted_at,
+            'price_hr' => $this->price_hr,
         ];
     }
 }

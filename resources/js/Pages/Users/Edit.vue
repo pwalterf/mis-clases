@@ -71,7 +71,7 @@
                                     enter-from-class="transform scale-y-75 -translate-y-5"
                                     enter-to-class="transform scale-y-100 translate-y-0"
                                 >
-                                    <ListboxOptions class="z-10 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                    <ListboxOptions class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                         <ListboxOption as="template" :value="null" disabled>
                                             <li class="text-gray-900 relative cursor-default select-none py-2 pl-10 pr-4"><span class="opacity-75">Seleccione Rol...</span></li>
                                         </ListboxOption>

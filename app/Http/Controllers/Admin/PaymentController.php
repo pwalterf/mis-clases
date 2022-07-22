@@ -1,19 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentStoreRequest;
 use App\Http\Requests\PaymentUpdateRequest;
-use App\Http\Resources\PaymentResource;
-use App\Http\Resources\Payments\ClassroomUsersResource;
-use App\Http\Resources\Payments\IndexStudentsResource;
-use App\Http\Resources\PaymentsResource;
+use App\Http\Resources\Admin\PaymentEditResource;
+use App\Http\Resources\Admin\PaymentListResource;
+use App\Http\Resources\Admin\StudentPaymentResource;
 use App\Models\ClassroomUser;
 use App\Models\Payment;
+use App\Services\Admin\PaymentService;
+use App\Services\Admin\StudentService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
+use Illuminate\Support\Arr;
 
 class PaymentController extends Controller
 {
@@ -24,7 +27,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = PaymentsResource::collection(Payment::all());
+        $payments = PaymentListResource::collection(Payment::all());
 
         return Inertia::render('Payments/Index', compact('payments'));
     }
@@ -35,11 +38,11 @@ class PaymentController extends Controller
      * @param  \App\Models\ClassroomUser  $classroomUser
      * @return \Illuminate\Http\Response
      */
-    public function create(ClassroomUser $classroomUser = null)
+    public function create(ClassroomUser $student = null)
     {
         $student = [];
-        if ($classroomUser) {
-            $student[] = new ClassroomUsersResource($classroomUser);
+        if ($student) {
+            $student = new StudentPaymentResource($student);
         }
 
         return Inertia::render('Payments/Create', compact('student'));
@@ -51,19 +54,19 @@ class PaymentController extends Controller
      * @param  \App\Http\Requests\PaymentStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PaymentStoreRequest $request)
+    public function store(PaymentStoreRequest $request, PaymentService $paymentService, StudentService $studentService)
     {
         try {
             DB::beginTransaction();
 
             $validatedStudents = $request->safe()->only(['students'])['students'];
-            $payment = Payment::create($request->safe()->except(['students']));
+            $payment = $paymentService->createPayment($request->safe()->except(['students']));
 
             // students contiene [classroom_user_id => [new_credit]] por cada estudiante asociado al pago
-            $payment->classroomUsers()->attach($validatedStudents);
+            $paymentService->syncStudents($payment, $request->safe()->only(['students'])['students']);
+            
             foreach ($validatedStudents as $id => $credit) {
-                $classroomUser = ClassroomUser::find($id);
-                $classroomUser->update(['credit' => $classroomUser->credit + $credit['new_credit']]);
+                $studentService->updateCredit(ClassroomUser::find($id), $credit['new_credit']);
             }
 
             DB::commit();
@@ -91,7 +94,7 @@ class PaymentController extends Controller
      */
     public function edit(Payment $payment)
     {
-        $payment = new PaymentResource($payment);
+        $payment = new PaymentEditResource($payment);
         return Inertia::render('Payments/Edit', compact('payment'));
     }
 
@@ -102,33 +105,17 @@ class PaymentController extends Controller
      * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function update(PaymentUpdateRequest $request, Payment $payment)
+    public function update(PaymentUpdateRequest $request, Payment $payment, PaymentService $paymentService, StudentService $studentService)
     {
         try {
             DB::beginTransaction();
 
             $validatedStudents = $request->safe()->only(['students'])['students'];
-            $validatedOriginal = $request->safe()->only(['original_students'])['original_students'];
+            $originalStudents = $paymentService->formatStudentsCreditArray($payment);
 
-            $payment->update($request->safe()->except(['students', 'original_students']));
-
-            if (collect($validatedOriginal)->diffAssoc($validatedStudents) != []) {
-                $payment->classroomUsers()->sync(collect($validatedStudents)
-                    ->mapWithKeys(function ($new_credit, $id) {
-                        return [$id => ['new_credit' => $new_credit]];
-                    })
-                );
-
-                foreach ($validatedOriginal as $id => $new_credit) {
-                    $classroomUser = ClassroomUser::find($id);
-                    $classroomUser->update(['credit' => $classroomUser->credit - $new_credit]);
-                }
-
-                foreach ($validatedStudents as $id => $new_credit) {
-                    $classroomUser = ClassroomUser::find($id);
-                    $classroomUser->update(['credit' => $classroomUser->credit + $new_credit]);
-                }
-            }
+            $payment = $paymentService->updatePayment($payment, $request->safe()->except(['students']));
+            $paymentService->syncStudents($payment, $validatedStudents);
+            $studentService->syncCredit($paymentService->calculateStudentsCredit($originalStudents, $validatedStudents));
 
             DB::commit();
 
@@ -141,7 +128,7 @@ class PaymentController extends Controller
             DB::rollBack();
 
             Session::flash('alert.style', 'error');
-            Session::flash('alert.message', 'Ha ocurrido un error al modificar el pago. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
+            Session::flash('alert.message', 'Ha ocurrido un error al modificar el pago. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.'.$th);
 
             return Redirect::back()->withInput();
         }
@@ -153,16 +140,16 @@ class PaymentController extends Controller
      * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Payment $payment)
+    public function destroy(Payment $payment, PaymentService $paymentService, StudentService $studentService)
     {
         try {
             DB::beginTransaction();
 
             foreach ($payment->classroomUsers as $student) {
-                $student->update(['credit' => $student->credit - $student->studentPayment->new_credit]);
+                $studentService->updateCredit($student, -$student->studentPayment->new_credit);
             }
 
-            $payment->delete();
+            $paymentService->destroyPayment($payment);
 
             Session::flash('alert.style', 'exitoso');
             Session::flash('alert.message', 'Se ha eliminado el pago correctamente.');
@@ -189,6 +176,6 @@ class PaymentController extends Controller
      */
     public function students(Payment $payment)
     {
-        return IndexStudentsResource::collection($payment->classroomUsers()->with('user', 'classroom')->get());
+        return StudentPaymentResource::collection($payment->classroomUsers()->with('user', 'classroom')->get());
     }
 }

@@ -62,11 +62,10 @@
                             </td>
                             <td class="pl-2 pr-4 sm:pr-6 py-3">
                                 <div class="flex justify-end items-center gap-2">
-                                    <span v-if="loading[index]" class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent rounded-full" role="status" aria-label="loading"></span>
+                                    <span v-if="loading[index] === 'students'" class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent rounded-full" role="status" aria-label="loading"></span>
                                     <UserGroupIcon v-else class="h-5 w-5 text-gray-600 cursor-pointer" aria-hidden="true" @click="studentsOpen(classroom.id, index)" />
-                                    <Link :href="route('classrooms.lessons', classroom.id)">
-                                        <BookOpenIcon class="h-5 w-5 text-yellow-600 cursor-pointer" aria-hidden="true" />
-                                    </Link>
+                                    <span v-if="loading[index] === 'lessons'" class="animate-spin inline-block w-5 h-5 border-[3px] border-yellow-600 border-t-transparent rounded-full" role="status" aria-label="loading"></span>
+                                    <BookOpenIcon v-else class="h-5 w-5 text-yellow-600 cursor-pointer" aria-hidden="true" @click="lessonsOpen(classroom.id, index)" />
                                     <Link :href="route('classrooms.edit', classroom.id)">
                                         <PencilAltIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
                                     </Link>
@@ -81,7 +80,7 @@
         <!-- Alumnos por clase -->
         <JetDialogModal :show="studentsModal" @close="studentsClose">
             <template #title>
-                {{ selected.name }}
+                Alumnos - {{ selected.name }}
             </template>
 
             <template #content>
@@ -128,6 +127,61 @@
                 </div>
             </template>
         </JetDialogModal>
+
+        <!-- Lecciones de la clase -->
+        <JetDialogModal :show="lessonsModal" @close="lessonsClose">
+            <template #title>
+                Lecciones - {{ selected.name }}
+            </template>
+
+            <template #content>
+                <div class="relative overflow-x-auto shadow sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-purple-700 uppercase bg-purple-100">
+                            <tr>
+                                <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
+                                    Fecha
+                                </th>
+                                <th scope="col" class="px-2 py-3">
+                                    Comentario
+                                </th>
+                                <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
+                                    <span class="sr-only">Editar</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-if="lessons.length === 0" class="bg-white">
+                                <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No existen lecciones asociadas a la clase.</td>
+                            </tr>
+                            <tr v-else v-for="(lesson, index) in lessons" :key="lesson.id" :class="{'border-b': index != lessons.length - 1}" class="bg-white hover:bg-gray-50">
+                                <th scope="row" class="pl-4 sm:pl-6 pr-2 py-3 text-gray-900">
+                                    {{ lesson.lesson_date }}
+                                </th>
+                                <td class="px-2 py-3">
+                                    {{ lesson.comment ?? 'Ninguno' }}
+                                </td>
+                                <td class="pl-2 pr-4 sm:pr-6 py-3">
+                                    <div class="flex justify-end items-center gap-2">
+                                        <Link :href="route('lessons.edit', lesson.id)">
+                                            <PencilAltIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
+                                        </Link>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex justify-end mt-2">
+                    <Link :href="route('lessons.create', selected.id)">
+                        <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                            Nueva Lección
+                        </Button>
+                    </Link>
+                </div>
+            </template>
+        </JetDialogModal>
     </AppLayout>
 </template>
 
@@ -149,12 +203,15 @@ const props = defineProps({
 const loading = ref([])
 const selected = ref(null)
 const students = ref([])
+const lessons = ref([])
 const studentsModal = ref(false)
+const lessonsModal = ref(false)
 
+// Students Modal
 const studentsOpen = async (classroom, index) => {
-    if (selected.value !== classroom) {
-        loading.value[index] = true
-        selected.value = classroom
+    if (!students.value.length || selected.value?.id !== classroom) {
+        loading.value[index] = 'students'
+        selected.value = props.classrooms.find(item => item.id === classroom)
         await getStudents(classroom)
         loading.value[index] = false
     }
@@ -168,5 +225,25 @@ const studentsClose = () => {
 const getStudents = async (classroom) => {
     let response = await axios.get('/classrooms/' + classroom + '/students')
     students.value = response.data
+}
+
+// Lessons Modal
+const lessonsOpen = async (classroom, index) => {
+    if (!lessons.value.length || selected.value?.id !== classroom) {
+        loading.value[index] = 'lessons'
+        selected.value = props.classrooms.find(item => item.id === classroom)
+        await getLessons(classroom)
+        loading.value[index] = false
+    }
+    lessonsModal.value = true
+}
+
+const lessonsClose = () => {
+    lessonsModal.value = false
+}
+
+const getLessons = async (classroom) => {
+    let response = await axios.get('/classrooms/' + classroom + '/lessons')
+    lessons.value = response.data
 }
 </script>

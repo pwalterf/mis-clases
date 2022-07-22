@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\LessonStoreRequest;
 use App\Http\Requests\LessonUpdateRequest;
-use App\Http\Resources\LessonResource;
-use App\Http\Resources\Lessons\ClassroomResource;
-use App\Http\Resources\LessonsResource;
+use App\Http\Resources\Admin\ClassroomStudentsResource;
+use App\Http\Resources\Admin\LessonEditResource;
+use App\Http\Resources\Admin\LessonListResource;
 use App\Models\Classroom;
 use App\Models\Lesson;
+use App\Services\Admin\LessonService;
+use App\Services\Admin\StudentService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
@@ -23,7 +26,7 @@ class LessonController extends Controller
      */
     public function index()
     {
-        $lessons = LessonsResource::collection(Lesson::has('classroom')->orderByDesc('lesson_date')->with('classroom:id,name')->get());
+        $lessons = LessonListResource::collection(Lesson::orderByDesc('lesson_date')->with('classroom:id,name')->get());
 
         return Inertia::render('Lessons/Index', compact('lessons'));
     }
@@ -37,7 +40,7 @@ class LessonController extends Controller
     public function create(Classroom $classroom = null)
     {
         if ($classroom) {
-            $classroom = new ClassroomResource($classroom);
+            $classroom = new ClassroomStudentsResource($classroom);
         }
 
         return Inertia::render('Lessons/Create', compact('classroom'));
@@ -49,20 +52,23 @@ class LessonController extends Controller
      * @param  \App\Http\Requests\LessonStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(LessonStoreRequest $request)
+    public function store(LessonStoreRequest $request, LessonService $lessonService, StudentService $studentService)
     {
         try {
             DB::beginTransaction();
 
-            $lesson = Lesson::create($request->validated());
-            $lesson->classroom->classroomUsers()->update(['credit' => DB::raw("`credit` - 1")]);
+            $lesson = $lessonService->createLesson($request->validated());
+
+            foreach ($lesson->classroom->classroomUsers as $student) {
+                $studentService->updateCredit($student, -1);
+            }
 
             DB::commit();
 
             Session::flash('alert.style', 'exitoso');
             Session::flash('alert.message', 'Se ha creado la lección correctamente.');
 
-            return redirect()->route('lessons.index');
+            return Redirect::route('lessons.index');
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
@@ -82,7 +88,7 @@ class LessonController extends Controller
      */
     public function edit(Lesson $lesson)
     {
-        $lesson = new LessonResource($lesson);
+        $lesson = new LessonEditResource($lesson);
 
         return Inertia::render('Lessons/Edit', compact('lesson'));
     }
@@ -94,31 +100,27 @@ class LessonController extends Controller
      * @param  \App\Models\Lesson  $lesson
      * @return \Illuminate\Http\Response
      */
-    public function update(LessonUpdateRequest $request, Lesson $lesson)
+    public function update(LessonUpdateRequest $request, Lesson $lesson, LessonService $lessonService, StudentService $studentService)
     {
         try {
             DB::beginTransaction();
 
-            if ($lesson->classroom_id !== $request->classroom_id) {
-                $lesson->classroom->classroomUsers()->update(['credit' => DB::raw("`credit` + 1")]);
-                $lesson->update($request->validated());
-                $lesson->refresh()->classroom->classroomUsers()->update(['credit' => DB::raw("`credit` - 1")]);
-            } else {
-                $lesson->update($request->validated());
-            }
-
+            $studentsCredit = $lessonService->classroomChanged($lesson->classroom_id, $request->classroom_id);
+            $lessonService->updateLesson($lesson, $request->validated());
+            $studentService->syncCredit($studentsCredit);
+            
             DB::commit();
 
             Session::flash('alert.style', 'exitoso');
             Session::flash('alert.message', 'Se ha modificado la lección correctamente.');
 
-            return Redirect::back();
+            return Redirect::route('lessons.edit', $lesson->id);
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
 
             Session::flash('alert.style', 'error');
-            Session::flash('alert.message', 'Ha ocurrido un error al modificar la lección. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
+            Session::flash('alert.message', 'Ha ocurrido un error al modificar la lección. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.'.$th);
 
             return Redirect::back()->withInput();
         }
@@ -130,13 +132,16 @@ class LessonController extends Controller
      * @param  \App\Models\Lesson  $lesson
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Lesson $lesson)
+    public function destroy(Lesson $lesson, LessonService $lessonService, StudentService $studentService)
     {
         try {
             DB::beginTransaction();
 
-            $lesson->classroom->classroomUsers()->update(['credit' => DB::raw("`credit` + 1")]);
-            $lesson->delete();
+            foreach ($lesson->classroom->classroomUsers as $student) {
+                $studentService->updateCredit($student, 1);
+            }
+
+            $lessonService->destroyLesson($lesson);
 
             DB::commit();
 
