@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Classroom extends Model
@@ -52,13 +53,8 @@ class Classroom extends Model
         return $this->has('classroomUsers')->with('classroomUsers.user')->get();
     }
 
-    public function scopeAllWithLastSubscription(): Collection
+    public function latestSubscription(): HasOne
     {
-        return $this->addSelect([
-            'price_hr' => Subscription::select('price_hr')
-                ->whereColumn('classroom_id', 'classrooms.id')
-                ->latest()
-                ->limit(1)
-            ])->withTrashed()->get();
+        return $this->hasOne(Subscription::class)->latestOfMany();
     }
 }

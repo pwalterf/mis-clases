@@ -24,10 +24,12 @@ class ClassroomStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:classrooms,name'],
             'description' => ['nullable', 'string'],
             'price_hr' => ['required', 'numeric', 'between:0,9999.99'],
+            'started_at' => ['required', 'date'],
             'students' => ['nullable', 'array'],
+            'students.*.credit' => ['sometimes', 'required', 'numeric'],
         ];
     }
 
@@ -42,7 +44,9 @@ class ClassroomStoreRequest extends FormRequest
             'name' => 'Nombre',
             'description' => 'Descripción',
             'price_hr' => 'Precio por Hora',
+            'started_at' => 'Fecha Suscripción',
             'students' => 'Alumnos',
+            'students.*.credit' => 'Créditos',
         ];
     }
 }

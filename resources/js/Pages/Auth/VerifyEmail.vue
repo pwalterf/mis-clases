@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
 import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetButton from '@/Jetstream/Button.vue';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
 
 const props = defineProps({
     status: String,
@@ -36,9 +36,9 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
 
         <form @submit.prevent="submit">
             <div class="mt-4 flex items-center justify-between">
-                <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Reenviar Correo de Verificación
-                </JetButton>
+                </PrimaryButton>
 
                 <div>
                     <Link

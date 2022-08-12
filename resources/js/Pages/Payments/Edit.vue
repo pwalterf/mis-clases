@@ -80,8 +80,9 @@
                                         <td class="px-2 py-4">
                                             $ {{ studentClass.price_hr }}
                                         </td>
-                                        <td class="px-2">
-                                            <JetInput v-model="studentClass.new_credit" type="text" class="py-1 w-full"/>
+                                        <td class="py-2">
+                                            <JetInput v-model="studentClass.new_credit" type="text" class="py-1 w-20" :error="form.errors[`students.${studentClass.id}.new_credit`]"/>
+                                            <JetInputError v-if="form.errors[`students.${studentClass.id}.new_credit`]" :message="form.errors[`students.${studentClass.id}.new_credit`]" class="mt-1" />
                                         </td>
                                         <td class="pl-2 pr-4 sm:pr-6 py-4">
                                             <div class="flex justify-end items-center">
@@ -94,29 +95,23 @@
                         </div>
 
                         <div class="flex flex-row-reverse justify-between mt-2">
-                            <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
-                                :class="{ 'opacity-25': loading }" :disabled="loading"
-                                @click="openModal">
+                            <SecondaryButton type="button" :class="{ 'opacity-25': loading }" :disabled="loading" @click="openModal">
                                 <span v-if="loading" class="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" role="status" aria-label="loading"></span>
                                 Agregar Alumno
-                            </Button>
+                            </SecondaryButton>
                             <JetInputError v-if="form.errors.students" :message="['Es obligatorio asociar al menos un alumno.']" class="mt-2" />
                         </div>
                     </div>
                 </template>
 
                 <template #actions>
-                    <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                        :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.isDirty"
-                    >
+                    <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.isDirty">
                         <span v-text="form.isDirty ? 'Guardar Cambios' : 'Sin Cambios'"></span>
-                    </Button>
+                    </PrimaryButton>
 
-                    <Button type="button" class="bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800"
-                        :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal"
-                    >
+                    <DangerButton type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal">
                         Eliminar
-                    </Button>
+                    </DangerButton>
                 </template>
             </FormSection>
 
@@ -131,15 +126,13 @@
                 </template>
 
                 <template #footer>
-                    <Button class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700" @click="closeConfirm">
+                    <CancelButton class="mr-4" @click="closeConfirm">
                         Cancelar
-                    </Button>
+                    </CancelButton>
 
-                    <Button class="ml-4 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                        :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmingAction"
-                    >
+                    <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmingAction">
                         Confirmar
-                    </Button>
+                    </PrimaryButton>
                 </template>
             </JetDialogModal>
 
@@ -200,7 +193,10 @@ import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
 import FormSection from '@/Components/FormSection.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
-import Button from '@/Components/Button.vue'
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
+import CancelButton from '@/Components/Buttons/CancelButton.vue'
+import DangerButton from '@/Components/Buttons/DangerButton.vue'
 import JetInputError from '@/Jetstream/InputError.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
 import { UserAddIcon, UserRemoveIcon } from '@heroicons/vue/outline'
@@ -252,13 +248,13 @@ const submit = () => {
 
 const getStudents = async () => {
     if (students.value.length === 0) {
-        let response = await axios.get('/classroomUsers')
+        let response = await axios.get(route('students.index'))
         students.value = response.data
     }
 }
 
 const getSubscription = async (student) => {
-    let response = await axios.get('/classroomUsers/' + student + '/subscription')
+    let response = await axios.get(route('students.subscription', student))
     return response.data.price_hr
 }
 

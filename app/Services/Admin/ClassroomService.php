@@ -3,19 +3,17 @@
 namespace App\Services\Admin;
 
 use App\Models\Classroom;
+use Illuminate\Support\Arr;
 
 class ClassroomService
 {
-    protected Classroom $classroom;
-
-    public function __construct(Classroom $classroom)
-    {
-        $this->classroom = $classroom;
-    }
-
     public function createClassroom(array $classroomData): Classroom
     {
-        $classroom = Classroom::create($classroomData);
+        // $classroom = Classroom::create($classroomData);
+
+        $classroom = Classroom::create(Arr::only($classroomData, ['name', 'description']));
+        $this->createSubscription($classroom, Arr::only($classroomData, ['price_hr', 'started_at']));
+        $this->addStudents($classroom, Arr::only($classroomData, ['students'])['students']);
 
         return $classroom;
     }
@@ -29,6 +27,7 @@ class ClassroomService
 
     public function destroyClassroom(Classroom $classroom): void
     {
+        $this->removeStudents($classroom);
         $classroom->delete();
     }
 
@@ -50,9 +49,14 @@ class ClassroomService
     public function removeStudents(Classroom $classroom, array $students = null): void
     {
         if ($students) {
-            $classroom->classroomUsers()->detach($students);
+            $classroom->classroomUsers()->whereIn('id', $students)->delete();
         } else {
             $classroom->classroomUsers()->delete();
         }
+    }
+
+    public function restoreStudents(Classroom $classroom, array $students): void
+    {
+        $classroom->classroomUsers()->whereIn('id', $students)->restore($students);
     }
 }

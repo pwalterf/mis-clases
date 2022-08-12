@@ -40,7 +40,7 @@ class LessonController extends Controller
     public function create(Classroom $classroom = null)
     {
         if ($classroom) {
-            $classroom = new ClassroomStudentsResource($classroom);
+            $classroom = $classroom->deleted_at ? null : new ClassroomStudentsResource($classroom);
         }
 
         return Inertia::render('Lessons/Create', compact('classroom'));
@@ -74,7 +74,7 @@ class LessonController extends Controller
             DB::rollBack();
             
             Session::flash('alert.style', 'error');
-            Session::flash('alert.message', 'Ha ocurrido un error al crear la lección. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.'.$th);
+            Session::flash('alert.message', 'Ha ocurrido un error al crear la lección. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
 
             return Redirect::back()->withInput();
         }
@@ -120,7 +120,7 @@ class LessonController extends Controller
             DB::rollBack();
 
             Session::flash('alert.style', 'error');
-            Session::flash('alert.message', 'Ha ocurrido un error al modificar la lección. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.'.$th);
+            Session::flash('alert.message', 'Ha ocurrido un error al modificar la lección. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
 
             return Redirect::back()->withInput();
         }

@@ -10,6 +10,7 @@ class LessonService
     public function createLesson(array $lessonData): Lesson
     {
         $lesson = Lesson::create($lessonData);
+
         return $lesson;
     }
 
@@ -17,7 +18,7 @@ class LessonService
     {
         $lesson->update($lessonData);
 
-        return $lesson->refresh();
+        return $lesson;
     }
 
     public function destroyLesson(Lesson $lesson): void

@@ -116,7 +116,7 @@
                                     {{ student.credit }}
                                 </td>
                                 <td class="px-2 py-4 text-center">
-                                    <Badge :class="student.deleted_at ? 'bg-red-500' : 'bg-green-500'">
+                                    <Badge :class="student.deleted_at ? 'bg-red-600' : 'bg-green-600'">
                                         {{ student.deleted_at ? 'Inactivo' : 'Activo' }}
                                     </Badge>
                                 </td>

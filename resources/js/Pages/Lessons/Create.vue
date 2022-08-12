@@ -50,18 +50,14 @@
                 <template #actions>
                     <div class="flex gap-4">
                         <JetInputError v-if="form.errors.classroom_id" :message="['Es obligatorio asignar la clase.']" class="mt-2" />
-                        <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
-                            @click="openModal"
-                        >
+                        <SecondaryButton type="button" @click="openModal">
                             <span v-if="loading" class="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" role="status" aria-label="loading"></span>
                             <span>{{ form.classroom_id ? 'Reasignar' : 'Asignar' }} Clase</span>
-                        </Button>
+                        </SecondaryButton>
 
-                        <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                            :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.classroom_id"
-                        >
+                        <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.classroom_id">
                             Guardar
-                        </Button>
+                        </PrimaryButton>
                     </div>
                 </template>
             </FormSection>
@@ -96,7 +92,7 @@
                                     {{ student.user.email }}
                                 </td>
                                 <td class="pl-2 pr-4 sm:pr-6 py-4 text-center">
-                                    <Badge :class="student.deleted_at ? 'bg-red-500' : 'bg-green-500'">
+                                    <Badge :class="student.deleted_at ? 'bg-red-600' : 'bg-green-600'">
                                         {{ student.deleted_at ? 'Inactivo' : 'Activo' }}
                                     </Badge>
                                 </td>
@@ -133,11 +129,11 @@
                                     <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No existen clases creadas.</td>
                                 </tr>
                                 <tr v-else v-for="(classroom, index) in classrooms" :key="classroom.id" :class="{'border-b': index != classrooms.length - 1}" class="bg-white hover:bg-gray-50">
-                                    <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
                                         {{ classroom.name }}
                                     </th>
                                     <td class="px-2 py-4">
-                                        <Badge :class="classroom.deleted_at ? 'bg-red-500' : 'bg-green-500'">
+                                        <Badge :class="classroom.deleted_at ? 'bg-red-600' : 'bg-green-600'">
                                             {{ classroom.deleted_at ? 'Inactiva' : 'Activa' }}
                                         </Badge>
                                     </td>
@@ -161,7 +157,8 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
 import FormSection from '@/Components/FormSection.vue'
-import Button from '@/Components/Button.vue'
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
 import Badge from '@/Components/Badge.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetTextarea from '@/Jetstream/Textarea.vue'

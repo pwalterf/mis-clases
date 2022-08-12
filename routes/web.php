@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ClassroomController;
-use App\Http\Controllers\ClassroomUserController;
+use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SubscriptionController;
@@ -65,17 +65,18 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::put('/classrooms/{classroom}/restore', [ClassroomController::class, 'restore'])->name('classrooms.restore');
         Route::get('/classrooms/{classroom}/students', [ClassroomController::class, 'students'])->name('classrooms.students');
         Route::get('/classrooms/{classroom}/lessons', [ClassroomController::class, 'lessons'])->name('classrooms.lessons');
+        Route::post('/classrooms/students/add', [ClassroomController::class, 'addStudent'])->name('classrooms.students.add');
+        Route::post('/classrooms/students/remove', [ClassroomController::class, 'removeStudent'])->name('classrooms.students.remove');
+        Route::post('/classrooms/students/restore', [ClassroomController::class, 'restoreStudent'])->name('classrooms.students.restore');
 
         // Subscriptions
-        Route::resource('classrooms.subscriptions', SubscriptionController::class)->shallow()->only(['store', 'delete']);
+        Route::resource('classrooms.subscriptions', SubscriptionController::class)->shallow()->only(['store', 'destroy']);
 
-        // ClassroomUsers
-        Route::get('/classroomUsers', [ClassroomUserController::class, 'index'])->name('classroomUsers.index');
-        Route::get('/classroomUsers/{classroomUser}/payments', [ClassroomUserController::class, 'payments'])->name('classroomUsers.payments');
-        Route::get('/classroomUsers/{classroomUser}/subscription', [ClassroomUserController::class, 'subscription'])->name('classroomUsers.subscription');
-        Route::post('/classroomUsers/store', [ClassroomUserController::class, 'store'])->name('classroomUsers.store');
-        Route::delete('/classroomUsers/{classroomUser}/destroy', [ClassroomUserController::class, 'destroy'])->name('classroomUsers.destroy');
-        Route::put('/classroomUsers/{classroomUser}/restore', [ClassroomUserController::class, 'restore'])->name('classroomUsers.restore');
+        // Students
+        Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+        Route::put('/students/{classroomUser}', [StudentController::class, 'update'])->name('students.update');
+        Route::get('/students/{classroomUser}/payments', [StudentController::class, 'payments'])->name('students.payments');
+        Route::get('/students/{classroomUser}/subscription', [StudentController::class, 'subscription'])->name('students.subscription');
 
         // Payments
         Route::get('/payments/create/{classroomUser?}', [PaymentController::class, 'create'])->name('payments.create');

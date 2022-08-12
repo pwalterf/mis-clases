@@ -50,9 +50,6 @@
                                 <thead class="text-xs text-purple-700 uppercase bg-purple-100">
                                     <tr>
                                         <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
-                                            ID
-                                        </th>
-                                        <th scope="col" class="px-2 py-3">
                                             Nombre
                                         </th>
                                         <th scope="col" class="px-2 py-3">
@@ -68,23 +65,23 @@
                                 </thead>
                                 <tbody>
                                     <tr v-if="form.students.length === 0" class="bg-white">
-                                        <td colspan="4" class="pl-4 sm:pl-6 pr-2 py-4">No hay alumnos asociados al pago.</td>
+                                        <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No hay alumnos asociados al pago.</td>
                                     </tr>
                                     <tr v-else v-for="(studentClass, index) in form.students" :key="studentClass.id" :class="{'border-b': index != form.students.length - 1}" class="bg-white hover:bg-gray-50">
-                                        <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            {{ studentClass.id }}
-                                        </th>
-                                        <th class="px-2 py-4">
+                                        <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
                                             {{ studentClass.user.firstname + ' ' + studentClass.user.lastname }}
                                         </th>
                                         <td class="px-2 py-4">
                                             $ {{ studentClass.price_hr }}
                                         </td>
-                                        <td>
-                                            <JetInput v-model="studentClass.new_credit" type="text" class="py-1" />
+                                        <td class="py-2">
+                                            <JetInput v-model="studentClass.new_credit" type="text" class="py-1 w-20" :error="form.errors[`students.${studentClass.id}.new_credit`]" />
+                                            <JetInputError v-if="form.errors[`students.${studentClass.id}.new_credit`]" :message="form.errors[`students.${studentClass.id}.new_credit`]" class="mt-1" />
                                         </td>
-                                        <td class="pl-2 pr-4 sm:pr-6 py-4 flex justify-end">
-                                            <UserRemoveIcon class="h-5 w-5 text-red-600 cursor-pointer" aria-hidden="true" @click="removeStudent(studentClass)" />
+                                        <td class="pl-2 pr-4 sm:pr-6 py-4">
+                                            <div class="flex justify-end items-center">
+                                                <UserRemoveIcon class="h-5 w-5 text-red-600 cursor-pointer" aria-hidden="true" @click="removeStudent(studentClass)" />
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -92,21 +89,19 @@
                         </div>
 
                         <div class="flex flex-row-reverse justify-between mt-2">
-                            <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
-                                :class="{ 'opacity-25': loading }" :disabled="loading"
-                                @click="openModal">
+                            <SecondaryButton type="button" :class="{ 'opacity-25': loading }" :disabled="loading" @click="openModal">
                                 <span v-if="loading" class="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" role="status" aria-label="loading"></span>
                                 Agregar Alumno
-                            </Button>
+                            </SecondaryButton>
                             <JetInputError v-if="form.errors.students" :message="['Es obligatorio asociar al menos un alumno.']" class="mt-2" />
                         </div>
                     </div>
                 </template>
 
                 <template #actions>
-                    <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                         Guardar
-                    </Button>
+                    </PrimaryButton>
                 </template>
             </FormSection>
 
@@ -137,7 +132,7 @@
                                     <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No existen alumnos cursando actualmente.</td>
                                 </tr>
                                 <tr v-else v-for="(student, index) in studentsList" :key="student.id" :class="{'border-b': index != studentsList.length - 1}" class="bg-white hover:bg-gray-50">
-                                    <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
                                         {{ student.user.firstname + ' ' + student.user.lastname }}
                                     </th>
                                     <td class="px-2 py-4">
@@ -165,16 +160,14 @@ import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
 import FormSection from '@/Components/FormSection.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
-import Button from '@/Components/Button.vue'
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
 import JetInputError from '@/Jetstream/InputError.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
 import { UserAddIcon, UserRemoveIcon } from '@heroicons/vue/outline'
 
 const props = defineProps({
-    student: {
-        type: Object,
-        default: []
-    }
+    student: Object
 })
 
 const form = useForm({
@@ -200,7 +193,9 @@ watch(() => form.income, () => {
 const updateCredit = () => {
     if (form.students.length) {
         form.students.forEach((student) => {
-            student.new_credit = String(Math.trunc((form.income / student.price_hr) / form.students.length))
+            student.new_credit = student.price_hr !== 0 && student.price_hr !== '-'
+                ? String(Math.trunc((form.income / student.price_hr) / form.students.length))
+                : '0'
         })
     }
 }
@@ -219,13 +214,13 @@ const submit = () => {
 
 const getStudents = async () => {
     if (students.value.length === 0) {
-        let response = await axios.get('/classroomUsers')
+        let response = await axios.get(route('students.index'))
         students.value = response.data
     }
 }
 
-const getSubscription = async (student) => {
-    let response = await axios.get('/classroomUsers/' + student + '/subscription')
+const getSubscription = async (student_id) => {
+    let response = await axios.get(route('students.subscription', student_id))
     return response.data.price_hr
 }
 

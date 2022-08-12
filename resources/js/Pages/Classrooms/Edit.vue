@@ -35,23 +35,16 @@
                     </template>
 
                     <template #actions>
-                        <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                            :class="{ 'opacity-25': form.processing }"
-                            :disabled="form.processing || !form.isDirty"
-                        >
+                        <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.isDirty">
                             <span v-text="form.isDirty ? 'Guardar Cambios' : 'Sin Cambios'"></span>
-                        </Button>
+                        </PrimaryButton>
 
-                        <Button v-if="classroom.deleted_at" type="button" class="bg-green-700 hover:bg-green-800 focus:bg-green-900 focus:ring-green-600 active:bg-green-900"
-                            :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal"
-                        >
+                        <SuccessButton v-if="classroom.deleted_at" type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal">
                             Restaurar
-                        </Button>
-                        <Button v-else type="button" class="bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800"
-                            :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal"
-                        >
+                        </SuccessButton>
+                        <DangerButton v-else type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal">
                             Eliminar
-                        </Button>
+                        </DangerButton>
                     </template>
                 </FormSection>
             </div>
@@ -61,10 +54,10 @@
 
                 <FormSection>
                     <template #form>
-                        <!-- Created_at -->
+                        <!-- Started_at -->
                         <div class="col-span-6">
-                            <JetLabel for="sub_created_at" value="Creado" />
-                            <JetInput id="sub_created_at" v-model="sub_created_at" type="text" class="mt-1 block w-full bg-slate-50 text-slate-500" disabled />
+                            <JetLabel for="started_at" value="Fecha" />
+                            <JetInput id="started_at" v-model="lastSubs.started_at" type="date" class="mt-1 block w-full bg-slate-50 text-slate-500" placeholder="hola" disabled />
                         </div>
 
                         <!-- Price_hr -->
@@ -74,21 +67,19 @@
                                 <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
                                     <span class="text-gray-600">$</span>
                                 </div>
-                                <JetInput id="price_hr" v-model="price_hr" type="text" class="mt-1 block w-full pl-10 bg-slate-50 text-slate-500" disabled />
+                                <JetInput id="price_hr" v-model="lastSubs.price_hr" type="text" class="mt-1 block w-full pl-10 bg-slate-50 text-slate-500" placeholder="hola" disabled />
                             </div>
                         </div>
                     </template>
 
                     <template #actions>
-                        <Button type="button" class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                            :class="{ 'opacity-25': subsForm.processing}" :disabled="subsForm.processing" @click="subsOpenModal"
-                        >
+                        <PrimaryButton type="button" :class="{ 'opacity-25': subsForm.processing}" :disabled="subsForm.processing" @click="subsOpenModal">
                             Modificar
-                        </Button>
+                        </PrimaryButton>
 
-                        <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600" @click="openModal">
+                        <SecondaryButton type="button" @click="openModal">
                             Historial
-                        </Button>
+                        </SecondaryButton>
                     </template>
                 </FormSection>
             </div>
@@ -126,7 +117,7 @@
                                             <th scope="col" class="px-2 py-3">
                                                 Email
                                             </th>
-                                            <th scope="col" class="px-2 py-3">
+                                            <th scope="col" class="px-2 py-3 text-center">
                                                 Créditos
                                             </th>
                                             <th scope="col" class="px-2 py-3 text-center">
@@ -148,11 +139,11 @@
                                             <td class="px-2 py-4">
                                                 {{ student.user.email }}
                                             </td>
-                                            <td class="px-2 py-4">
+                                            <td class="px-2 py-2 text-center">
                                                 {{ student.credit }}
                                             </td>
                                             <td class="px-2 py-4 text-center">
-                                                <Badge :class="student.deleted_at ? 'bg-red-500' : 'bg-green-500'">
+                                                <Badge :class="student.deleted_at ? 'bg-red-600' : 'bg-green-600'">
                                                     {{ student.deleted_at ? 'Inactivo' : 'Activo' }}
                                                 </Badge>
                                             </td>
@@ -160,11 +151,11 @@
                                                 <div class="flex justify-end items-center gap-2">
                                                     <span v-if="loading[index]" class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent rounded-full" role="status" aria-label="loading"></span>
                                                     <CashIcon v-else class="h-5 w-5 text-gray-600 cursor-pointer" aria-hidden="true" @click="paymentsOpenModal(student.id, index)" />
-                                                    <Link :href="route('users.edit', student.user.id)">
-                                                        <PencilAltIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
-                                                    </Link>
+                                                    
+                                                    <PencilAltIcon class="h-5 w-5 text-blue-600 cursor-pointer" aria-hidden="true" @click="studentOpenModal(student.id)" />
+                                                    
                                                     <template v-if="!classroom.deleted_at">
-                                                        <TrashIcon v-if="!student.deleted_at" class="h-5 w-5 text-red-600 cursor-pointer" aria-hidden="true" @click="destroyStudent(student.id)" />
+                                                        <TrashIcon v-if="!student.deleted_at" class="h-5 w-5 text-red-600 cursor-pointer" aria-hidden="true" @click="removeStudent(student.id)" />
                                                         <ClipboardCheckIcon v-else class="h-5 w-5 text-green-600 cursor-pointer" aria-hidden="true" @click="restoreStudent(student.id)" />
                                                     </template>
                                                 </div>
@@ -175,10 +166,10 @@
                             </div>
 
                             <div class="flex justify-end mt-2">
-                                <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
-                                    :class="{ 'opacity-25': form.processing}" :disabled="form.processing || classroom.deleted_at" @click="studentsOpenModal">
+                                <SecondaryButton type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing || classroom.deleted_at" @click="studentsOpenModal">
+                                    <span v-if="studentsLoading" class="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" role="status" aria-label="loading"></span>
                                     Agregar Alumno
-                                </Button>
+                                </SecondaryButton>
                             </div>
                         </TabPanel>
 
@@ -239,15 +230,66 @@
 
                             <div class="flex justify-end mt-2">
                                 <Link :href="route('lessons.create', classroom.id)">
-                                    <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                                    <SecondaryButton type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing || classroom.deleted_at">
                                         Nueva Lección
-                                    </Button>
+                                    </SecondaryButton>
                                 </Link>
                             </div>
                         </TabPanel>
                     </TabPanels>
                 </TabGroup>
             </div>
+
+            <!-- Editar Alumno -->
+            <JetDialogModal :show="studentOpen" @close="studentCloseModal">
+                <template #title>
+                    Editar Alumno
+                </template>
+
+                <template #content>
+                    <form @submit.prevent="studentSubmit" novalidate>
+                        <div class="grid grid-cols-6 gap-4">
+                            <!-- Firstname -->
+                            <div class="col-span-6 md:col-span-3">
+                                <JetLabel for="firstname" value="Nombre" />
+                                <JetInput id="firstname" v-model="studentForm.firstname" type="text" class="mt-1 block w-full" :error="studentForm.errors.firstname" required />
+                                <JetInputError :message="studentForm.errors.firstname" class="mt-2" />
+                            </div>
+    
+                            <!-- Lastname -->
+                            <div class="col-span-6 md:col-span-3">
+                                <JetLabel for="lastname" value="Apellido" />
+                                <JetInput id="lastname" v-model="studentForm.lastname" type="text" class="mt-1 block w-full" :error="studentForm.errors.lastname" required />
+                                <JetInputError :message="studentForm.errors.lastname" class="mt-2" />
+                            </div>
+    
+                            <!-- Email Address -->
+                            <div class="col-span-6 md:col-span-5">
+                                <JetLabel for="email" value="Email" />
+                                <JetInput id="email" v-model="studentForm.email" type="email" class="mt-1 block w-full" :error="studentForm.errors.email" required />
+                                <JetInputError :message="studentForm.errors.email" class="mt-2" />
+                            </div>
+    
+                            <!-- Credit -->
+                            <div class="col-span-6 md:col-span-1">
+                                <JetLabel for="credit" value="Créditos" />
+                                <JetInput id="credit" v-model="studentForm.credit" type="text" class="mt-1 block w-full" :error="studentForm.errors.credit" />
+                                <JetInputError v-if="studentForm.errors.credit" :message="studentForm.errors.credit" class="mt-2" />
+                            </div>
+                        </div>
+                    </form>
+                </template>
+
+                <template #footer>
+                    <CancelButton class="mr-4" @click="studentCloseModal">
+                        Cancelar
+                    </CancelButton>
+
+                    <PrimaryButton @click="studentSubmit" :class="{ 'opacity-25': studentForm.processing }" :disabled="studentForm.processing">
+                        Guardar
+                    </PrimaryButton>
+                </template>
+            </JetDialogModal>
 
             <!-- Modal de Confirmacion -->
             <JetDialogModal :show="confirming" @close="closeConfirm">
@@ -260,15 +302,13 @@
                 </template>
 
                 <template #footer>
-                    <Button class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700" @click="closeConfirm">
+                    <CancelButton class="mr-4" @click="closeConfirm">
                         Cancelar
-                    </Button>
+                    </CancelButton>
 
-                    <Button class="ml-4 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                        :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmingAction"
-                    >
+                    <PrimaryButton :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmingAction">
                         Confirmar
-                    </Button>
+                    </PrimaryButton>
                 </template>
             </JetDialogModal>
 
@@ -287,7 +327,7 @@
                                         Precio / hr
                                     </th>
                                     <th scope="col" class="px-2 py-3">
-                                        Creada
+                                        Fecha
                                     </th>
                                     <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
                                         <span class="sr-only">Editar</span>
@@ -296,14 +336,14 @@
                             </thead>
                             <tbody>
                                 <tr v-if="classroom.subscriptions.length === 0" class="bg-white">
-                                    <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No existen clases creadas</td>
+                                    <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No existen suscripciones creadas.</td>
                                 </tr>
                                 <tr v-else v-for="(subscription, index) in classroom.subscriptions" :key="subscription.id" :class="{'border-b': index != classroom.subscriptions.length - 1}" class="bg-white hover:bg-gray-50">
                                     <td scope="row" class="pl-4 sm:pl-6 pr-2 py-4">
                                         $ {{ subscription.price_hr }}
                                     </td>
                                     <td class="px-2 py-4">
-                                        {{ subscription.created_at }}
+                                        <input type="date" v-model="subscription.started_at" class="bg-transparent border-0 p-0 text-sm" disabled>
                                     </td>
                                     <td class="pl-2 pr-4 sm:pr-6 py-4">
                                         <div class="flex justify-end items-center">
@@ -325,8 +365,15 @@
 
                 <template #content>
                     <form @submit.prevent="subsSubmit" novalidate>
-                        <!-- Price_hr -->
+                        <!-- Started_at -->
                         <div class="col-span-6">
+                            <JetLabel for="started_at" value="Fecha Suscripción" />
+                            <JetInput id="started_at" v-model="subsForm.started_at" type="date" class="mt-1 block w-full" :error="subsForm.errors.started_at" required />
+                            <JetInputError :message="subsForm.errors.started_at" class="mt-2" />
+                        </div>
+
+                        <!-- Price_hr -->
+                        <div class="col-span-6 mt-4">
                             <JetLabel for="price_hr" value="Precio por Hora" />
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
@@ -340,13 +387,13 @@
                 </template>
 
                 <template #footer>
-                    <Button class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700" @click="subsCloseModal">
+                    <CancelButton class="mr-4" @click="subsCloseModal">
                         Cancelar
-                    </Button>
+                    </CancelButton>
 
-                    <Button @click="subsSubmit" class="ml-4 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700" :class="{ 'opacity-25': subsForm.processing }" :disabled="subsForm.processing">
+                    <PrimaryButton @click="subsSubmit" :class="{ 'opacity-25': subsForm.processing }" :disabled="subsForm.processing">
                         Confirmar
-                    </Button>
+                    </PrimaryButton>
                 </template>
             </JetDialogModal>
 
@@ -447,10 +494,10 @@
                     </div>
 
                     <div class="flex justify-end mt-2">
-                        <Link :href="route('payments.create', paymentsOpen)">
-                            <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                        <Link :href="route('payments.create', paymentsSelected)">
+                            <SecondaryButton type="button">
                                 Agregar Pago
-                            </Button>
+                            </SecondaryButton>
                         </Link>
                     </div>
                 </template>
@@ -470,7 +517,11 @@ import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetInputError from '@/Jetstream/InputError.vue'
 import Badge from '@/Components/Badge.vue'
-import Button from '@/Components/Button.vue'
+import CancelButton from '@/Components/Buttons/CancelButton.vue'
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
+import SuccessButton from '@/Components/Buttons/SuccessButton.vue'
+import DangerButton from '@/Components/Buttons/DangerButton.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
 import { CashIcon, UserIcon, BookOpenIcon, PencilAltIcon, TrashIcon, ClipboardCheckIcon, UserAddIcon } from '@heroicons/vue/outline'
@@ -480,19 +531,23 @@ const props = defineProps({
 })
 
 const loading = ref([])
+const studentsLoading = ref(false)
 const lessonsLoading = ref(false)
 const open = ref(false)
 const subsOpen = ref(false)
 const studentsOpen = ref(false)
+const studentOpen = ref(false)
 const paymentsOpen = ref(false)
 const students = ref([])
 const payments = ref([])
 const lessons = ref([])
-const paymentsSelected =  ref(null)
+const paymentsSelected = ref(null)
 const confirming = ref(false)
 
-const price_hr = computed(() => props.classroom.subscriptions[0].price_hr)
-const sub_created_at = computed(() => props.classroom.subscriptions[0].created_at)
+const lastSubs = computed(() => {
+    return props.classroom.subscriptions[0] ?? {price_hr: '-'}
+})
+
 const studentsList = computed(() => {
     return students.value.filter((student) => !props.classroom.students.map(st => st.user.id).includes(student.id))
 })
@@ -504,19 +559,35 @@ const form = useForm({
 })
 
 const submit = () => {
-    form.put(route('classrooms.update', props.classroom), {
+    form.put(route('classrooms.update', props.classroom.id), {
         preserveScroll: true,
     })
 }
 
 const subsForm = useForm({
-    price_hr: props.classroom.subscriptions[0].price_hr,
+    price_hr: '',
+    started_at: '',
 })
 
 const subsSubmit = () => {
     subsForm.post(route('classrooms.subscriptions.store', props.classroom.id), {
         preserveScroll: true,
         onSuccess: () => subsCloseModal(),
+    })
+}
+
+const studentForm = useForm({
+    id: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    credit: '',
+})
+
+const studentSubmit = () => {
+    studentForm.put(route('students.update', studentForm.id), {
+        preserveScroll: true,
+        onSuccess: () => studentCloseModal(),
     })
 }
 
@@ -551,13 +622,29 @@ const closeModal = () => {
 }
 
 const subsOpenModal = () => {
-    subsForm.price_hr = price_hr.value
     subsOpen.value = true
 }
 
 const subsCloseModal = () => {
     subsOpen.value = false
-    subsForm.clearErrors('price_hr')
+    subsForm.reset()
+    subsForm.clearErrors()
+}
+
+const studentOpenModal = (student_id) => {
+    let response = JSON.parse(JSON.stringify(props.classroom.students.find((student) => student.id === student_id)))
+    studentForm.id = response.id
+    studentForm.firstname = response.user.firstname
+    studentForm.lastname = response.user.lastname
+    studentForm.email = response.user.email
+    studentForm.credit = response.credit
+    studentOpen.value = true
+}
+
+const studentCloseModal = () => {
+    studentOpen.value = false
+    studentForm.reset()
+    studentForm.clearErrors()
 }
 
 const studentsOpenModal = async () => {
@@ -576,7 +663,7 @@ const paymentsOpenModal = async (classroomUser, index) => {
         await getPayments(classroomUser)
         loading.value[index] = false
     }
-    paymentsOpen.value = classroomUser
+    paymentsOpen.value = true
 }
 
 const paymentsCloseModal = () => {
@@ -592,48 +679,54 @@ const destroySubs = (id) => {
     })
 }
 
-const destroyStudent = (id) => {
+const addStudent = (student_id) => {
     useForm({
-        _method: 'DELETE'
-    }).delete(route('classroomUsers.destroy', id), {
+        _method: 'POST',
+        classroom_id: props.classroom.id,
+        user_id: student_id,
+    }).post(route('classrooms.students.add'), {
+        preserveScroll: true
+    })
+}
+
+const removeStudent = (student_id) => {
+    useForm({
+        _method: 'POST',
+        classroom_id: props.classroom.id,
+        user_id: student_id,
+    }).post(route('classrooms.students.remove'), {
         preserveScroll: true,
     })
 }
 
-const restoreStudent = (id) => {
+const restoreStudent = (student_id) => {
     useForm({
-        _method: 'PUT'
-    }).put(route('classroomUsers.restore', id), {
+        _method: 'POST',
+        classroom_id: props.classroom.id,
+        user_id: student_id,
+    }).post(route('classrooms.students.restore'), {
         preserveScroll: true,
     })
 }
 
 const getStudents = async () => {
     if (students.value.length === 0) {
+        studentsLoading.value = true
         let response = await axios.get('/users/students')
         students.value = response.data
+        studentsLoading.value = false
     }
 }
 
-const addStudent = (student) => {
-    useForm({
-        _method: 'POST',
-        classroom_id: props.classroom.id,
-        user_id: student,
-    }).post(route('classroomUsers.store'), {
-        preserveScroll: true
-    })
-}
-
-const getPayments = async (classroomUser) => {
-    let response = await axios.get('/classroomUsers/' + classroomUser + '/payments')
+const getPayments = async (student_id) => {
+    let response = await axios.get(route('students.payments', student_id))
     payments.value = response.data
 }
 
 const getLessons = async () => {
     if (!lessons.value.length) {
         lessonsLoading.value = true
-        let response = await axios.get('/classrooms/' + props.classroom.id + '/lessons')
+        let response = await axios.get(route('classrooms.lessons', props.classroom.id))
         lessons.value = response.data
         lessonsLoading.value = false
     }

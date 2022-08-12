@@ -16,6 +16,7 @@ class Subscription extends Model
      */
     protected $fillable = [
         'price_hr',
+        'started_at',
         'classroom_id',
     ];
 
@@ -26,6 +27,7 @@ class Subscription extends Model
      */
     protected $casts = [
         'price_hr' => 'decimal:2',
+        'started_at' => 'datetime:d/m/Y',
         'created_at' => 'datetime:d/m/Y',
     ];
 

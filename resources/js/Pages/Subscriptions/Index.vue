@@ -69,8 +69,6 @@ import { Link } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
-import JetButton from '@/Jetstream/Button.vue'
-import Badge from '@/Components/Badge.vue'
 import Button from '@/Components/Button.vue'
 
 const props = defineProps({

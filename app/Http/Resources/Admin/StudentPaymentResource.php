@@ -19,7 +19,7 @@ class StudentPaymentResource extends JsonResource
             'credit' => $this->credit,
             'deleted_at' => $this->deleted_at,
             'new_credit' => $this->studentPayment?->new_credit . '',
-            'price_hr' => $this->classroom->subscriptions()->first()->price_hr,
+            'price_hr' => $this->classroom->latestSubscription->price_hr ?? '-',
             'user' => new UserBasicResource($this->user),
             'classroom' => new ClassroomBasicResource($this->classroom),
         ];

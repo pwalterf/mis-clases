@@ -20,7 +20,7 @@ class ClassroomListResource extends JsonResource
             'description' => $this->description,
             'created_at' => $this->created_at->format('d/m/Y'),
             'deleted_at' => $this->deleted_at,
-            'price_hr' => $this->price_hr,
+            'price_hr' => $this->latestSubscription->price_hr ?? '-',
         ];
     }
 }

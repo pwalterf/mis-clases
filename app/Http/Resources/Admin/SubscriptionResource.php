@@ -16,8 +16,8 @@ class SubscriptionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'price_hr' => $this->price_hr,
-            'created_at' => $this->created_at->format('d/m/Y'),
+            'price_hr' => $this->price_hr ?? '-',
+            'started_at' => $this->started_at->format('Y-m-d'),
         ];
     }
 }

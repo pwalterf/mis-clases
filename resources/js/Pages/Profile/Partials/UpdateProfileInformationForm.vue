@@ -2,7 +2,9 @@
 import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Link, useForm } from '@inertiajs/inertia-vue3';
-import Button from '@/Components/Button.vue';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue';
+import DangerButton from '@/Components/Buttons/DangerButton.vue';
 import JetFormSection from '@/Jetstream/FormSection.vue';
 import JetInput from '@/Jetstream/Input.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
@@ -114,17 +116,13 @@ const clearPhotoFileInput = () => {
                     />
                 </div>
 
-                <Button type="button" class="mt-2 mr-2 bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
-                    @click.prevent="selectNewPhoto"
-                >
+                <SecondaryButton type="button" class="mt-2 mr-2" @click.prevent="selectNewPhoto">
                     Seleccione una Nueva Foto
-                </Button>
+                </SecondaryButton>
 
-                <Button v-if="user.profile_photo_path" type="button" class="mt-2 bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800"
-                    @click.prevent="deletePhoto"
-                >
+                <DangerButton v-if="user.profile_photo_path" type="button" class="mt-2" @click.prevent="deletePhoto">
                     Eliminar Foto
-                </Button>
+                </DangerButton>
 
                 <JetInputError :message="form.errors.photo" class="mt-2" />
             </div>
@@ -219,11 +217,9 @@ const clearPhotoFileInput = () => {
                 Guardado.
             </JetActionMessage>
 
-            <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.isDirty"
-            >
+            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.isDirty">
                 <span v-text="form.isDirty ? 'Guardar Cambios' : 'Sin Cambios'"></span>
-            </Button>
+            </PrimaryButton>
         </template>
     </JetFormSection>
 </template>

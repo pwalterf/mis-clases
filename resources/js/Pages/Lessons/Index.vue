@@ -12,9 +12,9 @@
                     </template>
                 </Breadcrumb>
                 <Link :href="route('lessons.create')">
-                    <Button type="button" class="border-none bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                    <SecondaryButton type="button" class="border-none">
                         Nueva Lección
-                    </Button>
+                    </SecondaryButton>
                 </Link>
             </div>
         </template>
@@ -101,7 +101,7 @@
                                     {{ student.user.email }}
                                 </td>
                                 <td class="pl-2 pr-4 sm:pr-6 py-4 text-center">
-                                    <Badge :class="student.deleted_at ? 'bg-red-500' : 'bg-green-500'">
+                                    <Badge :class="student.deleted_at ? 'bg-red-600' : 'bg-green-600'">
                                         {{ student.deleted_at ? 'Inactivo' : 'Activo' }}
                                     </Badge>
                                 </td>
@@ -120,7 +120,7 @@ import { Link } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
-import Button from '@/Components/Button.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
 import Badge from '@/Components/Badge.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
 import { PencilAltIcon, UserGroupIcon } from '@heroicons/vue/outline'

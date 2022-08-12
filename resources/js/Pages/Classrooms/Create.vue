@@ -16,30 +16,45 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <FormSection @submitted="submit">
                 <template #form>
-                    <!-- Name -->
-                    <div class="col-span-6 md:col-span-4">
-                        <JetLabel for="name" value="Nombre" />
-                        <JetInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" :error="form.errors.name" required />
-                        <JetInputError :message="form.errors.name" class="mt-2" />
-                    </div>
-
-                    <!-- Price_hr -->
-                    <div class="col-span-6 md:col-span-2">
-                        <JetLabel for="price_hr" value="Precio por Hora" />
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
-                                <span class="text-gray-600">$</span>
-                            </div>
-                            <JetInput id="price_hr" v-model="form.price_hr" type="text" class="mt-1 block w-full pl-10" :error="form.errors.price_hr" required />
-                        </div>
-                        <JetInputError :message="form.errors.price_hr" class="mt-2" />
-                    </div>
-
-                    <!-- Description -->
                     <div class="col-span-6">
-                        <JetLabel for="description" value="Descripción" />
-                        <JetInput id="description" v-model="form.description" type="text" class="mt-1 block w-full" :error="form.errors.description" />
-                        <JetInputError :message="form.errors.description" class="mt-2" />
+                        <div class="grid grid-cols-6 gap-x-8 gap-y-4">
+                            <div class="col-span-6 md:col-span-4">
+                                <!-- Name -->
+                                <div>
+                                    <JetLabel for="name" value="Nombre" />
+                                    <JetInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" :error="form.errors.name" required />
+                                    <JetInputError :message="form.errors.name" class="mt-2" />
+                                </div>
+
+                                <!-- Description -->
+                                <div class="mt-4">
+                                    <JetLabel for="description" value="Descripción" />
+                                    <JetInput id="description" v-model="form.description" type="text" class="mt-1 block w-full" :error="form.errors.description" />
+                                    <JetInputError :message="form.errors.description" class="mt-2" />
+                                </div>
+                            </div>
+
+                            <div class="col-span-6 md:col-span-2">
+                                <!-- Started_at -->
+                                <div>
+                                    <JetLabel for="started_at" value="Fecha Suscripción" />
+                                    <JetInput id="started_at" v-model="form.started_at" type="date" class="mt-1 block w-full" :error="form.errors.started_at" required />
+                                    <JetInputError :message="form.errors.started_at" class="mt-2" />
+                                </div>
+
+                                <!-- Price_hr -->
+                                <div class="mt-4">
+                                    <JetLabel for="price_hr" value="Precio por Hora" />
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
+                                            <span class="text-gray-600">$</span>
+                                        </div>
+                                        <JetInput id="price_hr" v-model="form.price_hr" type="text" class="mt-1 block w-full pl-10" :error="form.errors.price_hr" required />
+                                    </div>
+                                    <JetInputError :message="form.errors.price_hr" class="mt-2" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-span-6">
@@ -54,6 +69,9 @@
                                         </th>
                                         <th scope="col" class="px-2 py-3">
                                             Email
+                                        </th>
+                                        <th scope="col" class="px-2 py-3">
+                                            Créditos
                                         </th>
                                         <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
                                             <span class="sr-only">Desasociar</span>
@@ -71,6 +89,10 @@
                                         <td class="px-2 py-4">
                                             {{ studentClass.email }}
                                         </td>
+                                        <td class="py-2">
+                                            <JetInput v-model="studentClass.credit" type="text" class="py-1 w-20" :error="form.errors[`students.${index}.credit`]" />
+                                            <JetInputError v-if="form.errors[`students.${index}.credit`]" :message="form.errors[`students.${index}.credit`]" class="mt-1" />
+                                        </td>
                                         <td class="pl-2 pr-4 sm:pr-6 py-4">
                                             <div class="flex justify-end items-center">
                                                 <UserRemoveIcon class="h-5 w-5 text-red-600 cursor-pointer" aria-hidden="true" @click="removeStudent(studentClass)" />
@@ -82,20 +104,18 @@
                         </div>
 
                         <div class="flex justify-end mt-2">
-                            <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600" @click="openModal">
+                            <SecondaryButton type="button" :class="{ 'opacity-25': loading }" :disabled="loading" @click="openModal">
+                                <span v-if="loading" class="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" role="status" aria-label="loading"></span>
                                 Agregar Alumno
-                            </Button>
+                            </SecondaryButton>
                         </div>
                     </div>
                 </template>
 
                 <template #actions>
-                    <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                    >
+                    <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                         Guardar
-                    </Button>
+                    </PrimaryButton>
                 </template>
             </FormSection>
 
@@ -156,12 +176,14 @@ import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
 import FormSection from '@/Components/FormSection.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
-import Button from '@/Components/Button.vue'
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
 import JetInputError from '@/Jetstream/InputError.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
 import { UserAddIcon, UserRemoveIcon } from '@heroicons/vue/outline'
 
 const open = ref(false)
+const loading = ref(false)
 const students = ref([])
 
 const studentsList = computed(() => {
@@ -171,15 +193,15 @@ const studentsList = computed(() => {
 const form = useForm({
     name: '',
     description: '',
-    created_at: '',
     price_hr: '',
+    started_at: '',
     students: []
 })
 
 const submit = () => {
     form.transform((data) => ({
         ...data,
-        students: data.students.flatMap(student => ({['user_id']: student.id}))
+        students: data.students.flatMap(student => ({['user_id']: student.id, ['credit']: student.credit}))
     }))
     .post(route('classrooms.store'), {
         preserveScroll: true,
@@ -188,8 +210,10 @@ const submit = () => {
 
 const getStudents = async () => {
     if (students.value.length === 0) {
+        loading.value = true
         let response = await axios.get('/users/students')
         students.value = response.data
+        loading.value = false
     }
 }
 

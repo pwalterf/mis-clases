@@ -5,7 +5,8 @@ import JetActionSection from '@/Jetstream/ActionSection.vue';
 import JetDialogModal from '@/Jetstream/DialogModal.vue';
 import JetInput from '@/Jetstream/Input.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
-import Button from '@/Components/Button.vue';
+import DangerButton from '@/Components/Buttons/DangerButton.vue';
+import CancelButton from '@/Components/Buttons/CancelButton.vue';
 
 const confirmingUserDeletion = ref(false);
 const passwordInput = ref(null);
@@ -52,11 +53,9 @@ const closeModal = () => {
             </div>
 
             <div class="mt-5">
-                <Button type="button" class="bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800"
-                    @click="confirmUserDeletion"
-                >
+                <DangerButton type="button" @click="confirmUserDeletion">
                     Eliminar Cuenta
-                </Button>
+                </DangerButton>
             </div>
 
             <!-- Delete Account Confirmation Modal -->
@@ -84,17 +83,13 @@ const closeModal = () => {
                 </template>
 
                 <template #footer>
-                    <Button type="button" class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700"
-                        @click="closeModal"
-                    >
+                    <CancelButton type="button" class="mr-4" @click="closeModal">
                         Cancelar
-                    </Button>
+                    </CancelButton>
 
-                    <Button type="button" class="ml-3 bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800"
-                        :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="deleteUser"
-                    >
+                    <DangerButton type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="deleteUser">
                         Eliminar Cuenta
-                    </Button>
+                    </DangerButton>
                 </template>
             </JetDialogModal>
         </template>

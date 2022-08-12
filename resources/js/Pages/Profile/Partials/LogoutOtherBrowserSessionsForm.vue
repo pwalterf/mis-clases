@@ -3,7 +3,8 @@ import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import JetActionMessage from '@/Jetstream/ActionMessage.vue';
 import JetActionSection from '@/Jetstream/ActionSection.vue';
-import Button from '@/Components/Button.vue';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
+import CancelButton from '@/Components/Buttons/CancelButton.vue';
 import JetDialogModal from '@/Jetstream/DialogModal.vue';
 import JetInput from '@/Jetstream/Input.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
@@ -112,9 +113,9 @@ const closeModal = () => {
             </div>
 
             <div class="flex items-center mt-5">
-                <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700" @click="confirmLogout">
+                <PrimaryButton @click="confirmLogout">
                     Cerrar Otras Sesiones Abiertas
-                </Button>
+                </PrimaryButton>
 
                 <JetActionMessage :on="form.recentlySuccessful" class="ml-3">
                     Hecho.
@@ -145,16 +146,13 @@ const closeModal = () => {
                 </template>
 
                 <template #footer>
-                    <Button type="button" class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700" @click="closeModal">
+                    <CancelButton type="button" class="mr-4" @click="closeModal">
                         Cancelar
-                    </Button>
+                    </CancelButton>
 
-                    <Button class="ml-3 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                        @click="logoutOtherBrowserSessions">
+                    <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="logoutOtherBrowserSessions">
                         Cerrar Otras Sesiones Abiertas
-                    </Button>
+                    </PrimaryButton>
                 </template>
             </JetDialogModal>
         </template>

@@ -50,25 +50,19 @@
                 <template #actions>
                     <div class="flex gap-4">
                         <JetInputError v-if="form.errors.classroom_id" :message="['Es obligatorio asignar la clase.']" class="mt-2" />
-                        <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
-                            @click="openModal"
-                        >
+                        <SecondaryButton type="button" @click="openModal">
                             <span v-if="loading" class="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" role="status" aria-label="loading"></span>
                             <span>{{ form.classroom_id ? 'Reasignar' : 'Asignar' }} Clase</span>
-                        </Button>
+                        </SecondaryButton>
                         
-                        <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                            :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.classroom_id || !form.isDirty"
-                        >
+                        <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.classroom_id || !form.isDirty">
                             <span v-text="form.isDirty ? 'Guardar Cambios' : 'Sin Cambios'"></span>
-                        </Button>
+                        </PrimaryButton>
                     </div>
 
-                    <Button type="button" class="bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800"
-                        :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="openConfirm"
-                    >
+                    <DangerButton type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="openConfirm">
                         Eliminar
-                    </Button>
+                    </DangerButton>
                 </template>
             </FormSection>
 
@@ -107,7 +101,7 @@
                                     {{ student.user.email }}
                                 </td>
                                 <td class="pl-2 pr-4 sm:pr-6 py-4 text-center">
-                                    <Badge :class="student.deleted_at ? 'bg-red-500' : 'bg-green-500'">
+                                    <Badge :class="student.deleted_at ? 'bg-red-600' : 'bg-green-600'">
                                         {{ student.deleted_at ? 'Inactivo' : 'Activo' }}
                                     </Badge>
                                 </td>
@@ -148,7 +142,7 @@
                                         {{ classroom.name }}
                                     </th>
                                     <td class="px-2 py-4">
-                                        <Badge :class="classroom.deleted_at ? 'bg-red-500' : 'bg-green-500'">
+                                        <Badge :class="classroom.deleted_at ? 'bg-red-600' : 'bg-green-600'">
                                             {{ classroom.deleted_at ? 'Inactiva' : 'Activa' }}
                                         </Badge>
                                     </td>
@@ -173,15 +167,13 @@
                 </template>
 
                 <template #footer>
-                    <Button class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700" @click="closeConfirm">
+                    <CancelButton class="mr-4" @click="closeConfirm">
                         Cancelar
-                    </Button>
+                    </CancelButton>
 
-                    <Button class="ml-4 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                        :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmingAction"
-                    >
+                    <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmingAction">
                         Confirmar
-                    </Button>
+                    </PrimaryButton>
                 </template>
             </JetDialogModal>
         </div>
@@ -195,7 +187,10 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
 import FormSection from '@/Components/FormSection.vue'
-import Button from '@/Components/Button.vue'
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
+import DangerButton from '@/Components/Buttons/DangerButton.vue'
+import CancelButton from '@/Components/Buttons/CancelButton.vue'
 import Badge from '@/Components/Badge.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetTextarea from '@/Jetstream/Textarea.vue'

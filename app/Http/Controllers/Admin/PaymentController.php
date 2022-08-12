@@ -38,11 +38,11 @@ class PaymentController extends Controller
      * @param  \App\Models\ClassroomUser  $classroomUser
      * @return \Illuminate\Http\Response
      */
-    public function create(ClassroomUser $student = null)
+    public function create(ClassroomUser $classroomUser = null)
     {
         $student = [];
-        if ($student) {
-            $student = new StudentPaymentResource($student);
+        if ($classroomUser) {
+            $student[] = new StudentPaymentResource($classroomUser);
         }
 
         return Inertia::render('Payments/Create', compact('student'));

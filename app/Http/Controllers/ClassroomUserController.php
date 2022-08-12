@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ClassroomUserStoreRequest;
+use App\Http\Requests\StudentStoreRequest;
 use App\Http\Resources\ClassroomUsers\ClassroomUsersResource;
 use App\Http\Resources\PaymentsResource;
 use App\Http\Resources\SubscriptionsResource;
@@ -39,7 +39,7 @@ class ClassroomUserController extends Controller
      * @param  \App\Http\Requests\ClassroomUserStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ClassroomUserStoreRequest $request)
+    public function store(StudentStoreRequest $request)
     {
         try {
             $classroomUser = ClassroomUser::create($request->validated());

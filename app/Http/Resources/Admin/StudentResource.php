@@ -16,7 +16,7 @@ class StudentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'credit' => $this->credit,
+            'credit' => $this->credit . '',
             'deleted_at' => $this->deleted_at,
             'user' => new UserBasicResource($this->user),
         ];

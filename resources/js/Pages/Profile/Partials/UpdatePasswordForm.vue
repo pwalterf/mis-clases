@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import JetActionMessage from '@/Jetstream/ActionMessage.vue';
-import Button from '@/Components/Button.vue';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
 import JetFormSection from '@/Jetstream/FormSection.vue';
 import JetInput from '@/Jetstream/Input.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
@@ -92,11 +92,9 @@ const updatePassword = () => {
                 Guardado.
             </JetActionMessage>
 
-            <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.isDirty"
-            >
+            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing || !form.isDirty">
                 <span v-text="form.isDirty ? 'Guardar Cambios' : 'Sin Cambios'"></span>
-            </Button>
+            </PrimaryButton>
         </template>
     </JetFormSection>
 </template>

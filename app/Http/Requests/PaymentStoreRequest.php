@@ -28,6 +28,7 @@ class PaymentStoreRequest extends FormRequest
             'income' => ['required', 'numeric', 'between:0,99999,99'],
             'comment' => ['nullable', 'string'],
             'students' => ['required', 'array'],
+            'students.*.new_credit' => ['sometimes', 'required', 'numeric'],
         ];
     }
 
@@ -43,6 +44,7 @@ class PaymentStoreRequest extends FormRequest
             'income' => 'Ingreso',
             'comment' => 'Comentario',
             'students' => 'Alumnos',
+            'students.*.new_credit' => 'Créditos',
         ];
     }
 }

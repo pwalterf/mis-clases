@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, nextTick } from 'vue';
-import Button from '@/Components/Button.vue';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
+import CancelButton from '@/Components/Buttons/CancelButton.vue';
 import JetDialogModal from './DialogModal.vue';
 import JetInput from './Input.vue';
 import JetInputError from './InputError.vue';
@@ -98,17 +99,13 @@ const closeModal = () => {
             </template>
 
             <template #footer>
-                <Button type="button" class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700" @click="closeModal">
+                <CancelButton type="button" class="mr-4" @click="closeModal">
                     Cancelar
-                </Button>
+                </CancelButton>
 
-                <Button class="ml-3 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                    @click="confirmPassword"
-                >
+                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmPassword">
                     {{ button }}
-                </Button>
+                </PrimaryButton>
             </template>
         </JetDialogModal>
     </span>

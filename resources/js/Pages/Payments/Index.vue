@@ -12,9 +12,9 @@
                     </template>
                 </Breadcrumb>
                 <Link :href="route('payments.create')">
-                    <Button type="button" class="border-none bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                    <SecondaryButton type="button" class="border-none">
                         Nuevo Pago
-                    </Button>
+                    </SecondaryButton>
                 </Link>
             </div>
         </template>
@@ -54,7 +54,8 @@
                             </td>
                             <td class="pl-2 pr-4 sm:pr-6 py-3">
                                 <div class="flex justify-end items-center gap-2">
-                                    <UserGroupIcon class="h-5 w-5 text-gray-600 cursor-pointer" aria-hidden="true" @click="studentsOpen(payment.id)" />
+                                    <span v-if="loading[index]" class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent rounded-full" role="status" aria-label="loading"></span>
+                                    <UserGroupIcon v-else class="h-5 w-5 text-gray-600 cursor-pointer" aria-hidden="true" @click="studentsOpen(payment.id, index)" />
                                     <Link :href="route('payments.edit', payment.id)">
                                         <PencilAltIcon class="h-5 w-5 text-blue-600" aria-hidden="true" />
                                     </Link>
@@ -117,7 +118,7 @@ import { Link } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
-import Button from '@/Components/Button.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
 import { PencilAltIcon, UserGroupIcon } from '@heroicons/vue/outline'
 
@@ -125,14 +126,17 @@ const props = defineProps({
     payments: Object,
 })
 
+const loading = ref([])
 const selected = ref(null)
 const students = ref([])
 const studentsModal = ref(false)
 
-const studentsOpen = async (payment) => {
+const studentsOpen = async (payment, index) => {
     if (selected === null || selected.value?.id !== payment) {
+        loading.value[index] = true
         selected.value = props.payments.find(item => item.id === payment)
         await getStudents(payment)
+        loading.value[index] = false
     }
     studentsModal.value = true
 }

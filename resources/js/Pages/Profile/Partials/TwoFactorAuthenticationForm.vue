@@ -3,7 +3,10 @@ import { ref, computed, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { useForm, usePage } from '@inertiajs/inertia-vue3';
 import JetActionSection from '@/Jetstream/ActionSection.vue';
-import Button from '@/Components/Button.vue';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue';
+import DangerButton from '@/Components/Buttons/DangerButton.vue';
+import CancelButton from '@/Components/Buttons/CancelButton.vue';
 import JetConfirmsPassword from '@/Jetstream/ConfirmsPassword.vue';
 import JetInput from '@/Jetstream/Input.vue';
 import JetInputError from '@/Jetstream/InputError.vue';
@@ -188,54 +191,41 @@ const disableTwoFactorAuthentication = () => {
             <div class="mt-5">
                 <div v-if="! twoFactorEnabled">
                     <JetConfirmsPassword @confirmed="enableTwoFactorAuthentication">
-                        <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                            type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
+                        <PrimaryButton type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
                             Habilitar
-                        </Button>
+                        </PrimaryButton>
                     </JetConfirmsPassword>
                 </div>
 
                 <div v-else>
                     <JetConfirmsPassword @confirmed="confirmTwoFactorAuthentication">
-                        <Button v-if="confirming" class="mr-3 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                            type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
+                        <PrimaryButton v-if="confirming" class="mr-3" type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
                             Confirmar
-                        </Button>
+                        </PrimaryButton>
                     </JetConfirmsPassword>
 
                     <JetConfirmsPassword @confirmed="regenerateRecoveryCodes">
-                        <Button v-if="recoveryCodes.length > 0 && ! confirming" type="button"
-                            class="mr-3 bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
-                        >
+                        <SecondaryButton v-if="recoveryCodes.length > 0 && ! confirming" type="button" class="mr-3">
                             Regenerar códigos de recuperación
-                        </Button>
+                        </SecondaryButton>
                     </JetConfirmsPassword>
 
                     <JetConfirmsPassword @confirmed="showRecoveryCodes">
-                        <Button v-if="recoveryCodes.length === 0 && ! confirming" type="button"
-                            class="mr-3 bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600"
-                        >
+                        <SecondaryButton v-if="recoveryCodes.length === 0 && ! confirming" type="button" class="mr-3">
                             Mostrar códigos de recuperación
-                        </Button>
+                        </SecondaryButton>
                     </JetConfirmsPassword>
 
                     <JetConfirmsPassword @confirmed="disableTwoFactorAuthentication">
-                        <Button v-if="confirming" type="button"
-                            class="mr-3 bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700"
-                            :class="{ 'opacity-25': disabling }"
-                            :disabled="disabling"
-                        >
+                        <CancelButton v-if="confirming" type="button" class="mr-3" :class="{ 'opacity-25': disabling }" :disabled="disabling">
                             Cancelar
-                        </Button>
+                        </CancelButton>
                     </JetConfirmsPassword>
 
                     <JetConfirmsPassword @confirmed="disableTwoFactorAuthentication">
-                        <Button v-if="! confirming" type="button" class="mt-2 bg-red-600 hover:bg-red-700 focus:bg-red-800 focus:ring-red-500 active:bg-red-800"
-                            :class="{ 'opacity-25': disabling }"
-                            :disabled="disabling"
-                        >
+                        <DangerButton v-if="! confirming" type="button" class="mt-2" :class="{ 'opacity-25': disabling }" :disabled="disabling">
                             Deshabilitar
-                        </Button>
+                        </DangerButton>
                     </JetConfirmsPassword>
                 </div>
             </div>

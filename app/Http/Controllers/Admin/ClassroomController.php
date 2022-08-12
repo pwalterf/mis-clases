@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Classroom;
 use App\Http\Requests\ClassroomStoreRequest;
 use App\Http\Requests\ClassroomUpdateRequest;
+use App\Http\Requests\StudentStoreRequest;
 use App\Http\Resources\Admin\ClassroomEditResource;
 use App\Http\Resources\Admin\LessonBasicResource;
 use App\Http\Resources\Admin\ClassroomListResource;
@@ -26,7 +27,7 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        $classrooms = ClassroomListResource::collection(Classroom::allWithLastSubscription());
+        $classrooms = ClassroomListResource::collection(Classroom::withTrashed()->with('latestSubscription')->orderBy('deleted_at')->orderBy('created_at', 'desc')->get());
         
         return Inertia::render('Classrooms/Index', compact('classrooms'));
     }
@@ -52,9 +53,11 @@ class ClassroomController extends Controller
         try {
             DB::beginTransaction();
 
-            $classroom = $classroomService->createClassroom($request->safe()->only(['name', 'description']));
-            $classroomService->createSubscription($classroom, $request->safe()->only(['price_hr']));
-            $classroomService->addStudents($classroom, $request->safe()->only(['students'])['students']);
+            // $classroom = $classroomService->createClassroom($request->safe()->only(['name', 'description']));
+            // $classroomService->createSubscription($classroom, $request->safe()->only(['price_hr']));
+            // $classroomService->addStudents($classroom, $request->safe()->only(['students'])['students']);
+
+            $classroomService->createClassroom($request->validated());
 
             DB::commit();
 
@@ -124,7 +127,7 @@ class ClassroomController extends Controller
         try {
             DB::beginTransaction();
 
-            $classroomService->removeStudents($classroom);
+            // $classroomService->removeStudents($classroom);
             $classroomService->destroyClassroom($classroom);
 
             DB::commit();
@@ -170,6 +173,81 @@ class ClassroomController extends Controller
     }
 
     /**
+     * Add new student to the classroom.
+     *
+     * @param  \App\Models\Classroom  $classroom
+     * @return \Illuminate\Http\Response
+     */
+    public function addStudent(StudentStoreRequest $request, ClassroomService $classroomService)
+    {
+        try {
+            $classroomService->addStudents(Classroom::find($request->classroom_id), [$request->safe()->only('user_id')]);
+
+            Session::flash('alert.style', 'exitoso');
+            Session::flash('alert.message', 'Se ha asociado al alumno correctamente.');
+
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            //throw $th;
+
+            Session::flash('alert.style', 'error');
+            Session::flash('alert.message', 'Ha ocurrido un error al asociar al alumno. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
+
+            return Redirect::back()->withInput();
+        }
+    }
+
+    /**
+     * Remove the student to the classroom.
+     *
+     * @param  \App\Models\Classroom  $classroom
+     * @return \Illuminate\Http\Response
+     */
+    public function removeStudent(StudentStoreRequest $request, ClassroomService $classroomService)
+    {
+        try {
+            $classroomService->removeStudents(Classroom::find($request->classroom_id), [$request->user_id]);
+
+            Session::flash('alert.style', 'exitoso');
+            Session::flash('alert.message', 'Se ha desvinculado al alumno correctamente.');
+
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            //throw $th;
+
+            Session::flash('alert.style', 'error');
+            Session::flash('alert.message', 'Ha ocurrido un error al desvincular al alumno. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
+
+            return Redirect::back()->withInput();
+        }
+    }
+
+    /**
+     * Restore the student to the classroom.
+     *
+     * @param  \App\Models\Classroom  $classroom
+     * @return \Illuminate\Http\Response
+     */
+    public function restoreStudent(StudentStoreRequest $request, ClassroomService $classroomService)
+    {
+        try {
+            $classroomService->restoreStudents(Classroom::find($request->classroom_id), [$request->user_id]);
+
+            Session::flash('alert.style', 'exitoso');
+            Session::flash('alert.message', 'Se ha desvinculado al alumno correctamente.');
+
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            //throw $th;
+
+            Session::flash('alert.style', 'error');
+            Session::flash('alert.message', 'Ha ocurrido un error al desvincular al alumno. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
+
+            return Redirect::back()->withInput();
+        }
+    }
+
+    /**
      * Display a listing of students of the resource.
      *
      * @param  \App\Models\Classroom  $classroom
@@ -177,7 +255,7 @@ class ClassroomController extends Controller
      */
     public function students(Classroom $classroom)
     {
-        return StudentResource::collection($classroom->classroomUsers()->with('user')->get());
+        return StudentResource::collection($classroom->classroomUsers()->withTrashed()->with('user')->get());
     }
 
     /**
@@ -192,7 +270,7 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Display a listing of lessons of the resource.
+     * Display a listing of students of the resource.
      *
      * @return \Illuminate\Http\Response
      */

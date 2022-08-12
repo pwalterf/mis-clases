@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->decimal('price_hr', 6, 2, true);
+            $table->date('started_at');
             $table->timestamps();
 
             $table->foreignId('classroom_id')->constrained();

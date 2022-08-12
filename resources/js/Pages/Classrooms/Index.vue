@@ -12,9 +12,9 @@
                     </template>
                 </Breadcrumb>
                 <Link :href="route('classrooms.create')">
-                    <Button type="button" class="border-none bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                    <SecondaryButton type="button" class="border-none">
                         Nueva Clase
-                    </Button>
+                    </SecondaryButton>
                 </Link>
             </div>
         </template>
@@ -56,7 +56,7 @@
                                 $ {{ classroom.price_hr }}
                             </td>
                             <td class="px-2 py-4 text-center">
-                                <Badge :class="classroom.deleted_at ? 'bg-red-500' : 'bg-green-500'">
+                                <Badge :class="classroom.deleted_at ? 'bg-red-600' : 'bg-green-600'">
                                     {{ classroom.deleted_at ? 'Inactiva' : 'Activa' }}
                                 </Badge>
                             </td>
@@ -97,9 +97,10 @@
                                 <th scope="col" class="px-6 py-3 text-center">
                                     Créditos
                                 </th>
-                                <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3 text-center">
+                                <th scope="col" class="px-6 py-3 text-center">
                                     Estado
                                 </th>
+                                <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -116,10 +117,15 @@
                                 <td class="px-6 py-4 text-center">
                                     {{ student.credit }}
                                 </td>
-                                <td class="pl-2 pr-4 sm:pr-6 py-4 text-center">
-                                    <Badge :class="student.deleted_at ? 'bg-red-500' : 'bg-green-500'">
+                                <td class="px-6 py-4 text-center">
+                                    <Badge :class="student.deleted_at ? 'bg-red-600' : 'bg-green-600'">
                                         {{ student.deleted_at ? 'Inactivo' : 'Activo' }}
                                     </Badge>
+                                </td>
+                                <td class="pl-2 pr-4 sm:pr-6 py-4">
+                                    <Link :href="route('payments.create', student.id)">
+                                        <CashIcon class="h-5 w-5 text-gray-600 cursor-pointer" aria-hidden="true" />
+                                    </Link>
                                 </td>
                             </tr>
                         </tbody>
@@ -173,11 +179,11 @@
                     </table>
                 </div>
 
-                <div class="flex justify-end mt-2">
+                <div v-if="!selected.deleted_at" class="flex justify-end mt-2">
                     <Link :href="route('lessons.create', selected.id)">
-                        <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                        <SecondaryButton type="button">
                             Nueva Lección
-                        </Button>
+                        </SecondaryButton>
                     </Link>
                 </div>
             </template>
@@ -192,9 +198,9 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
 import Badge from '@/Components/Badge.vue'
-import Button from '@/Components/Button.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
-import { PencilAltIcon, UserGroupIcon, BookOpenIcon } from '@heroicons/vue/outline'
+import { PencilAltIcon, UserGroupIcon, BookOpenIcon, CashIcon } from '@heroicons/vue/outline'
 
 const props = defineProps({
     classrooms: Object,
@@ -208,11 +214,11 @@ const studentsModal = ref(false)
 const lessonsModal = ref(false)
 
 // Students Modal
-const studentsOpen = async (classroom, index) => {
-    if (!students.value.length || selected.value?.id !== classroom) {
+const studentsOpen = async (classroom_id, index) => {
+    if (!students.value.length || selected.value?.id !== classroom_id) {
         loading.value[index] = 'students'
-        selected.value = props.classrooms.find(item => item.id === classroom)
-        await getStudents(classroom)
+        selected.value = props.classrooms.find(item => item.id === classroom_id)
+        await getStudents(classroom_id)
         loading.value[index] = false
     }
     studentsModal.value = true
@@ -222,17 +228,17 @@ const studentsClose = () => {
     studentsModal.value = false
 }
 
-const getStudents = async (classroom) => {
-    let response = await axios.get('/classrooms/' + classroom + '/students')
+const getStudents = async (classroom_id) => {
+    let response = await axios.get(route('classrooms.students', classroom_id))
     students.value = response.data
 }
 
 // Lessons Modal
-const lessonsOpen = async (classroom, index) => {
-    if (!lessons.value.length || selected.value?.id !== classroom) {
+const lessonsOpen = async (classroom_id, index) => {
+    if (!lessons.value.length || selected.value?.id !== classroom_id) {
         loading.value[index] = 'lessons'
-        selected.value = props.classrooms.find(item => item.id === classroom)
-        await getLessons(classroom)
+        selected.value = props.classrooms.find(item => item.id === classroom_id)
+        await getLessons(classroom_id)
         loading.value[index] = false
     }
     lessonsModal.value = true
@@ -242,8 +248,8 @@ const lessonsClose = () => {
     lessonsModal.value = false
 }
 
-const getLessons = async (classroom) => {
-    let response = await axios.get('/classrooms/' + classroom + '/lessons')
+const getLessons = async (classroom_id) => {
+    let response = await axios.get(route('classrooms.lessons', classroom_id))
     lessons.value = response.data
 }
 </script>

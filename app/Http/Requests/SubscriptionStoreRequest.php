@@ -27,11 +27,12 @@ class SubscriptionStoreRequest extends FormRequest
             'price_hr' => [
                 'required', 'numeric', 'between:0,9999.99',
                 function ($attribute, $value, $fail) {
-                    if ($value == $this->classroom->subscriptions->first()->price_hr) {
+                    if ($value == $this->classroom->subscriptions->first()?->price_hr) {
                         $fail('El Precio por Hora es idéntico.');
                     }
                 },
             ],
+            'started_at' => ['required', 'date'],
         ];
     }
 
@@ -44,6 +45,7 @@ class SubscriptionStoreRequest extends FormRequest
     {
         return [
             'price_hr' => 'Precio por Hora',
+            'started_at' => 'Fecha Suscripción',
         ];
     }
 }

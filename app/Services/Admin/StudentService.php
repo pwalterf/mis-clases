@@ -6,6 +6,13 @@ use App\Models\ClassroomUser;
 
 class StudentService
 {
+    public function updateStudent(ClassroomUser $student, array $studentData): ClassroomUser
+    {
+        $student->update($studentData);
+
+        return $student->refresh();
+    }
+
     public function updateCredit(ClassroomUser $student, int $newCredit): void
     {
         $student->update(['credit' => $student->credit + $newCredit]);

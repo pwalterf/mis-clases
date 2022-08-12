@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Classroom;
+namespace App\Http\Resources\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Str;
 
-class LessonResource extends JsonResource
+class StudentListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +16,9 @@ class LessonResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'comment' => Str::limit($this->comment, 30),
-            'student_page' => $this->student_page,
-            'workbook_page' => $this->workbook_page,
-            'lesson_date' => $this->lesson_date->format('d/m/Y'),
+            'deleted_at' => $this->deleted_at,
+            'user' => new UserBasicResource($this->user),
+            'classroom' => new ClassroomBasicResource($this->classroom),
         ];
     }
 }
