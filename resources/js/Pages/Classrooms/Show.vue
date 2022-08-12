@@ -33,15 +33,13 @@
                     </template>
 
                     <template #actions>
-                        <Button class="bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700" disabled>
+                        <PrimaryButton disabled>
                             Inactiva
-                        </Button>
+                        </PrimaryButton>
 
-                        <Button type="button" class="bg-green-700 hover:bg-green-800 focus:bg-green-900 focus:ring-green-600 active:bg-green-900"
-                            :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal"
-                        >
+                        <SuccessButton type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing" @click="confirmModal">
                             Restaurar
-                        </Button>
+                        </SuccessButton>
                     </template>
                 </FormSection>
             </div>
@@ -70,9 +68,9 @@
                     </template>
 
                     <template #actions>
-                        <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600" @click="openModal">
+                        <SecondaryButton type="button" @click="openModal">
                             Historial
-                        </Button>
+                        </SecondaryButton>
                     </template>
                 </FormSection>
             </div>
@@ -135,9 +133,9 @@
                 </div>
 
                 <div class="flex justify-end mt-2">
-                    <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600" disabled>
+                    <SecondaryButton type="button" disabled>
                         Agregar Alumno
-                    </Button>
+                    </SecondaryButton>
                 </div>
             </div>
 
@@ -152,15 +150,13 @@
                 </template>
 
                 <template #footer>
-                    <Button class="bg-gray-500 hover:bg-gray-600 focus:bg-gray-700 focus:ring-gray-400 active:bg-gray-700" @click="closeConfirm">
+                    <CancelButton class="mr-4" @click="closeConfirm">
                         Cancelar
-                    </Button>
+                    </CancelButton>
 
-                    <Button class="ml-4 bg-pink-500 hover:bg-pink-600 focus:bg-pink-700 focus:ring-pink-400 active:bg-pink-700"
-                        :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmingAction"
-                    >
+                    <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmingAction">
                         Confirmar
-                    </Button>
+                    </PrimaryButton>
                 </template>
             </JetDialogModal>
 
@@ -254,9 +250,9 @@
 
                     <div class="flex justify-end mt-2">
                         <Link :href="route('payments.create', paymentsOpen)">
-                            <Button type="button" class="bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                            <SecondaryButton type="button">
                                 Agregar Pago
-                            </Button>
+                            </SecondaryButton>
                         </Link>
                     </div>
                 </template>
@@ -275,7 +271,10 @@ import FormSection from '@/Components/FormSection.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import Badge from '@/Components/Badge.vue'
-import Button from '@/Components/Button.vue'
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
+import SuccessButton from '@/Components/Buttons/SuccessButton.vue'
+import CancelButton from '@/Components/Buttons/CancelButton.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
 import { CashIcon, PencilAltIcon } from '@heroicons/vue/outline'
 

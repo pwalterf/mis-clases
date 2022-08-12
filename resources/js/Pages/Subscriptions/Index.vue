@@ -12,9 +12,9 @@
                     </template>
                 </Breadcrumb>
                 <Link :href="route('classrooms.create')">
-                    <Button type="button" class="border-none bg-purple-400 hover:bg-purple-500 focus:bg-purple-600 focus:ring-purple-300 active:bg-purple-600">
+                    <SecondaryButton type="button" class="border-none">
                         Nueva Clase
-                    </Button>
+                    </SecondaryButton>
                     <!-- <JetButton class="border-none font-medium px-3 bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-900 focus:ring-blue-300">Nueva Clase</JetButton> -->
                 </Link>
             </div>
@@ -69,7 +69,7 @@ import { Link } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
-import Button from '@/Components/Button.vue'
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
 
 const props = defineProps({
     subscriptions: Object,
