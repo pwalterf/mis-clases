@@ -4,7 +4,7 @@ namespace App\Http\Resources\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ClassroomStudentsResource extends JsonResource
+class UserEditResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +16,10 @@ class ClassroomStudentsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'students' => StudentResource::collection($this->classroomUsers()->withTrashed()->with('user')->get()),
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
+            'email' => $this->email,
+            'roles' => $this->roles->pluck('id'),
         ];
     }
 }

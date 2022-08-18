@@ -6,8 +6,21 @@ import { createInertiaApp, usePage } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+import { Inertia } from '@inertiajs/inertia';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+
+Inertia.on('success', (event) => {
+    let isAuthenticated = event.detail.page.props.user !== null;
+    window.localStorage.setItem('isAuthenticated', isAuthenticated);
+});
+
+window.addEventListener('popstate', (event) => {
+    if (window.localStorage.getItem('isAuthenticated') === 'false') {
+        event.stopImmediatePropagation();
+        Inertia.get('/login');
+    }
+});
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

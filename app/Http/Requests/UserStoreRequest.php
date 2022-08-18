@@ -31,7 +31,8 @@ class UserStoreRequest extends FormRequest
             //'birthdate' => ['required', 'date'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             //'password' => ['required', 'string', new Password, 'confirmed'],
-            'role' => ['required', 'string'],
+            'role' => ['required', 'array'],
+            'role.*' => ['required', 'numeric', 'exists:roles,id'],
         ];
     }
 

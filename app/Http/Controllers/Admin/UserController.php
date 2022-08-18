@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\Admin\UserBasicResource;
+use App\Http\Resources\Admin\UserEditResource;
 use App\Http\Resources\Admin\UserListResource;
 use App\Models\User;
 use App\Services\Admin\UserService;
@@ -36,7 +37,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::all()->pluck('name');
+        $roles = Role::select(['id', 'name'])->get();
 
         return Inertia::render('Users/Create', compact('roles'));
     }
@@ -84,8 +85,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $userData = new UserListResource($user);
-        $roles = Role::all()->pluck('name');
+        $userData = new UserEditResource($user);
+        $roles = Role::select(['id', 'name'])->get();
 
         return Inertia::render('Users/Edit', compact('userData', 'roles'));
     }
@@ -102,7 +103,8 @@ class UserController extends Controller
         try {
             DB::beginTransaction();
 
-            $userService->updateUser($user, $request->validated());
+            $userService->updateUser($user, $request->safe()->except('role'));
+            $userService->assignRole($user, $request->safe()->only('role'));
 
             //Notification::send($user, new NewUser($password));
 

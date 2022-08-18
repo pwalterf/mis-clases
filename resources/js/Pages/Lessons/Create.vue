@@ -63,7 +63,12 @@
             </FormSection>
 
             <div v-if="selected" class="mt-4">
-                <h2 class="font-semibold text-xl pl-4 sm:pl-6 pr-2 py-2">{{ selected.name }}</h2>
+                <Link :href="route('classrooms.edit', {classroom: selected.id})" class="hover:text-blue-800">
+                    <h2 class="font-semibold text-xl pl-4 sm:pl-6 pr-2 py-2 inline-flex items-center">
+                        <LinkIcon class="h-5 w-5 mr-2" aria-hidden="true" />
+                        {{ selected.name }}
+                    </h2>
+                </Link>
 
                 <div class="relative overflow-x-auto shadow sm:rounded-lg">
                     <table class="w-full text-sm text-left text-gray-500">
@@ -152,7 +157,7 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { useForm } from '@inertiajs/inertia-vue3'
+import { useForm, Link } from '@inertiajs/inertia-vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
 import Breadcrumb from '@/Components/Breadcrumb.vue'
 import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
@@ -165,7 +170,7 @@ import JetTextarea from '@/Jetstream/Textarea.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetInputError from '@/Jetstream/InputError.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
-import { CheckCircleIcon } from '@heroicons/vue/outline'
+import { CheckCircleIcon, LinkIcon } from '@heroicons/vue/outline'
 
 const props = defineProps({
     classroom: Object,

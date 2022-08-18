@@ -55,8 +55,8 @@
                             <td class="px-2 py-4">
                                 {{ user.created_at }}
                             </td>
-                            <td class="px-2 py-4 uppercase">
-                                {{ user.roleNames }}
+                            <td class="px-2 py-4 capitalize">
+                                {{ user.roles }}
                             </td>
                             <td class="px-2 py-4 text-center">
                                 <Badge :class="user.deleted_at ? 'bg-red-600' : 'bg-green-600'">

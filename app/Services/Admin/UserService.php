@@ -38,9 +38,9 @@ class UserService
         return $user->restore();
     }
 
-    public function assignRole(User $user, string $role): void
+    public function assignRole(User $user, string|array $role): void
     {
-        $user->assignRole($role);
+        $user->syncRoles($role);
     }
 
     public function destroyStudent(User $user): void
