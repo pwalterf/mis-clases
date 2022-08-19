@@ -5,43 +5,20 @@ import { Head, Link } from '@inertiajs/inertia-vue3';
 import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue';
 import JetBanner from '@/Jetstream/Banner.vue';
 import NavLink from '@/Components/NavLink.vue';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import Alert from '@/Components/Alert.vue';
 import { Dialog, DialogOverlay, Menu, MenuButton, MenuItem, MenuItems, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { CogIcon, LogoutIcon, MenuIcon, ChevronDownIcon } from '@heroicons/vue/outline'
+import { CogIcon, LogoutIcon, MenuIcon, ChevronDownIcon, HomeIcon, UserIcon, AcademicCapIcon, BookOpenIcon, CashIcon } from '@heroicons/vue/outline'
 
 defineProps({
     title: String,
 });
 
+const sidebarOpened = ref(false)
+
 const logout = () => {
     Inertia.post(route('logout'));
 };
-
-
-
-
-
-import {CalendarIcon, ChatIcon, ClipboardListIcon, ClockIcon, HeartIcon, HomeIcon, SearchIcon} from '@heroicons/vue/outline';
-
-const sidebarOpened = ref(false)
-
-let mainNavigation = [
-    {href: '/', label: 'Home', icon: HomeIcon},
-    {href: '/', label: 'Most recommended', icon: HeartIcon},
-    {href: '/', label: 'Most commented', icon: ChatIcon},
-]
-
-let libraryNavigation = [
-    {href: '/', label: 'Favorites', icon: HeartIcon},
-    {href: '/', label: 'Watch later', icon: ClockIcon},
-    {href: '/', label: 'History', icon: ClipboardListIcon},
-    {href: '/', label: 'Scheduled', icon: CalendarIcon},
-]
-
-let following = [
-    {href: '/', label: 'Constantin Druc', imageUrl: 'https://pbs.twimg.com/profile_images/1333896976602193922/MtWztkxt_400x400.jpg'},
-]
-
 </script>
 
 <template>
@@ -75,52 +52,42 @@ let following = [
                         </button> -->
 
                         <!-- Application Logo -->
-                        <div class="px-6 pt-8 pb-4 flex justify-center items-center">
+                        <!-- <div class="px-6 pt-8 pb-4 flex justify-center items-center">
                             <a href="/">
                                 <JetApplicationLogo class="h-7 w-48"/>
                             </a>
-                        </div>
+                        </div> -->
 
                         <!-- Sidebar Items -->
-                        <div class="overflow-y-auto flex-1">
-                            <div class="mb-10">
-                                <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
-                                    Main
-                                </h3>
+                        <div class="overflow-y-auto flex-1 pt-6">
+                            <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
+                                Menu Principal
+                            </h3>
 
-                                <a v-for="(item, index) in mainNavigation"
-                                    :href="item.href" :key="index" class="flex items-center px-6 py-2.5 text-gray-500 hover:text-orange-600 group">
-                                    <component
-                                        :is="item.icon"
-                                        class="mr-2 w-5 h-5 text-gray-400 group-hover:text-orange-500"/>
-                                    {{ item.label }}
-                                </a>
-                            </div>
-                            <div class="mb-10">
-                                <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
-                                    Library
-                                </h3>
+                            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                <HomeIcon class="h-5 w-5 mr-3" aria-hidden="true" />
+                                Dashboard
+                            </ResponsiveNavLink>
 
-                                <a v-for="(item, index) in libraryNavigation"
-                                    :href="item.href" :key="index" class="flex items-center px-6 py-2.5 text-gray-500 hover:text-orange-600 group">
-                                    <component
-                                        :is="item.icon"
-                                        class="mr-2 w-5 h-5 text-gray-400 group-hover:text-orange-500"/>
-                                    {{ item.label }}
-                                </a>
-                            </div>
-                            <div class="mb-10">
-                                <h3 class="mx-6 mb-2 text-xs tracking-widest text-gray-400 uppercase">
-                                    Following
-                                </h3>
+                            <ResponsiveNavLink v-if="is('admin')" :href="route('users.index')" :active="route().current('users.*')">
+                                <UserIcon class="h-5 w-5 mr-3" aria-hidden="true" />
+                                Usuarios
+                            </ResponsiveNavLink>
 
+                            <ResponsiveNavLink v-if="is('admin')" :href="route('classrooms.index')" :active="route().current('classrooms.*')">
+                                <AcademicCapIcon class="h-5 w-5 mr-3" aria-hidden="true" />
+                                Clases
+                            </ResponsiveNavLink>
 
-                                <a v-for="(item, index) in following"
-                                    :href="item.href" :key="index" class="flex items-center px-6 py-2.5 text-gray-500 hover:text-orange-600 group">
-                                    <img :src="item.imageUrl" alt="" class="mr-2 w-7 h-7 rounded-full">
-                                    {{ item.label }}
-                                </a>
-                            </div>
+                            <ResponsiveNavLink v-if="is('admin')" :href="route('lessons.index')" :active="route().current('lessons.*')">
+                                <BookOpenIcon class="h-5 w-5 mr-3" aria-hidden="true" />
+                                Lecciones
+                            </ResponsiveNavLink>
+
+                            <ResponsiveNavLink v-if="is('admin')" :href="route('payments.index')" :active="route().current('payments.*')">
+                                <CashIcon class="h-5 w-5 mr-3" aria-hidden="true" />
+                                Pagos
+                            </ResponsiveNavLink>
                         </div>
 
                     </div>
@@ -148,12 +115,14 @@ let following = [
                 <div class="flex justify-between h-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex">
                         <!-- Open Sidebar Button -->
-                        <button
-                            @click="sidebarOpened = true"
-                            class="mr-4 md:hidden flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full text-gray-600 hover:ring-2 hover:ring-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                            type="button" value="Open sidebar">
-                            <MenuIcon class="h-6 w-6"/>
-                        </button>
+                        <div class="flex items-center">
+                            <button
+                                @click="sidebarOpened = true"
+                                class="mr-4 md:hidden flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-md text-gray-600 hover:bg-gray-100 focus:outline-none"
+                                type="button" value="Open sidebar">
+                                <MenuIcon class="h-6 w-6"/>
+                            </button>
+                        </div>
     
                         <!-- Logo -->
                         <div class="shrink-0 flex items-center">
