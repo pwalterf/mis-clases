@@ -1,23 +1,21 @@
 <template>
     <AppLayout title="Clases">
         <template #header>
-            <div class="flex flex-row justify-between">
-                <Breadcrumb>
-                    <template #links>
-                        <BreadcrumbLink :href="'dashboard'">Inicio</BreadcrumbLink>
-                    </template>
+            <Breadcrumb>
+                <template #links>
+                    <BreadcrumbLink :href="'dashboard'">Inicio</BreadcrumbLink>
+                </template>
 
-                    <template #static>
-                        Salas de Clases
-                    </template>
-                </Breadcrumb>
-                <Link :href="route('classrooms.create')">
-                    <SecondaryButton type="button" class="border-none">
-                        Nueva Clase
-                    </SecondaryButton>
-                    <!-- <JetButton class="border-none font-medium px-3 bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-900 focus:ring-blue-300">Nueva Clase</JetButton> -->
-                </Link>
-            </div>
+                <template #static>
+                    Salas de Clases
+                </template>
+            </Breadcrumb>
+            <Link :href="route('classrooms.create')">
+                <SecondaryButton type="button" class="border-none">
+                    Nueva Clase
+                </SecondaryButton>
+                <!-- <JetButton class="border-none font-medium px-3 bg-blue-800 hover:bg-blue-700 active:bg-blue-900 focus:border-blue-900 focus:ring-blue-300">Nueva Clase</JetButton> -->
+            </Link>
         </template>
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

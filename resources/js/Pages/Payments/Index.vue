@@ -1,22 +1,20 @@
 <template>
     <AppLayout title="Pagos">
         <template #header>
-            <div class="flex flex-row justify-between">
-                <Breadcrumb>
-                    <template #links>
-                        <BreadcrumbLink :href="'dashboard'">Inicio</BreadcrumbLink>
-                    </template>
+            <Breadcrumb>
+                <template #links>
+                    <BreadcrumbLink :href="'dashboard'">Inicio</BreadcrumbLink>
+                </template>
 
-                    <template #static>
-                        Pagos
-                    </template>
-                </Breadcrumb>
-                <Link :href="route('payments.create')">
-                    <SecondaryButton type="button" class="border-none">
-                        Nuevo Pago
-                    </SecondaryButton>
-                </Link>
-            </div>
+                <template #static>
+                    Pagos
+                </template>
+            </Breadcrumb>
+            <Link :href="route('payments.create')">
+                <SecondaryButton type="button" class="border-none">
+                    Nuevo Pago
+                </SecondaryButton>
+            </Link>
         </template>
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

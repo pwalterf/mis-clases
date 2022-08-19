@@ -1,22 +1,20 @@
 <template>
     <AppLayout title="Clases">
         <template #header>
-            <div class="flex flex-row justify-between">
-                <Breadcrumb>
-                    <template #links>
-                        <BreadcrumbLink :href="'dashboard'">Inicio</BreadcrumbLink>
-                    </template>
+            <Breadcrumb>
+                <template #links>
+                    <BreadcrumbLink :href="'dashboard'">Inicio</BreadcrumbLink>
+                </template>
 
-                    <template #static>
-                        Salas de Clases
-                    </template>
-                </Breadcrumb>
-                <Link :href="route('classrooms.create')">
-                    <SecondaryButton type="button" class="border-none">
-                        Nueva Clase
-                    </SecondaryButton>
-                </Link>
-            </div>
+                <template #static>
+                    Salas de Clases
+                </template>
+            </Breadcrumb>
+            <Link :href="route('classrooms.create')">
+                <SecondaryButton type="button" class="border-none">
+                    Nueva Clase
+                </SecondaryButton>
+            </Link>
         </template>
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
