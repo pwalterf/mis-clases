@@ -86,27 +86,24 @@
 
             <div class="col-span-6 mt-2">
 
-                <TabGroup>
-                    <div class="mb-3 border-b-2 border-gray-200">
-                        <TabList class="flex -mb-px text-lg font-medium text-center space-x-6">
-                            <Tab v-slot="{ selected }" as="div" class="outline-none">
-                                <button type="button" class="inline-flex items-center p-4 border-b-2 gap-2" :class="selected ? 'text-purple-600 border-purple-500' : 'border-transparent text-gray-500 hover:text-purple-600'">
-                                    <UserIcon class="h-5 w-5" aria-hidden="true" />
-                                    Alumnos
-                                </button>
-                            </Tab>
-                            <Tab v-slot="{ selected }" as="div" class="outline-none">
-                                <button type="button" class="inline-flex items-center p-4 border-b-2 gap-2" :class="selected ? 'text-purple-600 border-purple-500' : 'border-transparent text-gray-500 hover:text-purple-600'" @click="getLessons">
-                                    <span v-if="lessonsLoading" class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent rounded-full" role="status" aria-label="loading"></span>
-                                    <BookOpenIcon v-else class="h-5 w-5" aria-hidden="true" />
-                                    Lecciones
-                                </button>
-                            </Tab>
-                        </TabList>
-                    </div>
+                <TabGroup as="div" class="w-full bg-white rounded-lg border shadow-sm">
+                    <TabList class="flex flex-wrap text-sm font-medium text-center text-gray-500 bg-gray-50 rounded-t-lg border-b border-gray-200">
+                        <Tab v-slot="{ selected }" as="div" class="mr-4 outline-none">
+                            <button type="button" class="inline-flex items-center p-4 border-b-2 gap-2" :class="selected ? 'text-purple-600 border-purple-500' : 'border-transparent text-gray-500 hover:text-purple-600'">
+                                <UserIcon class="h-5 w-5" aria-hidden="true" />
+                                Alumnos
+                            </button>
+                        </Tab>
+                        <Tab v-slot="{ selected }" as="div" class="mr-4 outline-none">
+                            <button type="button" class="inline-flex items-center p-4 border-b-2 gap-2" :class="selected ? 'text-purple-600 border-purple-500' : 'border-transparent text-gray-500 hover:text-purple-600'" @click="getLessons">
+                                <span v-if="lessonsLoading" class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent rounded-full" role="status" aria-label="loading"></span>
+                                <BookOpenIcon v-else class="h-5 w-5" aria-hidden="true" />
+                                Lecciones
+                            </button>
+                        </Tab>
+                    </TabList>
                     <TabPanels>
-                        <!-- Alumnos -->
-                        <TabPanel class="bg-white rounded-md px-6 py-4 shadow">
+                        <TabPanel class="p-4 bg-white rounded-lg md:p-6">
                             <div class="relative overflow-x-auto shadow rounded-md">
                                 <table class="w-full text-sm text-left text-gray-500">
                                     <thead class="text-xs text-purple-700 uppercase bg-purple-100">
@@ -172,9 +169,7 @@
                                 </SecondaryButton>
                             </div>
                         </TabPanel>
-
-                        <!-- Lecciones -->
-                        <TabPanel class="bg-white rounded-md px-6 py-4 shadow">
+                        <TabPanel class="p-4 bg-white rounded-lg md:p-6">
                             <div class="relative overflow-x-auto shadow rounded-md">
                                 <table class="w-full text-sm text-left text-gray-500">
                                     <thead class="text-xs text-purple-700 uppercase bg-purple-100">
@@ -238,6 +233,7 @@
                         </TabPanel>
                     </TabPanels>
                 </TabGroup>
+
             </div>
 
             <!-- Editar Alumno -->
