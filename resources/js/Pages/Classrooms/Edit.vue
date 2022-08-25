@@ -86,8 +86,8 @@
 
             <div class="col-span-6 mt-2">
 
-                <TabGroup as="div" class="w-full bg-white rounded-lg border shadow-sm">
-                    <TabList class="flex flex-wrap text-sm font-medium text-center text-gray-500 bg-gray-50 rounded-t-lg border-b border-gray-200">
+                <TabGroup as="div" class="sm:rounded-md shadow outline-none">
+                    <TabList class="flex flex-wrap text-sm font-medium text-center text-gray-500 bg-gray-50 sm:rounded-t-md border-b border-gray-200">
                         <Tab v-slot="{ selected }" as="div" class="mr-4 outline-none">
                             <button type="button" class="inline-flex items-center p-4 border-b-2 gap-2" :class="selected ? 'text-purple-600 border-purple-500' : 'border-transparent text-gray-500 hover:text-purple-600'">
                                 <UserIcon class="h-5 w-5" aria-hidden="true" />
@@ -103,15 +103,15 @@
                         </Tab>
                     </TabList>
                     <TabPanels>
-                        <TabPanel class="p-4 bg-white rounded-lg md:p-6">
-                            <div class="relative overflow-x-auto shadow rounded-md">
+                        <TabPanel class="bg-white sm:rounded-b-md">
+                            <div class="relative overflow-x-auto">
                                 <table class="w-full text-sm text-left text-gray-500">
                                     <thead class="text-xs text-purple-700 uppercase bg-purple-100">
                                         <tr>
-                                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
+                                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3 text-center">
                                                 Nombre
                                             </th>
-                                            <th scope="col" class="px-2 py-3">
+                                            <th scope="col" class="px-2 py-3 text-center">
                                                 Email
                                             </th>
                                             <th scope="col" class="px-2 py-3 text-center">
@@ -126,14 +126,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-if="classroom.students.length === 0" class="bg-white">
+                                        <tr v-if="classroom.students.length === 0" class="bg-white border-b">
                                             <td colspan="5" class="pl-4 sm:pl-6 pr-2 py-4">No hay alumnos asociados a la clase.</td>
                                         </tr>
-                                        <tr v-else v-for="(student, index) in classroom.students" :key="student.id" :class="{'border-b': index != classroom.students.length - 1}" class="bg-white hover:bg-gray-50">
-                                            <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
+                                        <tr v-else v-for="(student, index) in classroom.students" :key="student.id" class="bg-white hover:bg-gray-50 border-b">
+                                            <td class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900 font-bold text-center">
                                                 {{ student.user.firstname + ' ' + student.user.lastname }}
-                                            </th>
-                                            <td class="px-2 py-4">
+                                            </td>
+                                            <td class="px-2 py-4 text-center">
                                                 {{ student.user.email }}
                                             </td>
                                             <td class="px-2 py-2 text-center">
@@ -162,28 +162,28 @@
                                 </table>
                             </div>
 
-                            <div class="flex justify-end mt-2">
+                            <div class="flex justify-end py-4 px-4 sm:px-6">
                                 <SecondaryButton type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing || classroom.deleted_at" @click="studentsOpenModal">
                                     <span v-if="studentsLoading" class="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" role="status" aria-label="loading"></span>
                                     Agregar Alumno
                                 </SecondaryButton>
                             </div>
                         </TabPanel>
-                        <TabPanel class="p-4 bg-white rounded-lg md:p-6">
-                            <div class="relative overflow-x-auto shadow rounded-md">
+                        <TabPanel class="bg-white sm:rounded-b-md">
+                            <div class="relative overflow-x-auto">
                                 <table class="w-full text-sm text-left text-gray-500">
                                     <thead class="text-xs text-purple-700 uppercase bg-purple-100">
                                         <tr>
-                                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
+                                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3 text-center">
                                                 Fecha
                                             </th>
-                                            <th scope="col" class="px-2 py-3">
+                                            <th scope="col" class="px-2 py-3 text-center">
                                                 Comentario
                                             </th>
-                                            <th scope="col" class="px-2 py-3">
+                                            <th scope="col" class="px-2 py-3 text-center">
                                                 Libro Estudiante
                                             </th>
-                                            <th scope="col" class="px-2 py-3">
+                                            <th scope="col" class="px-2 py-3 text-center">
                                                 Libro Ejercicio
                                             </th>
                                             <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
@@ -192,23 +192,23 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-if="lessons.length === 0" class="bg-white">
+                                        <tr v-if="lessons.length === 0" class="bg-white border-b">
                                             <td colspan="4" class="pl-4 sm:pl-6 pr-2 py-3">
                                                 <span v-if="lessonsLoading">Cargando datos...</span>
                                                 <span v-else>La clase no posee lecciones cargadas.</span>
                                             </td>
                                         </tr>
-                                        <tr v-else v-for="(lesson, index) in lessons" :key="lesson.id" :class="{'border-b': index != lessons.length - 1}" class="bg-white hover:bg-gray-50">
-                                            <td class="pl-4 sm:pl-6 pr-2 py-3">
+                                        <tr v-else v-for="(lesson, index) in lessons" :key="lesson.id" class="bg-white hover:bg-gray-50 border-b">
+                                            <td class="pl-4 sm:pl-6 pr-2 py-3 text-center">
                                                 {{ lesson.lesson_date }}
                                             </td>
-                                            <td class="px-2 py-4">
+                                            <td class="px-2 py-4 text-center">
                                                 {{ lesson.comment ?? 'Ninguno' }}
                                             </td>
-                                            <td class="px-2 py-4">
+                                            <td class="px-2 py-4 text-center">
                                                 {{ lesson.student_page ?? '-' }}
                                             </td>
-                                            <td class="px-2 py-4">
+                                            <td class="px-2 py-4 text-center">
                                                 {{ lesson.workbook_page ?? '-' }}
                                             </td>
                                             <td class="pl-2 pr-4 sm:pr-6 py-3">
@@ -223,7 +223,7 @@
                                 </table>
                             </div>
 
-                            <div class="flex justify-end mt-2">
+                            <div class="flex justify-end py-4 px-4 sm:px-6">
                                 <Link :href="route('lessons.create', classroom.id)">
                                     <SecondaryButton type="button" :class="{ 'opacity-25': form.processing}" :disabled="form.processing || classroom.deleted_at">
                                         Nueva Lección
