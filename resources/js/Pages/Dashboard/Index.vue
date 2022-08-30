@@ -11,8 +11,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
             <div class="grid grid-cols-8 gap-4 lg:gap-6 justify-items-stretch">
-                <div class="col-span-4 lg:col-span-2">
-                    <div class="block p-4 max-w-lg bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">
+                <div class="col-span-8 sm:col-span-4 lg:col-span-2">
+                    <div class="block p-4 max-w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">
                         <div class="flex justify-between">
                             <div>
                                 <h5 class="font-semibold font-mono text-gray-400 uppercase">Clases Activas</h5>
@@ -37,8 +37,8 @@
                     </div>
                 </div>
 
-                <div class="col-span-4 lg:col-span-2">
-                    <div class="block p-4 max-w-lg bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">
+                <div class="col-span-8 sm:col-span-4 lg:col-span-2">
+                    <div class="block p-4 max-w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">
                         <div class="flex justify-between">
                             <div>
                                 <h5 class="font-semibold font-mono text-gray-400 uppercase">Alumnos Activos</h5>
@@ -63,8 +63,8 @@
                     </div>
                 </div>
 
-                <div class="col-span-4 lg:col-span-2">
-                    <div class="block p-4 max-w-lg bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">
+                <div class="col-span-8 sm:col-span-4 lg:col-span-2">
+                    <div class="block p-4 max-w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">
                         <div class="flex justify-between">
                             <div>
                                 <h5 class="font-semibold font-mono text-gray-400 uppercase">Precio/hr Prom.</h5>
@@ -89,8 +89,8 @@
                     </div>
                 </div>
 
-                <div class="col-span-4 lg:col-span-2">
-                    <div class="block p-4 max-w-lg bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">
+                <div class="col-span-8 sm:col-span-4 lg:col-span-2">
+                    <div class="block p-4 max-w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100">
                         <div class="flex justify-between">
                             <div>
                                 <h5 class="font-semibold font-mono text-gray-400 uppercase">Ingresos / Mes</h5>
