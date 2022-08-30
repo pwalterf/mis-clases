@@ -57,4 +57,11 @@ class Classroom extends Model
     {
         return $this->hasOne(Subscription::class)->latestOfMany();
     }
+
+    public function latestSubscriptionLastMonth(): HasOne
+    {
+        return $this->hasOne(Subscription::class)->ofMany(['id' => 'max'], function ($query) {
+            $query->where('started_at', '<', now()->startOfMonth());
+        });
+    }
 }

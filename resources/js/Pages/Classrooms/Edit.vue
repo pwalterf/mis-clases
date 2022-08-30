@@ -108,10 +108,10 @@
                                 <table class="w-full text-sm text-left text-gray-500">
                                     <thead class="text-xs text-purple-700 uppercase bg-purple-100">
                                         <tr>
-                                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3 text-center">
+                                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
                                                 Nombre
                                             </th>
-                                            <th scope="col" class="px-2 py-3 text-center">
+                                            <th scope="col" class="px-2 py-3">
                                                 Email
                                             </th>
                                             <th scope="col" class="px-2 py-3 text-center">
@@ -130,10 +130,10 @@
                                             <td colspan="5" class="pl-4 sm:pl-6 pr-2 py-4">No hay alumnos asociados a la clase.</td>
                                         </tr>
                                         <tr v-else v-for="(student, index) in classroom.students" :key="student.id" class="bg-white hover:bg-gray-50 border-b">
-                                            <td class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900 font-bold text-center">
+                                            <td class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900 font-bold">
                                                 {{ student.user.firstname + ' ' + student.user.lastname }}
                                             </td>
-                                            <td class="px-2 py-4 text-center">
+                                            <td class="px-2 py-4">
                                                 {{ student.user.email }}
                                             </td>
                                             <td class="px-2 py-2 text-center">
@@ -174,10 +174,10 @@
                                 <table class="w-full text-sm text-left text-gray-500">
                                     <thead class="text-xs text-purple-700 uppercase bg-purple-100">
                                         <tr>
-                                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3 text-center">
+                                            <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
                                                 Fecha
                                             </th>
-                                            <th scope="col" class="px-2 py-3 text-center">
+                                            <th scope="col" class="px-2 py-3">
                                                 Comentario
                                             </th>
                                             <th scope="col" class="px-2 py-3 text-center">
@@ -199,10 +199,10 @@
                                             </td>
                                         </tr>
                                         <tr v-else v-for="(lesson, index) in lessons" :key="lesson.id" class="bg-white hover:bg-gray-50 border-b">
-                                            <td class="pl-4 sm:pl-6 pr-2 py-3 text-center">
+                                            <td class="pl-4 sm:pl-6 pr-2 py-3">
                                                 {{ lesson.lesson_date }}
                                             </td>
-                                            <td class="px-2 py-4 text-center">
+                                            <td class="px-2 py-4">
                                                 {{ lesson.comment ?? 'Ninguno' }}
                                             </td>
                                             <td class="px-2 py-4 text-center">
