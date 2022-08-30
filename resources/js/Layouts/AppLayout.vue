@@ -30,7 +30,7 @@ const logout = () => {
     <Head :title="title" />
     <JetBanner />
 
-    <div class="flex min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-gray-100">
 
         <!-- Mobile Sidebar & Overlay -->
         <TransitionRoot :show="sidebarOpened">
@@ -112,7 +112,7 @@ const logout = () => {
         </TransitionRoot>
 
         <!-- Container -->
-        <div class="flex-1 overflow-auto">
+        <div class="flex-1">
 
             <!-- Nav -->
             <nav class="sticky top-0 inset-0 bg-gray-50 border-b z-40">
