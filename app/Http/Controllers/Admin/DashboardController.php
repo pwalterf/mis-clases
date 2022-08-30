@@ -20,13 +20,13 @@ class DashboardController extends Controller
         $countActive = $activeClassrooms->count();
         $classroomsPanel = [
             'count' => $countActive,
-            'lastMonth' => ($countActive - $lastMonthClassrooms->count()) / $lastMonthClassrooms->count() * 100,
+            'lastMonth' => $lastMonthClassrooms->count() != 0 ? ($countActive - $lastMonthClassrooms->count()) / $lastMonthClassrooms->count() * 100 : $countActive,
         ];
 
         $countStudents = $activeClassrooms->sum('classroom_users_count');
         $studentsPanel = [
             'count' => $countStudents,
-            'lastMonth' => ($countStudents - $lastMonthClassrooms->sum('classroom_users_count')) / $lastMonthClassrooms->sum('classroom_users_count') * 100,
+            'lastMonth' => $lastMonthClassrooms->sum('classroom_users_count') != 0 ? ($countStudents - $lastMonthClassrooms->sum('classroom_users_count')) / $lastMonthClassrooms->sum('classroom_users_count') * 100 : $countStudents,
         ];
 
         $subsAverage = $activeClassrooms->load('latestSubscription')->avg('latestSubscription.price_hr');
