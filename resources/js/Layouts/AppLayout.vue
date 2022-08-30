@@ -108,7 +108,7 @@ const logout = () => {
         </TransitionRoot>
 
         <!-- Container -->
-        <div class="flex-1">
+        <div class="flex-1 overflow-auto">
 
             <!-- Nav -->
             <nav class="sticky top-0 inset-0 bg-gray-50 border-b z-40">
