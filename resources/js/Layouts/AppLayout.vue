@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link, usePage } from '@inertiajs/inertia-vue3';
 import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue';
 import JetBanner from '@/Jetstream/Banner.vue';
 import NavLink from '@/Components/NavLink.vue';
@@ -15,6 +15,10 @@ defineProps({
 });
 
 const sidebarOpened = ref(false)
+
+const avatar = computed(
+    () => usePage().props.value.user.firstname.charAt(0) + usePage().props.value.user.lastname.charAt(0)
+)
 
 const logout = () => {
     Inertia.post(route('logout'));
@@ -127,7 +131,7 @@ const logout = () => {
                         <!-- Logo -->
                         <div class="shrink-0 flex items-center">
                             <Link :href="route('dashboard')">
-                                <JetApplicationLogo class="block h-9 w-48" />
+                                <JetApplicationLogo class="block h-9" />
                             </Link>
                         </div>
     
@@ -156,7 +160,10 @@ const logout = () => {
                     </div>
                     <div class="flex items-center">
                         <Menu as="div" class="relative flex-shrink-0">
-                            <MenuButton class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none transition">
+                            <MenuButton class="md:hidden flex p-2 border-2 border-transparent rounded-full bg-gray-800 text-white focus:outline-none focus:border-gray-300 transition">
+                                {{ avatar }}
+                            </MenuButton>
+                            <MenuButton class="hidden md:inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none transition">
                                 {{ $page.props.user.firstname }}
                                 <ChevronDownIcon class="ml-2 -mr-1 h-5 w-5 text-gray-500 hover:text-gray-700" aria-hidden="true" />
                             </MenuButton>
