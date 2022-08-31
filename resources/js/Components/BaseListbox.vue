@@ -7,7 +7,11 @@
             <ListboxButton
                 class="border mt-1 block w-full cursor-default py-2 pl-3 pr-10 text-left border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
                 :class="{'border-red-500 focus:border-red-500 focus:ring-red-500': error}">
-                <span v-if="label" class="block truncate capitalize">{{ label }}</span>
+                <span v-if="label.length" class="block truncate capitalize space-x-2">
+                    <Badge v-for="l in label" :key="l" class="bg-gray-400">
+                        {{ l }}
+                    </Badge>
+                </span>
                 <span v-else class="text-gray-500">{{ placeholder }}</span>
                 <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -48,6 +52,7 @@
 import { computed } from 'vue';
 import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/vue'
 import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid'
+import Badge from '@/Components/Badge.vue';
 
 const props = defineProps({
     options: Array,
@@ -69,6 +74,6 @@ const label = computed(() => {
         }
 
         return option.id === props.modelValue
-    }).map(option => option.name).join(', ')
+    }).map(option => option.name)
 })
 </script>

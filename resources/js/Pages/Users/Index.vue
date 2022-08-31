@@ -53,8 +53,10 @@
                             <td class="px-2 py-4">
                                 {{ user.created_at }}
                             </td>
-                            <td class="px-2 py-4 capitalize">
-                                {{ user.roles }}
+                            <td class="px-2 py-4 capitalize space-x-2">
+                                <Badge v-for="role in user.roles" :key="role" class="bg-gray-400">
+                                    {{ role }}
+                                </Badge>
                             </td>
                             <td class="px-2 py-4 text-center">
                                 <Badge :class="user.deleted_at ? 'bg-red-600' : 'bg-green-600'">
