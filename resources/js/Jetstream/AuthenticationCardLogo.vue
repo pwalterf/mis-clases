@@ -14,7 +14,7 @@ import { Link } from '@inertiajs/inertia-vue3';
             <path d="M14.134 45.885A23.914 23.914 0 0024 48c13.255 0 24-10.745 24-24 0-3.516-.756-6.856-2.115-9.866-4.659 15.143-16.608 27.092-31.75 31.751z" fill="#6875F5" />
         </svg> -->
 
-        <svg viewBox="0 0 387.2996756103234 100" class="h-28">
+        <svg viewBox="0 0 387.2996756103234 100" class="h-20">
             <defs id="SvgjsDefs5416"></defs>
             <g transform="matrix(1,0,0,1,0,0)" fill="#7E22CE">
                 <rect y="0" height="1" width="1" opacity="0"></rect>
