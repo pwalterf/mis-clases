@@ -17,7 +17,7 @@ class StudentResource extends JsonResource
         return [
             'id' => $this->id,
             'credit' => $this->credit . '',
-            'deleted_at' => $this->deleted_at,
+            'deleted_at' => $this->deleted_at ? 'Inactivo' : 'Activo',
             'user' => new UserBasicResource($this->user),
         ];
     }

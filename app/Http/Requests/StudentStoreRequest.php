@@ -26,7 +26,7 @@ class StudentStoreRequest extends FormRequest
         return [
             'classroom_id' => ['required', 'numeric'],
             'user_id' => ['required', 'numeric'],
-            'credit' => ['sometimes', 'required', 'numeric'],
+            'credit' => ['sometimes', 'required', 'numeric', 'integer'],
         ];
     }
 

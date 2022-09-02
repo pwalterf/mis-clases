@@ -1,5 +1,6 @@
 import './bootstrap';
 import '../css/app.css';
+import 'vue3-easy-data-table/dist/style.css';
 
 import { createApp, h } from 'vue';
 import { createInertiaApp, usePage } from '@inertiajs/inertia-vue3';

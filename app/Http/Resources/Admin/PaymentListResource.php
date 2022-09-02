@@ -19,7 +19,7 @@ class PaymentListResource extends JsonResource
             'id' => $this->id,
             'income' => $this->income,
             'payment_date' => $this->payment_date->format('d/m/Y'),
-            'comment' => Str::limit($this->comment, 30),
+            'comment' => $this->comment ? Str::limit($this->comment, 30) : 'Ninguno',
         ];
     }
 }

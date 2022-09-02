@@ -17,9 +17,9 @@ class LessonBasicResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'comment' => Str::limit($this->comment, 30),
-            'student_page' => $this->student_page,
-            'workbook_page' => $this->workbook_page,
+            'comment' => $this->comment ? Str::limit($this->comment, 30) : 'Ninguno',
+            'student_page' => $this->student_page ?? '-',
+            'workbook_page' => $this->workbook_page ?? '-',
             'lesson_date' => $this->lesson_date->format('d/m/Y'),
         ];
     }

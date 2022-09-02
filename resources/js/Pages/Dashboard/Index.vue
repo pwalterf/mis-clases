@@ -28,7 +28,7 @@
                                 <ArrowUpIcon v-if="classroomsPanel.lastMonth > 0" class="h-4 w-4" aria-hidden="true" />
                                 <ArrowDownIcon v-else-if="classroomsPanel.lastMonth < 0" class="h-4 w-4" aria-hidden="true" />
                                 <MenuAlt4Icon v-else class="h-4 w-4" aria-hidden="true" />
-                                {{ classroomsPanel.lastMonth }}%
+                                {{ numberFormat.format(classroomsPanel.lastMonth) }}%
                             </span>
                             <span class="text-gray-400">
                                 el último mes
@@ -54,7 +54,7 @@
                                 <ArrowUpIcon v-if="studentsPanel.lastMonth > 0" class="h-4 w-4" aria-hidden="true" />
                                 <ArrowDownIcon v-else-if="studentsPanel.lastMonth < 0" class="h-4 w-4" aria-hidden="true" />
                                 <MenuAlt4Icon v-else class="h-4 w-4" aria-hidden="true" />
-                                {{ studentsPanel.lastMonth }}%
+                                {{ numberFormat.format(studentsPanel.lastMonth) }}%
                             </span>
                             <span class="text-gray-400">
                                 el último mes
@@ -68,7 +68,7 @@
                         <div class="flex justify-between">
                             <div>
                                 <h5 class="font-semibold font-mono text-gray-400 uppercase">Precio/hr Prom.</h5>
-                                <p class="text-xl font-bold text-gray-900">$ {{ subsPanel.average }}</p>
+                                <p class="text-xl font-bold text-gray-900">{{ currencyFormat.format(subsPanel.average) }}</p>
                             </div>
                             <div class="flex rounded-full w-12 h-12 bg-blue-500 items-center justify-center">
                                 <ReceiptTaxIcon class="h-5 w-5 text-white" aria-hidden="true" />
@@ -76,11 +76,11 @@
                         </div>
 
                         <div class="flex mt-4 text-sm">
-                            <span class="flex mr-2 font-semibold gap-1" :class="{'text-green-600': subsPanel.lastMonthNumber > 0, 'text-red-600': subsPanel.lastMonthNumber < 0, 'text-gray-500': subsPanel.lastMonthNumber === 0}">
-                                <ArrowUpIcon v-if="subsPanel.lastMonthNumber > 0" class="h-4 w-4" aria-hidden="true" />
-                                <ArrowDownIcon v-else-if="subsPanel.lastMonthNumber < 0" class="h-4 w-4" aria-hidden="true" />
+                            <span class="flex mr-2 font-semibold gap-1" :class="{'text-green-600': subsPanel.lastMonth > 0, 'text-red-600': subsPanel.lastMonth < 0, 'text-gray-500': subsPanel.lastMonth === 0}">
+                                <ArrowUpIcon v-if="subsPanel.lastMonth > 0" class="h-4 w-4" aria-hidden="true" />
+                                <ArrowDownIcon v-else-if="subsPanel.lastMonth < 0" class="h-4 w-4" aria-hidden="true" />
                                 <MenuAlt4Icon v-else class="h-4 w-4" aria-hidden="true" />
-                                {{ subsPanel.lastMonth }}%
+                                {{ numberFormat.format(subsPanel.lastMonth) }}%
                             </span>
                             <span class="text-gray-400">
                                 el último mes
@@ -94,7 +94,7 @@
                         <div class="flex justify-between">
                             <div>
                                 <h5 class="font-semibold font-mono text-gray-400 uppercase">Ingresos / Mes</h5>
-                                <p class="text-xl font-bold text-gray-900">$ {{ incomePanel.income }}</p>
+                                <p class="text-xl font-bold text-gray-900">{{ currencyFormat.format(incomePanel.income) }}</p>
                             </div>
                             <div class="flex rounded-full w-12 h-12 bg-gray-500 items-center justify-center">
                                 <CashIcon class="h-5 w-5 text-white" aria-hidden="true" />
@@ -102,11 +102,11 @@
                         </div>
 
                         <div class="flex mt-4 text-sm">
-                            <span class="flex mr-2 font-semibold gap-1" :class="{'text-green-600': incomePanel.lastMonthNumber > 0, 'text-red-600': incomePanel.lastMonthNumber < 0, 'text-gray-500': incomePanel.lastMonthNumber === 0}">
-                                <ArrowUpIcon v-if="incomePanel.lastMonthNumber > 0" class="h-4 w-4" aria-hidden="true" />
-                                <ArrowDownIcon v-else-if="incomePanel.lastMonthNumber < 0" class="h-4 w-4" aria-hidden="true" />
+                            <span class="flex mr-2 font-semibold gap-1" :class="{'text-green-600': incomePanel.lastMonth > 0, 'text-red-600': incomePanel.lastMonth < 0, 'text-gray-500': incomePanel.lastMonth === 0}">
+                                <ArrowUpIcon v-if="incomePanel.lastMonth > 0" class="h-4 w-4" aria-hidden="true" />
+                                <ArrowDownIcon v-else-if="incomePanel.lastMonth < 0" class="h-4 w-4" aria-hidden="true" />
                                 <MenuAlt4Icon v-else class="h-4 w-4" aria-hidden="true" />
-                                {{ incomePanel.lastMonth }}%
+                                {{ numberFormat.format(incomePanel.lastMonth) }}%
                             </span>
                             <span class="text-gray-400">
                                 el último mes
@@ -144,4 +144,7 @@ const props = defineProps({
     subsPanel: Object,
     incomePanel: Object,
 })
+
+const numberFormat = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 2 })
+const currencyFormat = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' })
 </script>

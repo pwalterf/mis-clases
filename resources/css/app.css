@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.customize-table {
+    --easy-table-border: 0;
+    --easy-table-header-font-color: #7E22CE;
+    --easy-table-header-background-color: #F3E8FF;
+    --easy-table-body-row-height: 45px;
+    --easy-table-body-row-font-size: 0.875rem;
+    --easy-table-body-row-hover-background-color: #F9FAFB;
+    --easy-table-body-row-font-color: #6B7280;
+}

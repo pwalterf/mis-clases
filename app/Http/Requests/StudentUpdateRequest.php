@@ -27,7 +27,7 @@ class StudentUpdateRequest extends FormRequest
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $this->classroomUser->user->id],
-            'credit' => ['sometimes', 'required', 'numeric'],
+            'credit' => ['sometimes', 'required', 'numeric', 'integer'],
         ];
     }
 

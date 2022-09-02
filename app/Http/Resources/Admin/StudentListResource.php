@@ -16,7 +16,7 @@ class StudentListResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'deleted_at' => $this->deleted_at,
+            'deleted_at' => $this->deleted_at ? 'Inactivo' : 'Activo',
             'user' => new UserBasicResource($this->user),
             'classroom' => new ClassroomBasicResource($this->classroom),
         ];

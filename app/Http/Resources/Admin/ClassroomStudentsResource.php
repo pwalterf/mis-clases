@@ -17,6 +17,7 @@ class ClassroomStudentsResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'deleted_at' => $this->deleted_at ? 'Inactiva' : 'Activa',
             'students' => StudentResource::collection($this->classroomUsers()->withTrashed()->with('user')->get()),
         ];
     }

@@ -19,6 +19,7 @@ class UserEditResource extends JsonResource
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
             'email' => $this->email,
+            'deleted_at' => $this->deleted_at,
             'roles' => $this->roles->pluck('id'),
         ];
     }

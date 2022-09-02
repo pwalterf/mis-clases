@@ -60,7 +60,7 @@
                     <div class="col-span-6">
                         <h2 class="font-semibold text-xl pl-4 sm:pl-6 pr-2 py-2">Alumnos</h2>
 
-                        <div class="relative overflow-x-auto shadow sm:rounded-lg">
+                        <div class="relative overflow-x-auto shadow sm:rounded-md">
                             <table class="w-full text-sm text-left text-gray-500">
                                 <thead class="text-xs text-purple-700 uppercase bg-purple-100">
                                     <tr>
@@ -126,40 +126,11 @@
                 </template>
 
                 <template #content>
-                    <div class="relative overflow-x-auto shadow sm:rounded-lg">
-                        <table class="w-full text-sm text-left text-gray-500">
-                            <thead class="text-xs text-purple-700 uppercase bg-purple-100">
-                                <tr>
-                                    <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
-                                        Alumno
-                                    </th>
-                                    <th scope="col" class="px-2 py-3">
-                                        Email
-                                    </th>
-                                    <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
-                                        <span class="sr-only">Asociar</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-if="studentsList.length === 0" class="bg-white">
-                                    <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No existen alumnos libres.</td>
-                                </tr>
-                                <tr v-else v-for="(student, index) in studentsList" :key="student.id" :class="{'border-b': index != studentsList.length - 1}" class="bg-white border-b hover:bg-gray-50">
-                                    <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
-                                        {{ student.firstname + ' ' + student.lastname }}
-                                    </th>
-                                    <td class="px-2 py-4">
-                                        {{ student.email }}
-                                    </td>
-                                    <td class="pl-2 pr-4 sm:pr-6 py-4">
-                                        <div class="flex justify-end items-center">
-                                            <UserAddIcon class="h-5 w-5 text-green-600 cursor-pointer" aria-hidden="true" @click="addStudent(student)" />
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="relative overflow-x-auto shadow sm:rounded-md">
+                        <StudentsTable
+                            :items="studentsList"
+                            @add-student="addStudent"
+                        />
                     </div>
                 </template>
             </JetDialogModal>
@@ -180,7 +151,8 @@ import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue'
 import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
 import JetInputError from '@/Jetstream/InputError.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
-import { UserAddIcon, UserRemoveIcon } from '@heroicons/vue/outline'
+import StudentsTable from '@/Components/Tables/StudentsTable.vue'
+import { UserRemoveIcon } from '@heroicons/vue/outline'
 
 const open = ref(false)
 const loading = ref(false)
@@ -226,8 +198,8 @@ const closeModal = () => {
     open.value = false
 }
 
-const addStudent = (student) => {
-    form.students.push(student)
+const addStudent = (student_id) => {
+    form.students.push(students.value.find(student => student.id === student_id))
 }
 
 const removeStudent = (studentClass) => {

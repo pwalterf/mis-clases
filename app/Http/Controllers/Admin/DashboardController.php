@@ -32,17 +32,15 @@ class DashboardController extends Controller
         $subsAverage = $activeClassrooms->load('latestSubscription')->avg('latestSubscription.price_hr');
         $lastMonthSubs = $lastMonthClassrooms->load('latestSubscriptionLastMonth')->avg('latestSubscriptionLastMonth.price_hr');
         $subsPanel = [
-            'average' => number_format($subsAverage, 2, ',', '.'),
-            'lastMonth' => $lastMonthSubs != 0 ? number_format(($subsAverage - $lastMonthSubs) / $lastMonthSubs * 100, 2, ',', '.') : number_format($subsAverage, 2, ',', '.'),
-            'lastMonthNumber' => $lastMonthSubs != 0 ? ($subsAverage - $lastMonthSubs) / $lastMonthSubs * 100 : $lastMonthSubs,
+            'average' => $subsAverage,
+            'lastMonth' => $lastMonthSubs != 0 ? ($subsAverage - $lastMonthSubs) / $lastMonthSubs * 100 : $subsAverage, 2,
         ];
 
         $monthIncome = Payment::whereBetween('payment_date', [now()->startOfMonth(), now()->endOfMonth()])->sum('income');
         $lastMonthIncome = Payment::whereBetween('payment_date', [now()->startOfMonth()->subMonth(), now()->endOfMonth()->subMonth()])->sum('income');
         $incomePanel = [
-            'income' => number_format($monthIncome, 2, ',', '.'),
-            'lastMonth' => $lastMonthIncome != 0 ? number_format(($monthIncome - $lastMonthIncome) / $lastMonthIncome * 100, 2, ',', '.') : number_format($monthIncome, 2, ',', '.'),
-            'lastMonthNumber' => $lastMonthIncome != 0 ? ($monthIncome - $lastMonthIncome) / $lastMonthIncome * 100 : $monthIncome,
+            'income' => $monthIncome,
+            'lastMonth' => $lastMonthIncome != 0 ? ($monthIncome - $lastMonthIncome) / $lastMonthIncome * 100 : $monthIncome,
         ];
 
         return Inertia::render('Dashboard/Index', compact('classroomsPanel', 'studentsPanel', 'subsPanel', 'incomePanel'));

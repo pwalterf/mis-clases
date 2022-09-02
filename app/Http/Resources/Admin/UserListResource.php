@@ -20,7 +20,7 @@ class UserListResource extends JsonResource
             'lastname' => $this->lastname,
             'email' => $this->email,
             'created_at' => $this->created_at->format('d/m/Y'),
-            'deleted_at' => $this->deleted_at,
+            'deleted_at' => $this->deleted_at ? 'Inactivo' : 'Activo',
             'roles' => $this->roles->pluck(['name']),
         ];
     }

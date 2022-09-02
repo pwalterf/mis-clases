@@ -70,40 +70,12 @@
                     </h2>
                 </Link>
 
-                <div class="relative overflow-x-auto shadow sm:rounded-lg">
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-purple-700 uppercase bg-purple-100">
-                            <tr>
-                                <th scope="col" class="pl-4 sm:pl-6 pr-2 py-3">
-                                    Nombre
-                                </th>
-                                <th scope="col" class="px-2 py-3">
-                                    Email
-                                </th>
-                                <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3 text-center">
-                                    Estado
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-if="selected.students.length === 0" class="bg-white">
-                                <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No hay alumnos asociados a la clase.</td>
-                            </tr>
-                            <tr v-else v-for="(student, index) in selected.students" :key="student.id" :class="{'border-b': index != selected.students.length - 1}" class="bg-white hover:bg-gray-50">
-                                <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
-                                    {{ student.user.firstname + ' ' + student.user.lastname }}
-                                </th>
-                                <td class="px-2 py-4">
-                                    {{ student.user.email }}
-                                </td>
-                                <td class="pl-2 pr-4 sm:pr-6 py-4 text-center">
-                                    <Badge :class="student.deleted_at ? 'bg-red-600' : 'bg-green-600'">
-                                        {{ student.deleted_at ? 'Inactivo' : 'Activo' }}
-                                    </Badge>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="relative overflow-x-auto shadow sm:rounded-md">
+                    <ClassroomStudentsTable
+                        :items="selected.students"
+                        :headers="['user.firstname', 'user.email', 'status']"
+                        :actions="[]"
+                    />
                 </div>
             </div>
 
@@ -114,41 +86,13 @@
                 </template>
 
                 <template #content>
-                    <div class="relative overflow-x-auto shadow sm:rounded-lg">
-                        <table class="w-full text-sm text-left text-gray-500">
-                            <thead class="text-xs text-purple-700 uppercase bg-purple-100">
-                                <tr>
-                                    <th scope="col" class="pl-4 sm:pl-6 pr-2 py-4">
-                                        Nombre
-                                    </th>
-                                    <th scope="col" class="px-2 py-3">
-                                        Estado
-                                    </th>
-                                    <th scope="col" class="pl-2 pr-4 sm:pr-6 py-3">
-                                        <span class="sr-only">Asociar</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-if="classrooms.length === 0" class="bg-white">
-                                    <td colspan="3" class="pl-4 sm:pl-6 pr-2 py-4">No existen clases creadas.</td>
-                                </tr>
-                                <tr v-else v-for="(classroom, index) in classrooms" :key="classroom.id" :class="{'border-b': index != classrooms.length - 1}" class="bg-white hover:bg-gray-50">
-                                    <th scope="row" class="pl-4 sm:pl-6 pr-2 py-4 text-gray-900">
-                                        {{ classroom.name }}
-                                    </th>
-                                    <td class="px-2 py-4">
-                                        <Badge :class="classroom.deleted_at ? 'bg-red-600' : 'bg-green-600'">
-                                            {{ classroom.deleted_at ? 'Inactiva' : 'Activa' }}
-                                        </Badge>
-                                    </td>
-                                    <td class="pl-2 pr-4 sm:pr-6 py-4 flex justify-end">
-                                        <CheckCircleIcon class="h-5 w-5 text-green-600 cursor-pointer" aria-hidden="true" @click="addClassroom(classroom)" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <ClassroomsTable
+                        :items="classrooms"
+                        :headers="['name', 'status', 'actions']"
+                        :actions="['addClassroom']"
+                        :rows="5"
+                        @add-classroom="addClassroom"
+                    />
                 </template>
             </JetDialogModal>
         </div>
@@ -164,13 +108,14 @@ import BreadcrumbLink from '@/Components/BreadcrumbLink.vue'
 import FormSection from '@/Components/FormSection.vue'
 import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue'
 import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue'
-import Badge from '@/Components/Badge.vue'
 import JetInput from '@/Jetstream/Input.vue'
 import JetTextarea from '@/Jetstream/Textarea.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetInputError from '@/Jetstream/InputError.vue'
 import JetDialogModal from '@/Jetstream/DialogModal.vue'
-import { CheckCircleIcon, LinkIcon } from '@heroicons/vue/outline'
+import ClassroomStudentsTable from '@/Components/Tables/ClassroomStudentsTable.vue'
+import ClassroomsTable from '@/Components/Tables/ClassroomsTable.vue'
+import { LinkIcon } from '@heroicons/vue/outline'
 
 const props = defineProps({
     classroom: Object,
@@ -210,17 +155,17 @@ const closeModal = () => {
     open.value = false
 }
 
-const addClassroom = (classroom) => {
-    if (form.classroom_id !== classroom.id) {
-        form.classroom_id = classroom.id
-        selected.value = classroom
+const addClassroom = (classroom_id) => {
+    if (form.classroom_id !== classroom_id) {
+        form.classroom_id = classroom_id
+        selected.value = classrooms.value.find(classroom => classroom.id === classroom_id)
     }
 
     closeModal()
 }
 
 const getClassrooms = async () => {
-    let response = await axios.get('/classrooms/active-students')
+    let response = await axios.get(route('classrooms.active_students'))
     classroomList.value = response.data
 }
 </script>

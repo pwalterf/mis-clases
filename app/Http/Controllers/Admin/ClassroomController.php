@@ -276,7 +276,8 @@ class ClassroomController extends Controller
      */
     public function activeStudents()
     {
-        return ClassroomStudentsResource::collection(Classroom::activeWithStudents());
+        //return ClassroomStudentsResource::collection(Classroom::activeWithStudents());
+        return ClassroomStudentsResource::collection(Classroom::withTrashed()->with('classroomUsers')->get()->sortDesc());
     }
 
 }
