@@ -29,7 +29,8 @@ class ClassroomStoreRequest extends FormRequest
             'price_hr' => ['required', 'numeric', 'between:0,9999.99'],
             'started_at' => ['required', 'date'],
             'students' => ['nullable', 'array'],
-            'students.*.credit' => ['sometimes', 'required', 'numeric', 'integer'],
+            'students.*.user_id' => ['required', 'numeric', 'exists:users,id'],
+            'students.*.credit' => ['required', 'numeric', 'integer'],
         ];
     }
 

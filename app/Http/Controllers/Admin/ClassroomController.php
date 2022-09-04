@@ -71,7 +71,7 @@ class ClassroomController extends Controller
             DB::rollBack();
 
             Session::flash('alert.style', 'error');
-            Session::flash('alert.message', 'Ha ocurrido un error al crear la clase. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.');
+            Session::flash('alert.message', 'Ha ocurrido un error al crear la clase. Por favor vuelva a intentar y si el problema persiste, comuníquese con el administrador.'.$th);
 
             return Redirect::back()->withInput();
         }
